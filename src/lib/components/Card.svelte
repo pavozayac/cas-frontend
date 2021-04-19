@@ -13,9 +13,9 @@
        <Carousel urls={pics_urls}/>
     </div>
     <div class="px-5 md:px-10 text-justify">
-        <p class="text-lg text-red-300">
+        <h2 class="text-2xl text-red-300">
             Lorem ipsum dolor sit amet.
-        </p>
+        </h2>
         <h3>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in viverra leo, sed finibus enim. Quisque dignissim a felis quis mollis. Praesent quis dignissim justo, id lacinia neque. Morbi laoreet, orci at luctus hendrerit, velit nibh scelerisque urna, et scelerisque dolor dolor in justo. Maecenas eleifend non nibh eget aliquam. Curabitur id pellentesque arcu. Nulla sodales vel enim sed aliquam.
         </h3>

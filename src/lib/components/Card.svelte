@@ -8,30 +8,34 @@
     ]
 </script>
 
-<div class="container bg-red-100 w-full flex flex-col rounded-lg text-center my-5">
-    <div class="w-full p-0 h-full rounded-lg">
+<div class="container bg-white border-2 w-full flex flex-col rounded-lg text-center my-5">
+    <div class="w-full p-0 h-full bg-grey-200">
        <Carousel urls={pics_urls}/>
     </div>
-    <div class="px-5 md:px-10 text-justify">
-        <h2 class="text-2xl text-red-300">
+    <div class="p-5 md:px-10 text-justify">
+        <h2 class="text-2xl font-bold mb-4">
             Lorem ipsum dolor sit amet.
         </h2>
         <h3>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in viverra leo, sed finibus enim. Quisque dignissim a felis quis mollis. Praesent quis dignissim justo, id lacinia neque. Morbi laoreet, orci at luctus hendrerit, velit nibh scelerisque urna, et scelerisque dolor dolor in justo. Maecenas eleifend non nibh eget aliquam. Curabitur id pellentesque arcu. Nulla sodales vel enim sed aliquam.
         </h3>
-        <div class="p-5 flex flex-row justify-end w-auto">
-            <button>Favourite</button>
-            <button>Comment</button>
+        <div class="py-5 flex flex-row justify-around items-center w-full space-x-4 text-gray-700 font-sans font-light">
+            <button><span class="material-icons-outlined">star</span>Favourite</button>
+            <button><span class="material-icons-outlined">comment</span>Comment</button>
         </div>
     </div>
     
 </div>
 
 <style lang="postcss">
+
+    span {
+        @apply mr-2;
+        font-size: 1.2rem;
+    }
     
     button {
-        @apply bg-white mr-2 ml-2 hover:bg-red-300  py-2 px-6 rounded-full text-lg border-gray-500 text-black font-semibold border-none cursor-pointer;
+        @apply bg-gray-200 hover:bg-red-300 w-full py-2 px-6 rounded-lg text-lg border-gray-500 border-none cursor-pointer transition-all duration-300 flex items-center justify-center font-light;
     }
 
-    
 </style>

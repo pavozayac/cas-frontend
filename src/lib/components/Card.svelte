@@ -35,7 +35,8 @@
     }
     
     button {
-        @apply bg-gray-200 hover:bg-red-300 w-full py-2 px-6 rounded-lg text-lg border-gray-500 border-none cursor-pointer transition-all duration-300 flex items-center justify-center font-light;
+        font-family: Rubik, sans-serif;
+        @apply bg-teal-400 border-none border-gray-300 font-medium text-black hover:bg-teal-300 focus:bg-gray-400 w-full py-2 px-6 rounded-lg text-lg cursor-pointer transition-all duration-300 flex items-center justify-center uppercase;
     }
 
 </style>

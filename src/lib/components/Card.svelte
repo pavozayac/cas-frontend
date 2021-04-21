@@ -19,9 +19,9 @@
         <h3>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in viverra leo, sed finibus enim. Quisque dignissim a felis quis mollis. Praesent quis dignissim justo, id lacinia neque. Morbi laoreet, orci at luctus hendrerit, velit nibh scelerisque urna, et scelerisque dolor dolor in justo. Maecenas eleifend non nibh eget aliquam. Curabitur id pellentesque arcu. Nulla sodales vel enim sed aliquam.
         </h3>
-        <div class="py-5 flex flex-row justify-around items-center w-full space-x-4 text-gray-700 font-sans font-light">
-            <button><span class="material-icons-outlined">star</span>Favourite</button>
-            <button><span class="material-icons-outlined">comment</span>Comment</button>
+        <div class="pt-5 flex flex-shrink flex-row justify-end items-center w-full text-gray-700 font-sans font-light">
+            <button><span class="material-icons-outlined">bookmark_border</span></button>
+            <button><span class="material-icons-outlined">comment</span></button>
         </div>
     </div>
     
@@ -30,13 +30,12 @@
 <style lang="postcss">
 
     span {
-        @apply mr-2;
-        font-size: 1.2rem;
+        font-size: 2em;
     }
     
     button {
         font-family: Rubik, sans-serif;
-        @apply bg-teal-400 border-none border-gray-300 font-medium text-black hover:bg-teal-300 focus:bg-gray-400 w-full py-2 px-6 rounded-lg text-lg cursor-pointer transition-all duration-300 flex items-center justify-center uppercase;
+        @apply w-20 h-20 text-center bg-transparent font-medium text-blue-500 hover:bg-gray-300 focus:bg-gray-400 py-2 px-6 rounded-full text-lg cursor-pointer transition-all duration-300 flex items-center justify-center uppercase;
     }
 
 </style>

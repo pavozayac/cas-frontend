@@ -18,15 +18,15 @@
 <div id="container">
     <div id="arrows">
         {#if offset != 0}
-            <svg on:click={()=>shiftOffset(-1)} id="left" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M21.883 12l-7.527 6.235.644.765 9-7.521-9-7.479-.645.764 7.529 6.236h-21.884v1h21.883z"/></svg>
+            <button class="items-start" on:click={()=>shiftOffset(-1)}><span class="material-icons-outlined">arrow_back</span></button>
         {:else}
-            <svg></svg>
+            <span></span>
         {/if}
 
         {#if offset < urls.length-1}
-            <svg on:click={()=>shiftOffset(1)} viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M21.883 12l-7.527 6.235.644.765 9-7.521-9-7.479-.645.764 7.529 6.236h-21.884v1h21.883z"/></svg>
+            <button class="items-end" on:click={()=>shiftOffset(1)}><span class="material-icons-outlined">arrow_forward</span></button>
         {:else}
-            <svg></svg>
+            <span></span>
         {/if}
     </div>
     <div id="images" style={roundedImages ? 'border-radius: 0.5rem;' : ''}>
@@ -59,10 +59,14 @@
 
     #arrows {
         top: 45%;
-        @apply absolute flex flex-grow w-full justify-between z-10 ;
+        @apply absolute flex flex-grow w-full justify-between items-center z-10 ;
     }
-    #arrows svg {
-        @apply cursor-pointer w-24 h-24 rounded-full flex justify-center  px-5 fill-current text-white hover:text-red-300 ;
+    #arrows button {
+        @apply cursor-pointer w-24 h-24 rounded-full flex justify-center items-center px-5 text-white hover:(text-blue-500 bg-grey-300) transition-all duration-300;
+    }
+
+    span {
+        @apply text-6xl;
     }
 
     path {

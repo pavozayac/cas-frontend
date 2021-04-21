@@ -37,14 +37,16 @@
 
 <nav bind:this={nav} class="fixed flex rounded-lg md:rounded-none mx-auto md:w-full justify-between items-center bg-white shadow-md p-4 h-16 z-20 transition-all duration-300">
     <CasLogo style="width: 7rem; height: 2.5rem"/>
-    <button class="outline-none border border-blue-500 
-    text-blue-500 bg-transparent rounded-lg text-base 
-    h-10 px-4 cursor-pointer hover:bg-blue-100 transition-all duration-300 text-center flex items-center justify-center">
-        <span class="text-2xl material-icons-outlined">lock</span>Sign in
+    <button class="outline-none border border-blue-500 text-blue-500 bg-transparent rounded-lg text-base flex items-center justify-center focus:bg-blue-200 h-10 px-4 cursor-pointer hover:bg-blue-100 transition-all duration-300 text-center uppercase">
+        <span class="material-icons-outlined">lock</span>Sign in
     </button>
 </nav>
 
 <style lang="postcss">
+    button {
+        font-family: Rubik, sans-serif;
+    }
+
     span {
         @apply text-xl mr-2;
     }

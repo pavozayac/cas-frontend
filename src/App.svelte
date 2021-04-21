@@ -57,7 +57,6 @@
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     @apply pt-20;
     
-    
   }
 
   main {

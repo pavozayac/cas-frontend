@@ -20,7 +20,7 @@
 
 </script>
 
-<div class="grid grid-cols-2 gap-x-2 gap-y-6 w-80">
+<div class="grid grid-cols-2 gap-x-2 gap-y-6 w-80 fixed left-1/12 top-2/12 invisible md:visible">
     {#each menuElements as el}
         <button class="box-content p-5 bg-gray-200 hover:(bg-gray-300 text-blue-500) w-24 h-24 rounded-lg flex flex-col justify-center items-center transition-all duration-300"><i class={el.iconType}>{el.icon}</i>{el.name}</button>
         
@@ -32,4 +32,9 @@
     i {
         @apply text-4xl font-thin;
     }
+
+    button {
+        font-family: Rubik, sans-serif;
+    }
+
 </style>

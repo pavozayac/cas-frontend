@@ -8,11 +8,11 @@
     ]
 </script>
 
-<div class="container bg-white border-2 w-full flex flex-col rounded-lg text-center my-5">
+<div class="container bg-white border-2 w-full flex flex-col rounded-lg my-5">
     <div class="w-full p-0 h-full bg-grey-200">
        <Carousel urls={pics_urls}/>
     </div>
-    <div class="p-5 md:px-10 text-justify">
+    <div class="p-5 md:px-10">
         <h2 class="text-2xl font-bold mb-4">
             Lorem ipsum dolor sit amet.
         </h2>
@@ -24,7 +24,6 @@
             <button><span class="material-icons-outlined">comment</span></button>
         </div>
     </div>
-    
 </div>
 
 <style lang="postcss">
@@ -34,8 +33,7 @@
     }
     
     button {
-        font-family: Rubik, sans-serif;
-        @apply w-20 h-20 text-center bg-transparent font-medium text-blue-500 hover:bg-gray-300 focus:bg-gray-400 py-2 px-6 rounded-full text-lg cursor-pointer transition-all duration-300 flex items-center justify-center uppercase;
+        @apply w-20 h-20 text-center bg-transparent font-medium text-blue-500 hover:bg-gray-300 focus:bg-gray-400 p-0 rounded-full text-lg cursor-pointer transition-all duration-300 flex items-center justify-center uppercase;
     }
 
 </style>

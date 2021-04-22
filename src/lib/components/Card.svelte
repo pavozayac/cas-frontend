@@ -8,7 +8,7 @@
     ]
 </script>
 
-<div class="container bg-white border-2 w-full flex flex-col rounded-lg my-5">
+<div class="container bg-white border-2 w-full flex flex-col rounded-lg my-5 filter blur-lg">
     <div class="w-full p-0 h-full bg-grey-200">
        <Carousel urls={pics_urls}/>
     </div>
@@ -33,7 +33,7 @@
     }
     
     button {
-        @apply w-20 h-20 text-center bg-transparent font-medium text-blue-500 hover:bg-gray-300 focus:bg-gray-400 p-0 rounded-full text-lg cursor-pointer transition-all duration-300 flex items-center justify-center uppercase;
+        @apply w-20 h-20 select-none focus:(outline-none) focus:(bg-gray-300) font-medium text-blue-500 hover:bg-gray-300 rounded-full text-lg md:cursor-pointer transition-all duration-300 flex items-center justify-center;
     }
 
 </style>

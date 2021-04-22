@@ -35,6 +35,7 @@
 
     button {
         font-family: Rubik, sans-serif;
+        font-display: swap;
     }
 
 </style>

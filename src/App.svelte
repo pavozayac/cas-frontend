@@ -55,6 +55,7 @@
     margin: 0 !important;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-display: swap;
     @apply pt-20;
     
   }

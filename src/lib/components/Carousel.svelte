@@ -12,6 +12,14 @@
 
     $: if (slider) slider.style.right = `${offset*100}%`;
 
+    function preload(src) {
+        return new Promise(function(resolve) {
+            let img = new Image()
+            img.onload = resolve
+            img.src = src
+        })
+    }
+
 
 </script>
 
@@ -31,8 +39,10 @@
     </div>
     <div id="images" style={roundedImages ? 'border-radius: 0.5rem;' : ''}>
         <div id="slider" bind:this={slider} >
-            {#each urls as url}
-                <img style={roundedImages ? 'border-radius: 0.5rem;' : ''} alt="" src={url} />                
+            {#each urls as src}
+                {#await preload(src) then _}
+                    <img style={roundedImages ? 'border-radius: 0.5rem;' : ''} alt="" {src} />                
+                {/await}
             {/each}
         </div>
         
@@ -62,7 +72,7 @@
         @apply absolute flex flex-grow w-full justify-between items-center z-10 ;
     }
     #arrows button {
-        @apply select-none cursor-pointer w-24 h-24 rounded-full flex justify-center items-center px-5 text-white hover:(text-blue-500 bg-grey-300) transition-all duration-300;
+        @apply select-none  focus:outline-none focus:(text-blue-400) md:cursor-pointer w-24 h-24 rounded-full flex justify-center items-center px-5 text-white hover:(text-blue-500 bg-grey-300) transition-all duration-300;
     }
 
     span {

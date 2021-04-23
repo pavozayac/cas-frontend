@@ -1,13 +1,19 @@
 <script lang="ts">
     import CasLogo from './cas_logo.svelte'
     
-
     let navVisible: boolean = true;
     let y1:number = 0, y2: number
-    let nav: HTMLElement
-    let navBorder: HTMLElement
+    let nav: HTMLElement;
+    let navBorder: HTMLElement;
+
+    let mouseX: number, mouseY: number;
 
     const maxDelta: number = 30;
+
+    function handleMousemove (e: MouseEvent) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    }
 
     $: {    
         let delta: number = y2 - y1;
@@ -17,7 +23,7 @@
         if(delta > maxDelta){
             navVisible = false;
             nav.style.top = "-100%";
-        } else if (delta < -maxDelta || y2 == 0){
+        } else if (delta < -maxDelta || nav && (y2 < nav.clientHeight) || nav && (mouseY < nav.clientHeight)){
             navVisible = true;
             nav.style.top = "0";
         }
@@ -38,12 +44,21 @@
 </script>
 
 <svelte:window bind:scrollY={y2}/>
+<svelte:body on:mousemove={handleMousemove} />
 
 <nav bind:this={nav} class={`fixed flex rounded-lg md:rounded-none mx-auto w-full justify-between items-center bg-white p-4 h-16 z-20 transition-all duration-500 `}>
-    <div bind:this={navBorder} class={`absolute h-full p-4 border-b-3 transition-all duration-500 ${y2 == 0 ? "w-0 left-1/2 opacity-0" : "w-full left-0"}`}></div>
-    <CasLogo style="width: 7rem; height: 2.5rem"/>
+    <div bind:this={navBorder} class={`absolute h-full p-4 border-b-3 border-gray-300 transition-all duration-500 ${y2 == 0 ? "w-0 left-1/2 opacity-0" : "w-full left-0"}`}></div>
+    
+    <!--<CasLogo style="width: 7rem; height: 2.5rem"/>-->
+
+    <div>
+        <span class="logoLetters text-3xl text-blue-500">c</span>
+        <span class="logoLetters text-3xl text-red-500">a</span>
+        <span class="logoLetters text-3xl text-green-500">s</span>
+    </div>
+
     <button class="bg-blue-500 text-white rounded-lg flex items-center justify-center focus:(bg-blue-400 outline-none) h-10 px-4 cursor-pointer hover:bg-blue-400 transition-all duration-300 text-center">
-        <span class="material-icons-round">lock</span>Sign in
+        <span id="lockIcon" class="material-icons-round">lock</span>Sign in
     </button>
 </nav>
  
@@ -52,10 +67,18 @@
         font-family: Rubik, sans-serif;
         font-display: swap;
     }
-
-    span {
+    
+    #lockIcon {
         @apply text-xl mr-2;
     }
+
+    .logoLetters {
+        font-family: Rubik, sans-serif;
+    }
+
+    /*span {
+        @apply text-xl mr-2;
+    }*/
 
     @keyframes hide {
         to {

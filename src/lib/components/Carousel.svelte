@@ -9,7 +9,7 @@
     const shiftOffset = (dir) => {
         if((dir>0 && offset < urls.length-1) || (dir < 0 && offset > 0)) offset += dir;
     }
-
+    
     $: if (slider) slider.style.right = `${offset*100}%`;
 
     function preload(src) {

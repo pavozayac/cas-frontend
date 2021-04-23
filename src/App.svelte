@@ -57,6 +57,7 @@
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-display: swap;
     @apply pt-20;
+    -webkit-tap-highlight-color: transparent;
     
   }
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-import { compute_rest_props } from "svelte/internal";
 
 
     export let nav = false;

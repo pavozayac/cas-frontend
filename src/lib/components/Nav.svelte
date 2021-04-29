@@ -4,6 +4,7 @@
     import { fade } from 'svelte/transition'
     import MobileMenu from './MobileMenu.svelte'
     import { tilesVisible } from '../../stores/nav.ts'
+import { stop_propagation } from 'svelte/internal';
 
     
     let navVisible: boolean = true;
@@ -51,16 +52,22 @@
 <svelte:window bind:scrollY={y2}/>
 <svelte:body on:mousemove={handleMousemove} />
 
-<nav bind:this={nav} class={`fixed flex rounded-lg md:rounded-none mx-auto w-full justify-between items-center bg-white p-4 h-16 z-20 transition-all duration-500 `}>
-    <div bind:this={navBorder} class={`-z-1 absolute h-full p-4 border-b-3 border-gray-300 transition-all duration-500 ${y2 == 0 ? "w-0 left-1/2 opacity-0" : "w-full left-0"}`}></div>
+<nav bind:this={nav} class={`fixed grid grid-cols-12 grid-flow-row rounded-lg md:rounded-none w-full justify-between items-center bg-transparent h-16 z-20 transition-all duration-500 `}>
+    <!--<div bind:this={navBorder} class={`-z-1 absolute h-full p-4 border-b-3 border-gray-300 transition-all duration-500 ${y2 == 0 ? "w-0 left-1/2 opacity-0" : "w-full left-0"}`}></div>-->
     
-    <div class="flex flex-row flex-shrink items-center justify-center">
-        <button on:click={()=>$tilesVisible = true}><span id="navIcon" class={`${$tilesVisible && "invisible"} md:hidden material-icons-round`}>menu</span></button>
-        <Svg src="/graphics/logo_mat.svg" class="w-32 pr-4" /> 
-        <div class="logoText text-2xl text-gray-600"><span class="logoTextBold">CAS</span> Portal</div>
+    <!--<button on:click={()=>$tilesVisible = true}><span id="navIcon" class={`md:hidden material-icons-round`}>menu</span></button>    -->
+    
+    <div class="hidden md:flex col-span-3 col-start-1 flex flex-row flex-shrink items-center justify-left p-4">
+        <Svg src="/graphics/logo_mat.svg" class="h-12 w-32 pr-4" /> 
+        <div class="select-none logoText text-2xl text-gray-600"><span class="logoTextBold">CAS</span> Portal</div>
     </div>
-
-    <input class="flex-grow h-full" placeholder="Search"/>
+    <div class="col-span-full md:col-span-6 col-start-1 md:col-start-4 h-14 flex items-center justify-center">
+        <button class="md:hidden h-full rounded-l-full pl-4 pr-2 hover:bg-gray-300 bg-gray-200" on:click={()=>$tilesVisible = true}><span id="navIcon" class="material-icons-round">menu</span></button>
+        <input id="searchBox" class="focus:(outline-none) pl-10 select-none flex-grow h-full rounded-l-none md:rounded-l-full rounded-full rounded-r-none bg-gray-200" placeholder="Search"/>
+        <div class="flex items-center h-full rounded-full rounded-l-none overflow-hidden bg-gray-200">
+            <button id="searchButton" class="h-full transition-all duration-200 hover:bg-gray-300 focus:(outline-none bg-gray-300)"><span id="searchIcon" class="select-none text-black py-2 px-3 h-auto material-icons-round">search</span></button>
+        </div>
+    </div>
     
 
     <!--<div>
@@ -69,11 +76,11 @@
         <span class="logoLetters text-3xl text-green-500">s</span>
     </div>-->
 
-    <button class="bg-blue-500 text-white rounded-lg flex items-center justify-center focus:(bg-blue-400 outline-none) h-10 px-4 cursor-pointer hover:bg-blue-400 transition-all duration-300 text-center">
+    <button class="hidden md:flex w-3/4 col-span-1 col-start-12 bg-blue-500 text-white rounded-lg flex items-center justify-center focus:(bg-blue-400 outline-none) h-10 px-4 cursor-pointer hover:bg-blue-400 transition-all duration-300 text-center">
         <span id="lockIcon" class="material-icons-round">lock</span>Sign in
     </button>
     {#if $tilesVisible}
-    <MobileMenu on:click={()=>$tilesVisible = false}/>
+    <MobileMenu on: on:click={e=>{$tilesVisible = false; e.stopPropagation()}}/>
     
     <!--<div transition:fade={{duration: 200}}  class="fixed flex items-center justify-center left-0 top-0 w-full h-full md:hidden mx-auto bg-gray-600 bg-opacity-30">
         <button on:click={() => tilesVisible = false}><span id="closeIcon" class="fixed p-5 left-0 top-0 w-10 h-10 material-icons-round">close</span></button>
@@ -117,5 +124,18 @@
     #closeIcon {
         @apply text-4xl;
     }    
+
+    #searchIcon {
+        @apply text-3xl;
+    }
+
+    input::placeholder {
+        font-family: Rubik, sans-serif;
+        @apply text-lg text-gray-700;
+    }
+
+    #searchBox:focus  {
+        @apply bg-gray-300;
+    }
     
 </style>

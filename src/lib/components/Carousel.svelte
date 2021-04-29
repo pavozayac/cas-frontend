@@ -72,7 +72,7 @@
         @apply absolute flex flex-grow w-full justify-between items-center z-10 ;
     }
     #arrows button {
-        @apply select-none  focus:outline-none focus:(text-blue-400) md:cursor-pointer w-24 h-24 rounded-full flex justify-center items-center px-5 text-white hover:(text-blue-500 bg-grey-300) transition-all duration-300;
+        @apply select-none focus:outline-none focus:(text-blue-400) md:cursor-pointer w-24 h-24 rounded-full flex justify-center items-center px-5 text-white hover:(text-blue-500 bg-grey-300) transition-all duration-300;
     }
 
     span {

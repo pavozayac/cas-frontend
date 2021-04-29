@@ -1,5 +1,4 @@
 <script lang="ts">
-  import logo from './assets/svelte.png'
   import Counter from './lib/Counter.svelte'
   import Card from './lib/components/Card.svelte'
   import Carousel from './lib/components/Carousel.svelte'

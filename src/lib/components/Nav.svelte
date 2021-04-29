@@ -3,6 +3,7 @@
     import Tiles from './TileMenu.svelte';
     import { fade } from 'svelte/transition'
     import MobileMenu from './MobileMenu.svelte'
+    import { tilesVisible } from '../../stores/nav.ts'
 
     
     let navVisible: boolean = true;
@@ -11,8 +12,6 @@
     let navBorder: HTMLElement;
 
     let mouseX: number, mouseY: number;
-
-    let tilesVisible = false;
 
     const maxDelta: number = 30;
 
@@ -56,7 +55,7 @@
     <div bind:this={navBorder} class={`-z-1 absolute h-full p-4 border-b-3 border-gray-300 transition-all duration-500 ${y2 == 0 ? "w-0 left-1/2 opacity-0" : "w-full left-0"}`}></div>
     
     <div class="flex flex-row flex-shrink items-center justify-center">
-        <button on:click={()=>tilesVisible = true}><span id="navIcon" class={`${tilesVisible && "invisible"} md:hidden material-icons-round`}>menu</span></button>
+        <button on:click={()=>$tilesVisible = true}><span id="navIcon" class={`${$tilesVisible && "invisible"} md:hidden material-icons-round`}>menu</span></button>
         <Svg src="/graphics/logo_mat.svg" class="w-32 pr-4" /> 
         <div class="logoText text-2xl text-gray-600"><span class="logoTextBold">CAS</span> Portal</div>
     </div>
@@ -73,8 +72,8 @@
     <button class="bg-blue-500 text-white rounded-lg flex items-center justify-center focus:(bg-blue-400 outline-none) h-10 px-4 cursor-pointer hover:bg-blue-400 transition-all duration-300 text-center">
         <span id="lockIcon" class="material-icons-round">lock</span>Sign in
     </button>
-    {#if tilesVisible}
-    <MobileMenu on:click={()=>tilesVisible = false}/>
+    {#if $tilesVisible}
+    <MobileMenu on:click={()=>$tilesVisible = false}/>
     
     <!--<div transition:fade={{duration: 200}}  class="fixed flex items-center justify-center left-0 top-0 w-full h-full md:hidden mx-auto bg-gray-600 bg-opacity-30">
         <button on:click={() => tilesVisible = false}><span id="closeIcon" class="fixed p-5 left-0 top-0 w-10 h-10 material-icons-round">close</span></button>
@@ -117,8 +116,6 @@
 
     #closeIcon {
         @apply text-4xl;
-    }
-   
-    
+    }    
     
 </style>

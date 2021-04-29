@@ -2,6 +2,7 @@
     import { fly } from 'svelte/transition'
     import Svg from 'svelte-inline-svg'
     import LogoMat from '../graphics/LogoMat.svelte'
+    import { tilesVisible } from '../../stores/nav'
 
     enum IconType {
         outlined = 'material-icons-outlined',
@@ -22,9 +23,46 @@
         {icon: 'feedback', iconType: IconType.round, name: 'Feedback'},
     ]
 
+    function touch (node: Node) {
+        let startX, endX;
+
+        function handleTouchStart (e: TouchEvent) {
+            startX = e.touches[0].clientX;
+            console.log('startx:', startX);
+        }
+
+        function handleTouchMove (e:TouchEvent) {
+            if (startX - e.changedTouches[0].clientX > 0)
+                node.style.left = -1*(startX - e.changedTouches[0].clientX);
+        }
+
+
+        function handleTouchEnd (e: TouchEvent) {
+            endX = e.changedTouches[0].clientX;
+            console.log('endx:', endX);
+
+            if (startX - endX > 200){
+                console.log('bruhbruh')
+                $tilesVisible = false;
+            }
+        }
+
+        node.addEventListener('touchstart', handleTouchStart);
+        node.addEventListener('touchmove', handleTouchMove)
+        node.addEventListener('touchend', handleTouchEnd);
+
+        return {
+            destroy() {
+                node.removeEventListener('touchstart', handleTouchStart);
+                node.removeEventListener('touchend', handleTouchEnd);
+            }
+        }
+
+    }
+
 </script>
 
-<div on:click transition:fly={{duration: 300, x: -200}} class="fixed w-full h-full left-0 top-0">
+<div use:touch on:click transition:fly={{duration: 300, x: -200}} class="fixed w-full h-full left-0 top-0">
     <div on:click={e=>e.stopPropagation()} class="w-70 h-full flex flex-col items-center bg-white">
         <LogoMat class="w-50" />
         <!--<Svg class="w-50" src="/graphics/logo_mat.svg"/>-->

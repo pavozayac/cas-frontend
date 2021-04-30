@@ -57,15 +57,15 @@ import { stop_propagation } from 'svelte/internal';
     
     <!--<button on:click={()=>$tilesVisible = true}><span id="navIcon" class={`md:hidden material-icons-round`}>menu</span></button>    -->
     
-    <div class="hidden md:flex col-span-3 col-start-1 flex flex-row flex-shrink items-center justify-left p-4">
+    <button class="h-14 rounded-full focus:(bg-gray-200 outline-none) cursor-pointer hover:bg-gray-200 hidden md:flex col-span-2 col-start-1 flex flex-row flex-shrink items-center justify-center p-4 transition-all duration-200">
         <Svg src="/graphics/logo_mat.svg" class="h-12 w-32 pr-4" /> 
         <div class="select-none logoText text-2xl text-gray-600"><span class="logoTextBold">CAS</span> Portal</div>
-    </div>
-    <div class="col-span-full md:col-span-6 col-start-1 md:col-start-4 h-14 flex items-center justify-center">
+    </button>
+    <div class={`rounded-full ${y2 > 20 && "shadow-md"} md:shadow-none mx-2 md:mx-0 col-span-full md:col-span-6 col-start-1 md:col-start-4 h-14 flex items-center justify-center`}>
         <button class="md:hidden h-full rounded-l-full pl-4 pr-2 hover:bg-gray-300 bg-gray-200" on:click={()=>$tilesVisible = true}><span id="navIcon" class="material-icons-round">menu</span></button>
-        <input id="searchBox" class="focus:(outline-none) pl-10 select-none flex-grow h-full rounded-l-none md:rounded-l-full rounded-full rounded-r-none bg-gray-200" placeholder="Search"/>
-        <div class="flex items-center h-full rounded-full rounded-l-none overflow-hidden bg-gray-200">
-            <button id="searchButton" class="h-full transition-all duration-200 hover:bg-gray-300 focus:(outline-none bg-gray-300)"><span id="searchIcon" class="select-none text-black py-2 px-3 h-auto material-icons-round">search</span></button>
+        <input id="searchBox" class="focus:(outline-none) w-full pl-10 select-none flex-grow h-full rounded-l-none md:rounded-l-full rounded-full rounded-r-none bg-gray-200" placeholder="Search"/>
+        <div class="flex items-center justify-center h-full rounded-full rounded-l-none overflow-hidden bg-gray-200">
+            <button id="searchButton" class="h-full pr-4 pl-2 transition-all duration-200 hover:bg-gray-300 focus:(outline-none bg-gray-300)"><span id="searchIcon" class="select-none text-black py-2 px-3 h-full material-icons-round">search</span></button>
         </div>
     </div>
     
@@ -129,13 +129,22 @@ import { stop_propagation } from 'svelte/internal';
         @apply text-3xl;
     }
 
-    input::placeholder {
+    #searchBox {
+        font-family: Rubik, sans-serif;
+        @apply text-lg text-gray-700;
+    }
+
+    #searchBox::placeholder {
         font-family: Rubik, sans-serif;
         @apply text-lg text-gray-700;
     }
 
     #searchBox:focus  {
         @apply bg-gray-300;
+    }
+
+    #searchButton {
+        @apply text-3xl;
     }
     
 </style>

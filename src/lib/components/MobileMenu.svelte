@@ -48,7 +48,7 @@
             endX = e.changedTouches[0].clientX;
             console.log('endx:', endX);
 
-            if (startX - endX > 200){
+            if (startX - endX > 100){
                 console.log('bruhbruh')
                 $tilesVisible = false;
             } else {
@@ -76,7 +76,7 @@
 </script>
 
 <div bind:this={div} use:touch on:scroll={e=>e.stopPropagation()} on:click transition:fly={{duration: 300, x: -200}} class="fixed w-full h-full left-0 top-0">
-    <div on:click={e=>e.stopPropagation()} class="w-70 rounded-r-lg h-full flex flex-col items-center bg-white">
+    <div on:click={e=>e.stopPropagation()} class="shadow-lg w-70 rounded-r-lg h-full flex flex-col items-center bg-white">
         <LogoMat class="w-50" />
         <!--<Svg class="w-50" src="/graphics/logo_mat.svg"/>-->
         <ol class="list-none w-full">

@@ -3,8 +3,8 @@
     import Tiles from './TileMenu.svelte';
     import { fade } from 'svelte/transition'
     import MobileMenu from './MobileMenu.svelte'
-    import { tilesVisible } from '../../stores/nav.ts'
-import { stop_propagation } from 'svelte/internal';
+    import { tilesVisible } from '../../stores/nav'
+    import { stop_propagation } from 'svelte/internal';
 
     
     let navVisible: boolean = true;

@@ -26,13 +26,13 @@
 <div id="container">
     <div id="arrows">
         {#if offset != 0}
-            <button class="items-start" on:click={()=>shiftOffset(-1)}><span class="material-icons-outlined">arrow_back</span></button>
+            <button class="arrow-back" on:click={()=>shiftOffset(-1)}><span class="material-icons-outlined">arrow_back</span></button>
         {:else}
             <span></span>
         {/if}
 
         {#if offset < urls.length-1}
-            <button class="items-end" on:click={()=>shiftOffset(1)}><span class="material-icons-outlined">arrow_forward</span></button>
+            <button class="arrow-forward" on:click={()=>shiftOffset(1)}><span class="material-icons-outlined">arrow_forward</span></button>
         {:else}
             <span></span>
         {/if}
@@ -50,44 +50,91 @@
 
 </div>
 
-<style lang="postcss">
+<style>
+
+    @media (min-width: 640px) {
+        #container {
+            max-width: 640px;
+        }
+    }
+    @media (min-width: 768px) {
+        #container {
+            max-width: 768px;
+        }
+    }
     #container {
-        @apply container w-full h-full relative;
+        width: 100%;
+        height: 100%;
+        position: relative;
     }
 
-    #slider  :global(img) {
-        @apply w-full h-full select-none;
+    #slider > :global(img) {
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
     }
 
     #images {
-        @apply w-full h-full relative overflow-hidden;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
     }
     
     #slider {
-        @apply relative flex w-full transition-all duration-300 ease-in-out;
+        position: relative;
+        display: flex;
+        transition: all 300ms ease-in-out;
     }
 
     #arrows {
-        top: 45%;
-        @apply absolute flex flex-grow w-full justify-between items-center z-10 ;
+        position: absolute;
+        display: flex;
+        flex-grow: 1;
+        width: 100%;
+        height: 100%;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
     }
     #arrows button {
-        @apply select-none focus:outline-none focus:(text-blue-400) md:cursor-pointer w-24 h-24 rounded-full flex justify-center items-center px-5 text-white hover:(text-blue-500 bg-grey-300) transition-all duration-300;
+        background: transparent;
+        opacity: 0.6;
+        width: 6rem;
+        height: 100%;
+        border-radius: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+        color: white;
+        transition: all 300ms;
+        cursor: pointer;
+    }
+
+    #arrows button:focus {
+        outline: none;
+    }
+    
+    #arrows button:hover {
+        background: #777;
+    }
+
+    .arrow-forward {
+        align-items: flex-end;
+    }
+
+    .arrow-back {
+        align-items: flex-start;
     }
 
     span {
-        @apply text-6xl;
+        font-size: 3.75rem; /* 60px */
     }
 
-    path {
-        @apply cursor-pointer;
-    }
-
-    #left {
-        @apply items-start transform rotate-180;
-    }
-    #right {
-        @apply items-end ;
-    }
+    /*path {
+        cursor: pointer;
+    }*/
 
 </style>

@@ -8,12 +8,18 @@
 
 <style lang="postcss">
     div {
-        @apply relative h-0;
+        position: relative;
+        height: 0;
         padding-bottom: 50%;
     }
 
     img {
-        @apply absolute inset-0 object-cover w-full h-full rounded-lg;
+        position: absolute;
+        inset: 0;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        border-radius: 0.5rem;
     }
     
 </style>

@@ -8,18 +8,18 @@
     ]
 </script>
 
-<div class="container bg-white border-2 w-full flex flex-col rounded-lg my-5 filter blur-lg">
+<div class="card-container">
     <div class="w-full p-0 h-full bg-grey-200">
        <Carousel urls={pics_urls}/>
     </div>
-    <div class="p-5 md:px-10">
-        <h2 class="text-2xl font-bold mb-4">
+    <div class="text-section-wrapper">
+        <h2>
             Lorem ipsum dolor sit amet.
         </h2>
-        <h3>
+        <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in viverra leo, sed finibus enim. Quisque dignissim a felis quis mollis. Praesent quis dignissim justo, id lacinia neque. Morbi laoreet, orci at luctus hendrerit, velit nibh scelerisque urna, et scelerisque dolor dolor in justo. Maecenas eleifend non nibh eget aliquam. Curabitur id pellentesque arcu. Nulla sodales vel enim sed aliquam.
-        </h3>
-        <div class="pt-5 flex flex-shrink flex-row justify-end items-center w-full text-gray-700 font-sans font-light">
+        </p>
+        <div class="actions-buttons">
             <button><span class="material-icons-outlined">bookmark_border</span></button>
             <button><span class="material-icons-outlined">comment</span></button>
         </div>
@@ -28,12 +28,81 @@
 
 <style lang="postcss">
 
+    .card-container {
+        background-color: white;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        border-radius: 0.5rem;
+        margin-top: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    @media screen and (min-width: 648px) {
+        .card-container {
+            max-width: 648px;
+        }
+    }
+
+    @media screen and (min-width: 768px) {
+        .card-container {
+            max-width: 768px;
+        }
+    }
+
     span {
         font-size: 2em;
     }
     
     button {
-        @apply w-20 h-20 select-none focus:(outline-none) focus:(bg-gray-300) font-medium text-blue-500 hover:bg-gray-300 rounded-full text-lg md:cursor-pointer transition-all duration-300 flex items-center justify-center;
+        width: 5rem;
+        height: 5rem;
+        border-radius: 9999px;
+        font-size: 1.125rem;
+        transition: all 300ms;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    button:focus {
+        outline: none;
+        background: #eee;
+    }
+
+    button:hover {
+        background: #eee;
+    }
+
+    .text-section-wrapper {
+        padding: 1.25rem;
+    }
+    
+    .text-section-wrapper h2 {
+        font-size: 1.5rem; /* 24px */
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .actions-buttons {
+        padding-top: 1.25rem;
+        display: flex;
+        flex-shrink: 1;
+        flex-direction: row;
+        justify-content: left;
+        align-items: center;
+        width: 100%;
+        color: gray;
+        font-weight: 300;
+        font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    }
+
+    @media screen and (min-width: 768px) {
+        .text-section-wrapper {
+            padding-left: 2.5rem;
+            padding-right: 2.5rem;
+        }
     }
 
 </style>

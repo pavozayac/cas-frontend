@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Router, Route } from 'svelte-routing'
   import Nav from 'lib/components/navigation/Nav.svelte'
-  import Index from 'pages/index.svelte'
-  import SignIn from 'pages/signin/index.svelte'
+  import Index from 'routes/index.svelte'
+  import SignIn from 'routes/signin/SignInRoute.svelte'
 
   export let url = ''
 </script>

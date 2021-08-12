@@ -50,7 +50,7 @@
     }
 
     .tile:hover {
-        background: var(--bg-grey);
+        background: var(--bg-grey-lower);
         color: var(--accent-blue);
     }
 

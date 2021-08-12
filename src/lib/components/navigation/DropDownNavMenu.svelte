@@ -31,7 +31,7 @@
 
 <style>
     a {
-        color: #555;
+        color: var(--bg-dark-grey);
         text-decoration: none;
         display: flex;
         justify-content: flex-start;
@@ -48,7 +48,7 @@
         position: absolute;
         width: 100%;
         left: 0;
-        top: 2rem;
+        top: 1.5rem;
         z-index: -1;
         overflow: hidden;
     }
@@ -57,7 +57,7 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        background: var(--bg-grey);
+        background: var(--bg-grey-lower);
         border-bottom-left-radius: 1rem;
         border-bottom-right-radius: 1rem;
         padding-top: 2rem;
@@ -69,7 +69,7 @@
         width: 100%;
         padding: 1rem;
         transition: inherit;  
-        background: var(--bg-grey);
+        background: var(--bg-grey-lower);
     }
 
     .menu-element:hover {
@@ -77,7 +77,6 @@
     }
 
     
-
 
 
     @media screen and (min-width: 1124px) {

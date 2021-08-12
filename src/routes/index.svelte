@@ -39,7 +39,7 @@
         justify-content: center;
         width: 100%;
         padding: 1rem;
-        background: var(--bg-light);
+        background: var(--bg-grey);
         padding-top: 4rem;
     }
 

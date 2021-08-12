@@ -4,6 +4,7 @@
     --accent-red: #f50057;
     --bg-light: #f7f9f9;
     --bg-grey: #E3DEE2;
+    --bg-grey-lower: #D0C8CE;
     --bg-darker-grey: #6D5F6B;
     --bg-dark-grey: #413940;
     --bg-dark: #0a1128;
@@ -12,4 +13,24 @@
 body {
     height: 100%;
     width: 100%;
+    font-family: Rubik, sans-serif;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.tippy-box {
+    padding: 0.5rem;
+}
+
+.tippy-arrow {
+    display: none;
+}
+
+.tippy-content {
+    font-family: Rubik, sans-serif;
+    border-radius: 0;  
+
 }

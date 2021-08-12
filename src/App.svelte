@@ -28,6 +28,7 @@
   </Route>
 
   <Route path="/sign-in">
+    <Nav />
     <SignIn />
   </Route>
 

@@ -9,7 +9,13 @@
 </script>
 
 <div class="card-container">
-    <div class="w-full p-0 h-full bg-grey-200">
+    <div class="top-widgets">
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea sit placeat, eius molestiae, debitis exercitationem deleniti dolores consequuntur ab beatae nobis unde, sapiente aspernatur delectus obcaecati voluptatum possimus similique voluptate.
+        </p>
+    </div>
+
+    <div class="carousel-wrapper">
        <Carousel urls={pics_urls}/>
     </div>
     <div class="text-section-wrapper">

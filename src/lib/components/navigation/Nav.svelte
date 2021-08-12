@@ -6,7 +6,7 @@
     import TileMenu from 'lib/components/navigation/SideMenu.svelte'
     import DropDownNavMenu from 'lib/components/navigation/DropDownNavMenu.svelte'
 
-    import { Link } from 'svelte-routing'
+    import { Link, link } from 'svelte-routing'
 
     
     let navVisible: boolean = true;
@@ -62,34 +62,36 @@
     <!--<button on:click={()=>$tilesVisible = true}><span id="navIcon" class={`md:hidden material-icons-round`}>menu</span></button>    -->
     
     <div class="logo-wrapper">
-        <button class="logo">
-            <svg class="logo-svg" width="203.3mm" height="78.868mm" version="1.1" viewBox="0 0 203.3 78.868" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-                <metadata>
-                 <rdf:RDF>
-                  <cc:Work rdf:about="">
-                   <dc:format>image/svg+xml</dc:format>
-                   <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-                   <dc:title/>
-                  </cc:Work>
-                 </rdf:RDF>
-                </metadata>
-                <g transform="translate(1.6524 -60.566)">
-                 <path d="m152.82 73.264a19.991 19.246 0 0 0-28.271 0 19.991 19.246 0 0 0-4.7e-4 27.219l33.125 31.891 28.271-27.219z" fill="#00e676" opacity=".8"/>
-                 <path d="m190.8 73.264a19.991 19.246 0 0 0-28.271-3e-6l-33.125 31.891 28.271 27.218 33.125-31.891a19.991 19.246 0 0 0 0-27.218z" fill="#00e676" opacity=".8"/>
-                 <g fill="#1e88e5">
-                  <path d="m51.113 90.197a23.883 23.883 0 0 1-23.883 23.883 23.883 23.883 0 0 1-23.883-23.883 23.883 23.883 0 0 1 23.883-23.883 23.883 23.883 0 0 1 23.883 23.883z" opacity=".8"/>
-                  <g stroke-linecap="round" stroke-linejoin="round">
-                   <path d="m27.23 89.265a11.197 10.957 0 0 0-11.197 10.957v33.463h22.393v-33.463a11.197 10.957 0 0 0-11.197-10.957z" opacity=".8" stroke-width=".79816"/>
-                   <path d="m16.034 118.07h22.393v3.9736h-22.393z" opacity=".8" stroke-width=".70009"/>
-                   <path d="m16.034 125.52h22.393v3.9736h-22.393z" opacity=".8" stroke-width=".70009"/>
-                  </g>
-                 </g>
-                 <path d="m94.062 65.566-19.67 20.845-19.671 20.845h39.341z" fill="#f50057" opacity=".8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0272"/>
-                 <path d="m75.153 134.43 19.67-20.845 19.671-20.845h-39.341z" fill="#f50057" opacity=".8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0272"/>
-                </g>
-            </svg>
-            <div class="logo-text-wrapper"><span class="logoTextBold">CAS</span> Portal</div>
-        </button>
+        <Link to="/">
+            <button class="logo">
+                <svg class="logo-svg" width="203.3mm" height="78.868mm" version="1.1" viewBox="0 0 203.3 78.868" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <metadata>
+                     <rdf:RDF>
+                      <cc:Work rdf:about="">
+                       <dc:format>image/svg+xml</dc:format>
+                       <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+                       <dc:title/>
+                      </cc:Work>
+                     </rdf:RDF>
+                    </metadata>
+                    <g transform="translate(1.6524 -60.566)">
+                     <path d="m152.82 73.264a19.991 19.246 0 0 0-28.271 0 19.991 19.246 0 0 0-4.7e-4 27.219l33.125 31.891 28.271-27.219z" fill="#00e676" opacity=".8"/>
+                     <path d="m190.8 73.264a19.991 19.246 0 0 0-28.271-3e-6l-33.125 31.891 28.271 27.218 33.125-31.891a19.991 19.246 0 0 0 0-27.218z" fill="#00e676" opacity=".8"/>
+                     <g fill="#1e88e5">
+                      <path d="m51.113 90.197a23.883 23.883 0 0 1-23.883 23.883 23.883 23.883 0 0 1-23.883-23.883 23.883 23.883 0 0 1 23.883-23.883 23.883 23.883 0 0 1 23.883 23.883z" opacity=".8"/>
+                      <g stroke-linecap="round" stroke-linejoin="round">
+                       <path d="m27.23 89.265a11.197 10.957 0 0 0-11.197 10.957v33.463h22.393v-33.463a11.197 10.957 0 0 0-11.197-10.957z" opacity=".8" stroke-width=".79816"/>
+                       <path d="m16.034 118.07h22.393v3.9736h-22.393z" opacity=".8" stroke-width=".70009"/>
+                       <path d="m16.034 125.52h22.393v3.9736h-22.393z" opacity=".8" stroke-width=".70009"/>
+                      </g>
+                     </g>
+                     <path d="m94.062 65.566-19.67 20.845-19.671 20.845h39.341z" fill="#f50057" opacity=".8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0272"/>
+                     <path d="m75.153 134.43 19.67-20.845 19.671-20.845h-39.341z" fill="#f50057" opacity=".8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0272"/>
+                    </g>
+                </svg>
+                <div class="logo-text-wrapper"><span class="logoTextBold">CAS</span> Portal</div>
+            </button>
+        </Link>
     </div>
 
     <div class="utilities-wrapper">
@@ -98,6 +100,7 @@
         <div class="search-button-wrapper">
             <button id="searchButton" class="search-button"><span id="searchIcon" class="search-icon material-icons-round">search</span></button>
         </div>
+        <DropDownNavMenu />
     </div>
     
 
@@ -115,7 +118,6 @@
         </Link>
     </div>
 
-    <DropDownNavMenu />
 </nav>
 </div>
 
@@ -129,6 +131,7 @@
         font-family: Product-Sans-Bold;
         src: url("../../../assets/fonts/ProductSansBold.ttf");
     }
+
     .nav-wrapper {
         position: fixed;
         width: 100%;
@@ -173,7 +176,7 @@
         height: 100%;
         padding: 0 1rem;
         transition: all 200ms;
-        background: var(--bg-light);
+        background: var(--bg-grey);
     }
     
     .logo:focus {
@@ -181,7 +184,7 @@
     }
 
     .logo:hover {
-        background: var(--bg-grey);
+        background: var(--bg-grey-lower);
 
     }
     
@@ -204,6 +207,7 @@
     }
 
     .utilities-wrapper {
+        position: relative;
         border-radius: 9999px;
         width: 100%;
         height: 3rem; /* 56px */
@@ -213,7 +217,7 @@
     }
 
     .menu-icon {
-        background: var(--bg-grey);
+        background: var(--bg-grey-lower);
         height: 100%;
         border-top-left-radius: 9999px;
         border-bottom-left-radius: 9999px;
@@ -243,7 +247,7 @@
         border-bottom-left-radius: 0px;
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px;
-        background: var(--bg-grey);
+        background: var(--bg-grey-lower);
         outline: none;
         border: none;
     }
@@ -278,7 +282,7 @@
         padding-right: 1rem;
         padding-left: 0.5rem;
         transition: all 200ms;
-        background: var(--bg-grey);
+        background: var(--bg-grey-lower);
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -398,7 +402,7 @@
         }
 
         .nav-wrapper {
-            background: var(--bg-light);
+            background: var(--bg-grey);
         }
 
         .utilities-wrapper {

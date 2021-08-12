@@ -1,32 +1,41 @@
 <script lang="ts">
     import { createForm } from 'felte'
+    import { signInFormSchema } from 'lib/validationSchemas'
+    import { validator } from '@felte/validator-yup'
+    import reporter from '@felte/reporter-tippy'
 
-    const { form } = createForm({
-        onSubmit: values => {
-            console.log(JSON.stringify(values))
-        }
+    const { form, errors } = createForm({
+        onSubmit: (values) => {
+            console.log(JSON.stringify(errors));
+        },
+        extend: [validator, reporter()],
+        validateSchema: signInFormSchema,
     })
 </script>
 
+{@debug $errors}
+
 <div class="modal-wrapper">
-    <div class="form-wrapper">
-        <form use:form>
-            <div class="text-input-group">
-                <label for="email">Email address</label>
-                <input class="email" type="email" name="email" />
-            </div>
-            <div class="text-input-group">
-                <label for="password">Password</label>
-                <input class="password" type="password" name="password" />
-            </div>
-            <input class="sign-in-button" type="submit" value="Sign in" />
-        </form>
+    <div class="title">
+        <h3>Sign in to CAS Portal</h3>
+    </div>
+    <form use:form>
+        <input class:error="{$errors.email}" class="email" type="email" name="email" placeholder="Email address"/>
+        <input class:error="{$errors.password}" class="password" type="password" name="password" placeholder="Password" />
+        <input class="sign-in-button" type="submit" value="Sign in" />
+    </form>
+
+    <div class="social-wrapper">
+        <button>Google</button>
+        <button>Facebook</button>
     </div>
 </div>
 
 <style>
+
+
     .modal-wrapper {
-        width: 40%;
+        width: 20rem;
         background: white;
         padding: 2rem;
         border-radius: 0.5rem;
@@ -34,6 +43,7 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        font-family: Rubik, sans-serif;
     }
 
     form {
@@ -41,28 +51,52 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        width: 80%;
     }
 
-    .text-input-group {
+    .social-wrapper {
+        margin-top: 2rem;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
+        align-items: center;
+        width: 80%;
+    }
+
+    .social-wrapper > button {
+        width: 100%;
+        margin-top: 1rem;
+        padding: 1rem 2rem;
+        border-radius: 9999px;
+        background: var(--accent-green);
+        color: white;
+        font-size: .9rem;
+        font-family: Rubik, sans-serif;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .error {
+        outline: 2px solid var(--accent-red) !important;
+    }
+
+   
+    input {
+        width: 80%;
         margin-top: 1rem;
     }
 
-    .text-input-group > label {
-        padding: 0.5rem;
-        font-size: .9rem;
+    input::placeholder {
+        font-family: Rubik, sans-serif;
     }
 
     .email, .password {
-        height: 2rem;
-        border-radius: 0.5rem;
+        box-sizing: border-box;
+        border-radius: 9999px;
+        width: 100%;
         outline: none;
         border: none;
         background: var(--bg-grey);
-        padding: 0.2rem 0.5rem;
+        padding: 1rem 2rem;
     }
 
     .email:focus, .password:focus {
@@ -71,18 +105,21 @@
     
 
     .sign-in-button {
-        margin-top: 2rem;
         width: 100%;
         background: var(--accent-blue);
         border-radius: 9999px;
-        height: 2rem;
         color: white;
         outline: none;
         border: none;
         cursor: pointer;
+        padding: 1rem 2rem;
+        font-size: .9rem;
+        font-family: Rubik, sans-serif;
+        letter-spacing: 1px;
+        text-transform: uppercase;
     }
 
-    .sign-in-button:hover {
+    button:hover {
         filter: brightness(.9);
     }
 </style>

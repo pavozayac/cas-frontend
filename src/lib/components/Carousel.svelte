@@ -52,16 +52,6 @@
 
 <style>
 
-    @media (min-width: 640px) {
-        #container {
-            max-width: 640px;
-        }
-    }
-    @media (min-width: 768px) {
-        #container {
-            max-width: 768px;
-        }
-    }
     #container {
         width: 100%;
         height: 100%;

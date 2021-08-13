@@ -2,6 +2,7 @@
     import { menuElements } from 'lib/constants'
     import { menuVisible } from 'stores/nav'
     import { cubicInOut } from 'svelte/easing'
+    import { slide } from 'svelte/transition'
 
     function rollDown (node, { duration }) {
 
@@ -19,7 +20,7 @@
 
 {#if $menuVisible == true}
 <div class="overflow-hider">
-    <div transition:rollDown={{duration: 300}} class="menu-container">
+    <div transition:slide class="menu-container">
         {#each menuElements as element}
             <div class="menu-element">
                 <a href="#" class="tile"><i class={element.iconType}>{element.icon}</i><span class="tile-text">{element.name}</span></a>

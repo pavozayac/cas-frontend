@@ -18,9 +18,13 @@
         flex-direction: column;
         width: 14rem;
         position: fixed;
-        margin-left: 4rem;
-        margin-top: 7rem;
+        top: 50%;
+        left: 5rem;
+        transform: translateY(-50%);
         background: transparent;
+        background: var(--bg-grey-lower);
+        padding: 1rem;
+        border-radius: 1rem;
     }
 
     .tiles-container a {
@@ -36,6 +40,7 @@
     }
 
     .tile {
+        background: inherit;
         border-radius: 9999px;
         overflow: hidden;
         padding: 1rem 2rem;
@@ -50,7 +55,7 @@
     }
 
     .tile:hover {
-        background: var(--bg-grey-lower);
+        filter: brightness(.9);
         color: var(--accent-blue);
     }
 
@@ -61,7 +66,7 @@
         font-weight: 200;
     }
 
-    @media screen and (min-width: 1124px) {
+    @media screen and (min-width: 1380px) {
         .tiles-container {
             display: flex;
         }

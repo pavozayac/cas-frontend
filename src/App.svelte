@@ -3,6 +3,7 @@
   import Nav from 'lib/components/navigation/Nav.svelte'
   import Index from 'routes/index.svelte'
   import SignIn from 'routes/signin/SignInRoute.svelte'
+  import SideMenu from 'lib/components/navigation/SideMenu.svelte'
 
   export let url = ''
 </script>
@@ -23,6 +24,7 @@
 
 <Router url={url}>
   <Route path="/">
+    <SideMenu/>
     <Nav />
     <Index />
   </Route>

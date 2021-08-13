@@ -3,7 +3,6 @@
     import Tiles from './SideMenu.svelte';
     import { fade } from 'svelte/transition'
     import { menuVisible } from 'stores/nav'
-    import TileMenu from 'lib/components/navigation/SideMenu.svelte'
     import DropDownNavMenu from 'lib/components/navigation/DropDownNavMenu.svelte'
 
     import { Link, link } from 'svelte-routing'
@@ -54,7 +53,6 @@
 <svelte:window bind:scrollY={y2}/>
 <svelte:body on:mousemove={handleMousemove} />
 
-<TileMenu/>
 <div class="nav-wrapper"  bind:this={nav}>
 <nav>
     <!--<div bind:this={navBorder} class={`-z-1 absolute h-full p-4 border-b-3 border-gray-300 transition-all duration-500 ${y2 == 0 ? "w-0 left-1/2 opacity-0" : "w-full left-0"}`}></div>-->
@@ -231,7 +229,7 @@
         filter: brightness(.9);
     }
 
-    @media screen and (min-width: 1124px) {
+    @media screen and (min-width: 1380px) {
         .menu-icon {
             display: none;
         }
@@ -256,7 +254,7 @@
         outline: none;
     }
 
-    @media screen and (min-width: 1124px) {
+    @media screen and (min-width: 1380px) {
         .searchbox {
             border-top-left-radius: 9999px;
             border-bottom-left-radius: 9999px;
@@ -314,6 +312,7 @@
 
 
     .sign-in-button {
+        font-family: Rubik, sans-serif;
         height: 100%;
         display: none;
         background: var(--accent-blue);
@@ -403,6 +402,7 @@
 
         .nav-wrapper {
             background: var(--bg-grey);
+            border-bottom: 2px solid var(--bg-grey-lower);
         }
 
         .utilities-wrapper {

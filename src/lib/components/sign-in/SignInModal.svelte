@@ -8,7 +8,11 @@
         onSubmit: (values) => {
             console.log(JSON.stringify(errors));
         },
-        extend: [validator, reporter()],
+        extend: [validator, reporter({
+            tippyProps: {
+                trigger: 'submit'
+            }
+        })],
         validateSchema: signInFormSchema,
     })
 </script>

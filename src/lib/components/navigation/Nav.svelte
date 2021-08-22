@@ -5,8 +5,7 @@
     import { menuVisible } from 'stores/nav'
     import DropDownNavMenu from 'lib/components/navigation/DropDownNavMenu.svelte'
 
-    import { Link, link } from 'svelte-routing'
-
+    import { link } from 'svelte-spa-router'
     
     let navVisible: boolean = true;
     let y1:number = 0, y2: number;
@@ -60,8 +59,7 @@
     <!--<button on:click={()=>$tilesVisible = true}><span id="navIcon" class={`md:hidden material-icons-round`}>menu</span></button>    -->
     
     <div class="logo-wrapper">
-        <Link to="/">
-            <button class="logo">
+        <a class="logo" href="/" use:link>
                 <svg class="logo-svg" width="203.3mm" height="78.868mm" version="1.1" viewBox="0 0 203.3 78.868" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
                     <metadata>
                      <rdf:RDF>
@@ -88,8 +86,7 @@
                     </g>
                 </svg>
                 <div class="logo-text-wrapper"><span class="logoTextBold">CAS</span> Portal</div>
-            </button>
-        </Link>
+        </a>
     </div>
 
     <div class="utilities-wrapper">
@@ -109,11 +106,11 @@
     </div>-->
 
     <div class="sign-in-button-wrapper">
-        <Link to="sign-in" style="text-decoration: none">
+        <a href="/sign-in" use:link style="text-decoration: none">
             <div class="sign-in-button">
                 <span id="lockIcon" class="material-icons-round">lock</span>Sign in
             </div>
-        </Link>
+        </a>
     </div>
 
 </nav>
@@ -160,6 +157,8 @@
         flex: 1;
         height: 3rem; 
         overflow: hidden;
+        display: flex;
+        justify-content: flex-start;
     }
 
     .logo {

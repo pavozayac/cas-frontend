@@ -3,6 +3,8 @@
     import { signInFormSchema } from 'lib/validationSchemas'
     import { validator } from '@felte/validator-yup'
     import reporter from '@felte/reporter-tippy'
+    import GoogleButton from './GoogleSignInButton.svelte'
+    import FacebookButton from './FacebookSignInButton.svelte'
 
     const { form, errors } = createForm({
         onSubmit: (values) => {
@@ -30,8 +32,8 @@
     </form>
 
     <div class="social-wrapper">
-        <button>Google</button>
-        <button>Facebook</button>
+        <GoogleButton/>
+        <FacebookButton/>
     </div>
 </div>
 
@@ -80,7 +82,7 @@
     }
 
     .error {
-        outline: 2px solid var(--accent-red) !important;
+        box-shadow: 0 0 0 2px var(--accent-red);
     }
 
    

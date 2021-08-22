@@ -1,6 +1,6 @@
 <script lang="ts">
     import SignInModal from 'lib/components/sign-in/SignInModal.svelte'
-    import { Link } from 'svelte-routing'
+    import { link } from 'svelte-spa-router'
 
 </script>
 
@@ -10,12 +10,10 @@
 
 <main>
     <div class="back-wrapper">    
-        <Link to="/">
-            <button class="back-button">
-                <span class="material-icons-round">arrow_back</span>
-                Back to home screen
-            </button>
-        </Link>
+        <a class="back-button" use:link href="/">
+            <span class="material-icons-round">arrow_back</span>
+            Back to home screen
+        </a>
     </div>
     <SignInModal />
 </main>

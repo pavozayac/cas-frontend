@@ -1,7 +1,12 @@
 <script lang="ts">
     import Card from '../lib/components/Card.svelte'
+    import Nav from 'lib/components/navigation/Nav.svelte'
+    import SideMenu from 'lib/components/navigation/SideMenu.svelte'
 
 </script>
+
+<Nav/>
+<SideMenu/>
 
 <main>
     <div class="cards-container">

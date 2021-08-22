@@ -21,6 +21,7 @@
   "dependencies": {
     "@felte/reporter-tippy": "^0.3.6",
     "@felte/validator-yup": "^0.2.7",
+    "@types/gapi": "0.0.41",
     "felte": "^0.7.13",
     "material-design-icons": "^3.0.1",
     "node-sass": "^6.0.1",
@@ -30,7 +31,7 @@
     "sass": "^1.37.5",
     "scss": "^0.2.4",
     "svelte-inline-svg": "^1.0.8",
-    "svelte-routing": "^1.6.0",
+    "svelte-spa-router": "^3.2.0",
     "tippy.js": "^6.3.1",
     "vite-plugin-svelte": "^3.0.1",
     "vite-svg-loader": "^1.5.1",

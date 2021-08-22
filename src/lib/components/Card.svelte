@@ -5,7 +5,7 @@
     import { cubicInOut } from 'svelte/easing'
     import { slide } from 'svelte/transition'
 
-    let bookmarked: boolean = true
+    let bookmarked: boolean = false
 
     let commentsVisible: boolean = false
 

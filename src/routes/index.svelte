@@ -1,21 +1,20 @@
 <script lang="ts">
-    import Card from '../lib/components/Card.svelte'
+    import Card from 'lib/components/reflections/Card.svelte'
     import Nav from 'lib/components/navigation/Nav.svelte'
     import SideMenu from 'lib/components/navigation/SideMenu.svelte'
-
+    import Container from 'lib/components/Container.svelte'
 </script>
 
 <Nav/>
 <SideMenu/>
 
 <main>
-    <div class="cards-container">
+    <Container>
         <Card />
         <Card />
         <Card />
         <Card />
-        <!--<Carousel urls={pics_urls} />-->
-    </div>
+    </Container>
 </main>
 
  <style>
@@ -47,20 +46,6 @@
         background: var(--bg-grey);
         padding-top: 4rem;
     }
-
-    .cards-container {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
     
-
-    @media screen and (min-width: 768px) {
-        .cards-container {
-            max-width: 50%;
-        }
-    }
 </style>
   

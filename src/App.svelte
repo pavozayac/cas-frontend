@@ -1,15 +1,12 @@
 <script lang="ts">
-  import Router from 'svelte-spa-router'
+  import { Route, router } from 'tinro'
   import Nav from 'lib/components/navigation/Nav.svelte'
   import Index from 'routes/index.svelte'
   import SignIn from 'routes/signin/SignInRoute.svelte'
   import SideMenu from 'lib/components/navigation/SideMenu.svelte'
+  import ProfilesRoute from 'routes/profiles/CurrentProfileRoute.svelte'
+import CurrentProfileRoute from 'routes/profiles/CurrentProfileRoute.svelte'
 
-
-  const routes = {
-    '/': Index,
-    '/sign-in': SignIn,
-  }
 </script>
 
 <svelte:head>
@@ -26,4 +23,14 @@
 </svelte:head>
 
 
-<Router {routes}/>
+<Route path='/'>
+  <Index/>
+</Route>
+<Route path='/sign-in'>
+  <SignIn/>
+</Route>
+<Route path='/profiles/*'>
+  <Route path='/current'>
+    <CurrentProfileRoute/>
+  </Route>
+</Route>

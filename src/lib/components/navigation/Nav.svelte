@@ -4,8 +4,9 @@
     import { fade } from 'svelte/transition'
     import { menuVisible } from 'stores/nav'
     import DropDownNavMenu from 'lib/components/navigation/DropDownNavMenu.svelte'
-
-    import { link } from 'svelte-spa-router'
+    import { onMount } from 'svelte';
+    import { current_profile } from 'api/Profile'
+    import { active } from 'tinro'
     
     let navVisible: boolean = true;
     let y1:number = 0, y2: number;
@@ -46,6 +47,10 @@
         }
     }*/
 
+    onMount(async () => {
+        
+    })
+
 
 </script>
 
@@ -59,7 +64,7 @@
     <!--<button on:click={()=>$tilesVisible = true}><span id="navIcon" class={`md:hidden material-icons-round`}>menu</span></button>    -->
     
     <div class="logo-wrapper">
-        <a class="logo" href="/" use:link>
+        <a class="logo" href="/">
                 <svg class="logo-svg" width="203.3mm" height="78.868mm" version="1.1" viewBox="0 0 203.3 78.868" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
                     <metadata>
                      <rdf:RDF>
@@ -104,14 +109,37 @@
         <span class="logoLetters text-3xl text-red-500">a</span>
         <span class="logoLetters text-3xl text-green-500">s</span>
     </div>-->
-
     <div class="sign-in-button-wrapper">
-        <a href="/sign-in" use:link style="text-decoration: none">
-            <div class="sign-in-button">
-                <span id="lockIcon" class="material-icons-round">lock</span>Sign in
-            </div>
-        </a>
+        {#await current_profile()}
+            <a href="sign-in" style="text-decoration: none" use:active>
+                <div class="sign-in-button">
+                    <span id="lockIcon" class="material-icons-round">lock</span>Sign in
+                </div>
+            </a>
+        {:then profile}
+            <a href="/profiles/current" class="profile-link">
+                <div class="profile-info">
+                    <span class="profile-name">{profile.first_name} {profile.last_name}</span>
+                    {#if profile.avatar}
+                        <img alt="Profile picture" class="profile-icon" src={profile.avatar.saved_path} />
+                    {:else}
+                        <div style="background: red;" class="profile-icon"/>
+                    {/if}
+                </div>
+            </a>
+        {:catch error}
+            <!-- {error} -->
+            <a href="sign-in" style="text-decoration: none" use:active>
+                <div class="sign-in-button">
+                    <span id="lockIcon" class="material-icons-round">lock</span>Sign in
+                </div>
+            </a>
+        {/await}
+    <!-- <div class="sign-in-button-wrapper"> -->
     </div>
+
+
+    
 
 </nav>
 </div>
@@ -152,6 +180,37 @@
         background: transparent;
         height: 4rem;
     }
+
+    .profile-link:hover .profile-info{
+        background: var(--bg-grey-lower);
+    }
+
+    .profile-info {
+        display: flex;
+        align-items: center;
+        padding: 0.4rem 1rem;
+        border-radius: 9999px;
+        cursor: pointer;
+        transition: all 200ms;
+    }
+
+    .profile-info:hover {
+        background: var(--bg-grey);
+    }
+
+    .profile-icon {
+        border-radius: 9999px;
+        width: 3rem;
+        height: 3rem;
+        object-fit: cover;
+    }
+
+    .profile-name {
+        font-size: 1rem;
+        font-weight: 400;
+        margin-right: 1rem;
+    }
+
 
     .logo-wrapper {
         flex: 1;
@@ -305,6 +364,7 @@
     .sign-in-button-wrapper {
         display: flex;
         justify-content: flex-end;
+        align-items: center;
         flex: 1;
         height: 3rem;
     }
@@ -312,7 +372,7 @@
 
     .sign-in-button {
         font-family: Rubik, sans-serif;
-        height: 100%;
+        height: 3rem;
         display: none;
         background: var(--accent-blue);
         color: white;

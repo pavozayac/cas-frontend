@@ -6,9 +6,17 @@
     import GoogleButton from './GoogleSignInButton.svelte'
     import FacebookButton from './FacebookSignInButton.svelte'
 
+    import { login } from 'api/Auth'
+    import { route } from 'api/utils'
+    import axios from 'axios';
+
+    import { router } from 'tinro'
+
     const { form, errors } = createForm({
-        onSubmit: (values) => {
-            console.log(JSON.stringify(errors));
+        onSubmit: async (values) => {
+            console.log(values)
+            console.log(await login(values.email, values.password))
+            router.goto('/')
         },
         extend: [validator, reporter({
             tippyProps: {

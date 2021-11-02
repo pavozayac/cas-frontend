@@ -3,6 +3,7 @@
     import { onMount } from 'svelte';
     import { current_profile } from 'api/Profile'
     import Card from 'lib/components/reflections/Card.svelte'
+    import ThinButton from 'lib/components/generic/ThinButton.svelte'
 
 </script>
 
@@ -10,6 +11,9 @@
     {#await current_profile()}
     {:then profile}
     <div class="upper-data">
+        <div class="edit-wrapper">
+            <ThinButton text="Edit profile" target="/profiles/current/edit" fullIconName="edit"/>
+        </div>
         <div class="profile-info">
             {#if profile.avatar}
                 <img alt="Profile picture" class="profile-icon" src={profile.avatar.saved_path} />
@@ -17,27 +21,44 @@
                 <div style="background: red;" class="profile-icon"/>
             {/if}
             <span class="profile-name">{profile.first_name} {profile.last_name}</span>
+            <div class="detail-info">
+                <div class="tile">Joined {profile.date_joined}</div>
+                <div class="tile">Posted {23} times</div>
+            </div>
         </div>
     </div>
     {/await}
-    <Card/>
-    <Card/>
-    <Card/>
-    <Card/>
+    <div class="posts-container">
+        <Card/>
+        <Card/>
+        <Card/>
+        <Card/>
+    </div>
 </Container>
 
 <style>
+    .edit-wrapper {
+        width: 8rem;
+    }
+    .posts-container {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
     .upper-data {
+        margin-top: 1rem;
         background: white;
         width: 100%;
         border-radius: 0.5rem;
         padding: 3rem;
         display: flex;
+        flex-direction: column;
         box-sizing: border-box;
     }
 
     .profile-name {
-        margin-left: 5rem;
+        margin-top: 2rem;
         font-size: 2rem;
         color: var(--bg-dark-grey);
     }
@@ -45,6 +66,7 @@
     .profile-info {
         width: 100%;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: flex-start;
         padding: 0.4rem 1rem;
@@ -56,5 +78,21 @@
         width: 10rem;
         height: 10rem;
         object-fit: cover;
+    }
+
+    .detail-info {
+        margin-top: 1rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .tile {
+        padding: 2rem 2rem;
+        font-size: 1.2rem;
+        background: var(--bg-light);
+        border-radius: 1rem;
+        text-align: center;
+        color: var(--bg-dark-grey);
     }
 </style>

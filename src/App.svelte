@@ -7,6 +7,7 @@
   import ProfilesRoute from 'routes/profiles/CurrentProfileRoute.svelte'
   import CurrentProfileRoute from 'routes/profiles/CurrentProfileRoute.svelte'
   import Container from 'lib/components/Container.svelte';
+import EditProfile from 'routes/profiles/EditProfile.svelte'
 
 </script>
 
@@ -35,5 +36,8 @@
 <Route path='/profiles/*'>
   <Route path='/current'>
     <CurrentProfileRoute/>
+  </Route>
+  <Route path='/current/edit'>
+    <EditProfile />
   </Route>
 </Route>

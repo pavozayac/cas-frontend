@@ -13,3 +13,12 @@ export const registerSchema = yup.object({
     last_name: yup.string().required('Last name is required'),
     post_visibility: yup.number().oneOf([0,1,2]).required('Post visibility is required')
 })
+
+export const editProfileSchema = yup.object({
+    fist_name: yup.string().required('First name required'),
+    last_name: yup.string().required('Last name required'),
+})
+
+export const profileAvatar = yup.object({
+    file: yup.mixed().required('File required').test('Size test', value=>value.length <=200000)
+})

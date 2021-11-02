@@ -1,16 +1,23 @@
 <script lang="ts">
     import { createForm } from 'felte'
-    import { signInFormSchema } from 'lib/validationSchemas'
+    import { signInFormSchema, registerSchema } from 'lib/validationSchemas'
     import { validator } from '@felte/validator-yup'
     import reporter from '@felte/reporter-tippy'
     import GoogleButton from './GoogleSignInButton.svelte'
     import FacebookButton from './FacebookSignInButton.svelte'
+    import Form from 'lib/components/forms/Form.svelte'
+    import TextField from 'lib/components/forms/TextField.svelte';
+    import Submit from 'lib/components/forms/Submit.svelte'
+    import Group from 'lib/components/transitions/Group.svelte'
+    import Phase from 'lib/components/transitions/Phase.svelte'
+    import Container from '../Container.svelte';
 
-    import { login } from 'api/Auth'
+    import { login, register } from 'api/Auth'
     import { route } from 'api/utils'
     import axios from 'axios';
 
-    import { router } from 'tinro'
+    import { router, active, Route } from 'tinro'
+    import RadioGroup from '../forms/RadioGroup.svelte';
 
     const { form, errors } = createForm({
         onSubmit: async (values) => {
@@ -25,30 +32,71 @@
         })],
         validateSchema: signInFormSchema,
     })
+
+    const register_redirect = async (values) => {
+        console.log(values.email)
+        const res = await register(values);
+        router.goto('/sign-in')
+    }           
+
 </script>
 
 {@debug $errors}
-
+<Container>
 <div class="modal-wrapper">
-    <div class="title">
-        <h3>Sign in to CAS Portal</h3>
-    </div>
-    <form use:form>
-        <input class:error="{$errors.email}" class="email" type="email" name="email" placeholder="Email address"/>
-        <input class:error="{$errors.password}" class="password" type="password" name="password" placeholder="Password" />
-        <input class="sign-in-button" type="submit" value="Sign in" />
-    </form>
+    <Route path="/">     
+        <div class="title">
+            <h3>Sign in to CAS Portal</h3>
+        </div>
+        <form use:form>
+            <input class:error="{$errors.email}" class="email" type="email" name="email" placeholder="Email address"/>
+            <input class:error="{$errors.password}" class="password" type="password" name="password" placeholder="Password" />
+            <input class="sign-in-button" type="submit" value="Sign in" />
+        </form>
 
-    <div class="social-wrapper">
-        <GoogleButton/>
-        <FacebookButton/>
-    </div>
+        <div class="social-wrapper">
+            <GoogleButton/>
+            <FacebookButton/>   
+        </div>
+        <a class="register-button" use:active href="sign-in/register">Register</a>
+    </Route>
+
+    <Route path="/register">
+        <Form let:errors let:handleSubmit validationSchema={registerSchema} submitAction={register_redirect}>
+            <TextField {errors} name="email" type="email"/>
+            <TextField {errors} name="first_name" type="text" />
+            <TextField {errors} name="last_name" type="text" />
+            <br/>
+            <TextField {errors} name="password" type="password" />
+            <TextField {errors} name="repeat_password" type="password" />
+            <RadioGroup text="Post visibility" name="post_visibility" items={{
+                'Only you can see your posts': 0,
+                'Only your group can see your posts': 1,
+                'Anybody can see your posts': 2
+            }}/>
+            <br/>
+            <Submit text='Register' />
+        </Form>
+    </Route>
 </div>
+</Container>
 
 <style>
-
+    .register-button {
+        cursor: pointer;
+        text-align: center;
+        text-transform: uppercase;
+        margin-top: 2rem;
+        width: 60%;
+        color: var(--accent-blue);
+        background: white;
+        border-radius: 9999px;
+        outline: var(--accent-blue) 2px solid;
+        padding: 1rem 2rem;
+    }
 
     .modal-wrapper {
+        /* margin: auto; */
         width: 20rem;
         background: white;
         padding: 2rem;

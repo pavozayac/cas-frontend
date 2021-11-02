@@ -14,7 +14,7 @@ import { onDestroy, onMount } from "svelte";
                 { fields: "first_name,last_name,email" },
                 function (res) {
                     console.log(res)
-                    fetch('http://localhost:8000/auth/facebook', {
+                    fetch('https://localhost:8000/auth/facebook', {
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
@@ -24,7 +24,8 @@ import { onDestroy, onMount } from "svelte";
                             signed_request: statusRes['authResponse']['signedRequest'],
                             ...res
                         }),
-                        mode: 'no-cors'
+                        mode: 'no-cors',
+                        credentials: 'include'
                     }).then(res=>console.log(res))
                 }
             );

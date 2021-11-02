@@ -29,3 +29,13 @@ export async function login(email: string, password: string): Promise<JWT> {
 export async function logout() {
     const res = await fetch(route('logout'))
 }
+
+export async function register(values) {
+    const res = await fetch(route('register'), {
+        method: 'POST',
+        body: JSON.stringify(values),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}

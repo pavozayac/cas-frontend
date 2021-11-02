@@ -5,7 +5,8 @@
   import SignIn from 'routes/signin/SignInRoute.svelte'
   import SideMenu from 'lib/components/navigation/SideMenu.svelte'
   import ProfilesRoute from 'routes/profiles/CurrentProfileRoute.svelte'
-import CurrentProfileRoute from 'routes/profiles/CurrentProfileRoute.svelte'
+  import CurrentProfileRoute from 'routes/profiles/CurrentProfileRoute.svelte'
+  import Container from 'lib/components/Container.svelte';
 
 </script>
 
@@ -26,8 +27,10 @@ import CurrentProfileRoute from 'routes/profiles/CurrentProfileRoute.svelte'
 <Route path='/'>
   <Index/>
 </Route>
-<Route path='/sign-in'>
-  <SignIn/>
+<Route path='/sign-in/*'>
+  <Container>
+    <SignIn/>
+  </Container>
 </Route>
 <Route path='/profiles/*'>
   <Route path='/current'>

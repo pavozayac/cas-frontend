@@ -4,7 +4,8 @@
           fetch('http://localhost:8000/auth/google', {
                method: 'POST',
                body: JSON.stringify(res),
-               mode: 'no-cors'
+               mode: 'no-cors',
+               credentials: 'include'
           }).then(res=>console.log(res)).catch(err=>console.log(err))
      }
 </script>

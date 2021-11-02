@@ -20,6 +20,8 @@
     "vite-tsconfig-paths": "^3.3.13"
   },
   "dependencies": {
+    "@felte/reporter-dom": "^0.3.10",
+    "@felte/reporter-svelte": "^0.3.17",
     "@felte/reporter-tippy": "^0.3.6",
     "@felte/validator-yup": "^0.2.7",
     "@types/gapi": "0.0.41",

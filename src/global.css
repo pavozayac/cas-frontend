@@ -10,6 +10,12 @@
     --bg-dark: #0a1128;
 }
 
+html {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
 body {
     height: 100%;
     width: 100%;

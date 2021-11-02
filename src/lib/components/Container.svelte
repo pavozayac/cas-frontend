@@ -5,13 +5,15 @@
 <style>
     .container {
         width: 100%;
-        display: flex;
-        flex-direction: column;
+        height: 100%;
+        display: block;
+        overflow: visible;
+        /* flex-direction: column;
         align-items: center;
         justify-content: center;
         box-sizing: content-box;
         margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.5rem; */
     }
     
 

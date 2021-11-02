@@ -40,7 +40,7 @@
     <div id="images" style={roundedImages ? 'border-radius: 0.5rem;' : ''}>
         <div id="slider" bind:this={slider} >
             {#each urls as src}
-                {#await preload(src) then _}
+                {#await preload(src) then img}
                     <img style={roundedImages ? 'border-radius: 0.5rem;' : ''} alt="" {src} />                
                 {/await}
             {/each}

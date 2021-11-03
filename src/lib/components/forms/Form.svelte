@@ -6,12 +6,13 @@ import { onMount } from 'svelte';
     
     export let submitAction
     export let validationSchema
+    export let initialValues: Record<string, any> = {}
 
     const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit } = createForm({
-        onSubmit: (values) => {
+        onSubmit: async values => {
             // console.log('bruh')
             // console.log(values)
-            submitAction(values)
+            await submitAction(values)
         },
         extend: [validator, reporter({
             tippyProps: {
@@ -19,6 +20,7 @@ import { onMount } from 'svelte';
             }
         })],
         validateSchema: validationSchema,
+        initialValues: initialValues
     })
 
     // const altSubmit = createSubmitHandler({

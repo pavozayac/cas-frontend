@@ -5,8 +5,9 @@
     import { menuVisible } from 'stores/nav'
     import DropDownNavMenu from 'lib/components/navigation/DropDownNavMenu.svelte'
     import { onMount } from 'svelte';
-    import { current_profile } from 'api/Profile'
+    import { currentProfile } from 'api/Profile'
     import { active } from 'tinro'
+import { avatarSrc } from 'api/utils';
     
     let navVisible: boolean = true;
     let y1:number = 0, y2: number;
@@ -110,7 +111,7 @@
         <span class="logoLetters text-3xl text-green-500">s</span>
     </div>-->
     <div class="sign-in-button-wrapper">
-        {#await current_profile()}
+        {#await currentProfile()}
             <a href="sign-in" style="text-decoration: none" use:active>
                 <div class="sign-in-button">
                     <span id="lockIcon" class="material-icons-round">lock</span>Sign in
@@ -121,7 +122,7 @@
                 <div class="profile-info">
                     <span class="profile-name">{profile.first_name} {profile.last_name}</span>
                     {#if profile.avatar}
-                        <img alt="Profile picture" class="profile-icon" src={profile.avatar.saved_path} />
+                        <img alt="Profile picture" class="profile-icon" src={avatarSrc(profile.avatar)} />
                     {:else}
                         <div style="background: red;" class="profile-icon"/>
                     {/if}
@@ -158,6 +159,7 @@
     .nav-wrapper {
         position: fixed;
         width: 100%;
+        height: 5rem;
         z-index: 20;
         box-sizing: border-box;
         background: transparent;

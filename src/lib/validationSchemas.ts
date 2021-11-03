@@ -14,11 +14,16 @@ export const registerSchema = yup.object({
     post_visibility: yup.number().oneOf([0,1,2]).required('Post visibility is required')
 })
 
+export const profileUpdateSchema = yup.object({
+    first_name: yup.string().required('First name is required'),
+    last_name: yup.string().required('Last name is required'),
+})
+
 export const editProfileSchema = yup.object({
     fist_name: yup.string().required('First name required'),
     last_name: yup.string().required('Last name required'),
 })
 
 export const profileAvatar = yup.object({
-    file: yup.mixed().required('File required').test('Size test', value=>value.length <=200000)
+    file: yup.mixed().required('File required').test('Size test', 'File too large', value=>value.size <= 5000000, )
 })

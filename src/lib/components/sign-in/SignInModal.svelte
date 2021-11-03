@@ -18,6 +18,7 @@
 
     import { router, active, Route } from 'tinro'
     import RadioGroup from '../forms/RadioGroup.svelte';
+import CenterWrapper from '../CenterWrapper.svelte'
 
     const { form, errors } = createForm({
         onSubmit: async (values) => {
@@ -43,6 +44,7 @@
 
 {@debug $errors}
 <Container>
+<CenterWrapper>
 <div class="modal-wrapper">
     <Route path="/">     
         <div class="title">
@@ -58,7 +60,7 @@
             <GoogleButton/>
             <FacebookButton/>   
         </div>
-        <a class="register-button" use:active href="sign-in/register">Register</a>
+        <a class="register-button" use:active href="/sign-in/register">Register</a>
     </Route>
 
     <Route path="/register">
@@ -69,7 +71,7 @@
             <br/>
             <TextField {errors} name="password" type="password" />
             <TextField {errors} name="repeat_password" type="password" />
-            <RadioGroup text="Post visibility" name="post_visibility" items={{
+            <RadioGroup initialValue={0} text="Post visibility" name="post_visibility" items={{
                 'Only you can see your posts': 0,
                 'Only your group can see your posts': 1,
                 'Anybody can see your posts': 2
@@ -79,6 +81,7 @@
         </Form>
     </Route>
 </div>
+</CenterWrapper>
 </Container>
 
 <style>

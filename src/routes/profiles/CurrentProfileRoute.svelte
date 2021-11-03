@@ -1,14 +1,22 @@
 <script lang="ts">
     import Container from 'lib/components/Container.svelte'
     import { onMount } from 'svelte';
-    import { current_profile } from 'api/Profile'
+    import { currentProfile } from 'api/Profile'
     import Card from 'lib/components/reflections/Card.svelte'
     import ThinButton from 'lib/components/generic/ThinButton.svelte'
+import CenterWrapper from 'lib/components/CenterWrapper.svelte';
+import { avatarSrc } from 'api/utils';
+import Nav from 'lib/components/navigation/Nav.svelte';
+import SideMenu from 'lib/components/navigation/SideMenu.svelte';
 
 </script>
+<Nav/>
+<SideMenu />
 
+<CenterWrapper>
 <Container>
-    {#await current_profile()}
+<CenterWrapper>
+    {#await currentProfile()}
     {:then profile}
     <div class="upper-data">
         <div class="edit-wrapper">
@@ -16,7 +24,7 @@
         </div>
         <div class="profile-info">
             {#if profile.avatar}
-                <img alt="Profile picture" class="profile-icon" src={profile.avatar.saved_path} />
+                <img alt="Profile picture" class="profile-icon" src={avatarSrc(profile.avatar)} />
             {:else}
                 <div style="background: red;" class="profile-icon"/>
             {/if}
@@ -34,7 +42,11 @@
         <Card/>
         <Card/>
     </div>
+
+</CenterWrapper>
 </Container>
+</CenterWrapper>
+
 
 <style>
     .edit-wrapper {
@@ -49,7 +61,7 @@
     .upper-data {
         margin-top: 1rem;
         background: white;
-        width: 100%;
+        width: 40rem;
         border-radius: 0.5rem;
         padding: 3rem;
         display: flex;

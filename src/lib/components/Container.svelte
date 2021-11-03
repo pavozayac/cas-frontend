@@ -1,19 +1,27 @@
-<div class="container">
+<script lang="ts">
+    export let navMargin = true
+</script>
+
+<div class="container" class:navMargin>
     <slot></slot>
 </div>
 
 <style>
     .container {
-        width: 100%;
-        height: 100%;
+        width: 1000px;
+        height: auto;
         /* display: flex; */
         /* overflow: visible; */
-        /* flex-direction: column; */
-        /* align-items: center; */
+        flex-direction: column;
+        align-items: center;
         /* justify-content: center; */
         /* box-sizing: content-box; */
         /* margin-top: 0.5rem; */
         /* margin-bottom: 0.5rem; */
+    }
+
+    .navMargin {
+        margin-top: 5rem;
     }
     
 

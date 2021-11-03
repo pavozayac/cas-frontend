@@ -3,6 +3,7 @@
     import Nav from 'lib/components/navigation/Nav.svelte'
     import SideMenu from 'lib/components/navigation/SideMenu.svelte'
     import Container from 'lib/components/Container.svelte'
+import CenterWrapper from 'lib/components/CenterWrapper.svelte';
 </script>
 
 <Nav/>
@@ -10,10 +11,12 @@
 
 <main>
     <Container>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        <CenterWrapper>
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+        </CenterWrapper>
     </Container>
 </main>
 
@@ -44,7 +47,7 @@
         width: 100%;
         padding: 1rem;
         background: var(--bg-grey);
-        padding-top: 4rem;
+        /* padding-top: 4rem; */
     }
     
 </style>

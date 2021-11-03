@@ -29,9 +29,7 @@ import EditProfile from 'routes/profiles/EditProfile.svelte'
   <Index/>
 </Route>
 <Route path='/sign-in/*'>
-  <Container>
-    <SignIn/>
-  </Container>
+  <SignIn/>
 </Route>
 <Route path='/profiles/*'>
   <Route path='/current'>

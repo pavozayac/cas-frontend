@@ -1,4 +1,6 @@
 <script lang="ts">
+import Container from 'lib/components/Container.svelte';
+
     import SignInModal from 'lib/components/sign-in/SignInModal.svelte'
 </script>
 
@@ -18,8 +20,8 @@
 
 <style>
     main {
-        padding: 1rem 0rem;
-        width: 100%;
+        padding: 1rem 1rem;
+        /* width: 100%; */
         display: flex;
         flex-direction: column;
         justify-content: center;

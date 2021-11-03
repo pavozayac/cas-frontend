@@ -2,6 +2,7 @@
     export let items: Record<string, any>
     export let name: string
     export let text: string
+    export let initialValue
 </script>
 
 <div class="container">
@@ -9,7 +10,7 @@
     {#each Object.entries(items) as [key, value], index}
         <div class="radio-wrapper" class:first={index == 0}>
             <label class="radio-label">
-                <input  type="radio" name={name} value={value} checked={index == 0} />
+                <input  type="radio" name={name} value={value} checked={value == initialValue} />
                 <div class="checkmark">{key}</div>  
             </label>
         </div>

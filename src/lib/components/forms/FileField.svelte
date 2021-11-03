@@ -1,19 +1,17 @@
 <script lang="ts">
+    import { capitalizeFirst } from "./formUtils";
 
-    import { capitalizeFirst } from './formUtils'
-
-    export let errors
-    export let type: string
     export let name: string
-    export let placeholder = capitalizeFirst(name).replaceAll('_', ' ')
-
+    export let errors
 </script>
+
 <div class="wrapper">
     <label class="label" for={name}>
         {capitalizeFirst(name).replaceAll('_', ' ')}
     </label>
-    <input class:error={$errors[name]} {type} {name} {placeholder} id={name} />
+    <input class:error={$errors[name]} type="file" {name} id={name} />
 </div>
+
 
 <style>
     .wrapper {
@@ -21,6 +19,8 @@
         padding: 1rem;
         border-radius: .5rem;
         margin-bottom: .5rem;
+        width: 100%;
+        overflow: hidden;
     }
 
 

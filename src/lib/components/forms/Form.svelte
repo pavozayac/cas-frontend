@@ -2,13 +2,13 @@
     import { createForm } from 'felte'
     import { validator } from '@felte/validator-yup'
     import reporter from '@felte/reporter-tippy'
-import { onMount } from 'svelte';
+    import { onMount } from 'svelte';
     
     export let submitAction
     export let validationSchema
     export let initialValues: Record<string, any> = {}
 
-    const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit } = createForm({
+    const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit, setField } = createForm({
         onSubmit: async values => {
             // console.log('bruh')
             // console.log(values)
@@ -22,6 +22,7 @@ import { onMount } from 'svelte';
         validateSchema: validationSchema,
         initialValues: initialValues
     })
+
 
     // const altSubmit = createSubmitHandler({
     //     onSubmit: ()}
@@ -40,6 +41,6 @@ import { onMount } from 'svelte';
 {@debug $isSubmitting} -->
 
 <form use:form>
-    <slot {errors} {handleSubmit} ></slot>
+    <slot {errors} {data} {setField} {handleSubmit} ></slot>
 </form>
 

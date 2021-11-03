@@ -7,7 +7,7 @@
 
 <div class={`tiles-container ${!nav && "tiles-container-nonav"} ${$$props.class}`}>
     {#each menuElements as el}
-        <a href="#" class="tile"><i class={el.iconType}>{el.icon}</i><span class="tile-text">{el.name}</span></a>
+        <a href={el.target} class="tile"><i class={el.iconType}>{el.icon}</i><span class="tile-text">{el.name}</span></a>
     {/each}
 </div>
 

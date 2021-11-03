@@ -5,15 +5,23 @@
     export let errors
     export let type: string
     export let name: string
+    export let label: string = name
     export let placeholder = capitalizeFirst(name).replaceAll('_', ' ')
+    export let stopProp: bool = false
+
+    let value
 
 </script>
+
 <div class="wrapper">
     <label class="label" for={name}>
-        {capitalizeFirst(name).replaceAll('_', ' ')}
+        {capitalizeFirst(label).replaceAll('_', ' ')}
     </label>
-    <input class:error={$errors[name]} {type} {name} {placeholder} id={name} />
-</div>
+    <div class="input-wrapper">
+        <input on:change={(e)=>value=e.target.value} class:error={$errors[name]} {type} {name} {placeholder} id={name} /> 
+        <slot {value}></slot>
+    </div>
+</div>  
 
 <style>
     .wrapper {
@@ -32,7 +40,6 @@
         box-shadow: 0 0 0 1.5px var(--accent-red);
     }
     input {
-        margin-top: .5rem;
         box-sizing: border-box;
         border-radius: 9999px;
         width: 100%;
@@ -45,6 +52,13 @@
 
     input:focus {
         filter: brightness(.9);
+    }
+
+    .input-wrapper {
+        margin-top: .5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
 </style>

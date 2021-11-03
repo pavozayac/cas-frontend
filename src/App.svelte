@@ -8,6 +8,7 @@
   import CurrentProfileRoute from 'routes/profiles/CurrentProfileRoute.svelte'
   import Container from 'lib/components/Container.svelte';
 import EditProfile from 'routes/profiles/EditProfile.svelte'
+import AddReflectionRoute from 'routes/reflections/AddReflectionRoute.svelte'
 
 </script>
 
@@ -28,9 +29,11 @@ import EditProfile from 'routes/profiles/EditProfile.svelte'
 <Route path='/'>
   <Index/>
 </Route>
+
 <Route path='/sign-in/*'>
   <SignIn/>
 </Route>
+
 <Route path='/profiles/*'>
   <Route path='/current'>
     <CurrentProfileRoute/>
@@ -38,4 +41,8 @@ import EditProfile from 'routes/profiles/EditProfile.svelte'
   <Route path='/current/edit'>
     <EditProfile />
   </Route>
+</Route>
+
+<Route path="/add-reflection">
+  <AddReflectionRoute />
 </Route>

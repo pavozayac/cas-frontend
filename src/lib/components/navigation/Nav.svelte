@@ -112,11 +112,12 @@ import { avatarSrc } from 'api/utils';
     </div>-->
     <div class="sign-in-button-wrapper">
         {#await currentProfile()}
-            <a href="sign-in" style="text-decoration: none" use:active>
+            <!-- <a href="sign-in" style="text-decoration: none" use:active>
                 <div class="sign-in-button">
                     <span id="lockIcon" class="material-icons-round">lock</span>Sign in
                 </div>
-            </a>
+            </a> -->
+            <div></div>
         {:then profile}
             <a href="/profiles/current" class="profile-link">
                 <div class="profile-info">

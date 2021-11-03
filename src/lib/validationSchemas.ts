@@ -27,3 +27,10 @@ export const editProfileSchema = yup.object({
 export const profileAvatar = yup.object({
     file: yup.mixed().required('File required').test('Size test', 'File too large', value=>value.size <= 5000000, )
 })
+
+export const addReflectionSchema = yup.object({
+    title: yup.string().required(),
+    text_content: yup.string().required(),
+    tags: yup.string().required(),
+    oneTag: yup.string().nullable(),
+})

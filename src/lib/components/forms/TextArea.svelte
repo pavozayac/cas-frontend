@@ -38,10 +38,10 @@ import { onMount } from 'svelte';
     }
 
 
-    textarea::placeholder {
+    /* textarea::placeholder {
         font-family: Rubik, sans-serif;
         font-size: .9rem;
-    }
+    } */
 
     .error {
         box-shadow: 0 0 0 1.5px var(--accent-red);

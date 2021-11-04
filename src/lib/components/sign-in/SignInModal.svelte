@@ -56,10 +56,10 @@ import CenterWrapper from '../CenterWrapper.svelte'
             <input class="sign-in-button" type="submit" value="Sign in" />
         </form>
 
-        <div class="social-wrapper">
-            <GoogleButton/>
-            <FacebookButton/>   
-        </div>
+            <!-- <div class="social-wrapper">
+                <GoogleButton/>
+                <FacebookButton/>   
+            </div> -->
         <a class="register-button" use:active href="/sign-in/register">Register</a>
     </Route>
 

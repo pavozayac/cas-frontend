@@ -1,6 +1,7 @@
 import { route } from './utils'
 import 'axios'
 import axios from 'axios'
+import { profileStore } from 'stores/profile'
 
 export interface JWT {
     access_token: string,
@@ -20,14 +21,25 @@ export async function login(email: string, password: string): Promise<JWT> {
             'Content-Type': 'application/json',
             // 'Content-Type': 'application/x-www-form-urlencoded',
         },
-        credentials: 'include'
-    })
+        credentials: 'include',
+        mode: 'cors',
 
-    return res.json()
+    })
+    const response = await res.json()
+    profileStore.set(response)
+    return response
 }
 
 export async function logout() {
-    const res = await fetch(route('logout'))
+    const res = await fetch(route('logout'), {
+        method: 'POST',
+        credentials: 'include',
+        mode: 'cors'
+    })
+
+    const response = await res.json()
+    profileStore.set(null)
+    return response
 }
 
 export async function register(values) {
@@ -36,6 +48,7 @@ export async function register(values) {
         body: JSON.stringify(values),
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        mode: 'cors',
     })
 }

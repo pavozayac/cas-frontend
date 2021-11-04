@@ -1,13 +1,22 @@
 <script lang="ts">
-     window.handleGoogleSignIn = res => {
-          console.log(res)
-          fetch('http://localhost:8000/auth/google', {
-               method: 'POST',
-               body: JSON.stringify(res),
-               mode: 'no-cors',
-               credentials: 'include'
-          }).then(res=>console.log(res)).catch(err=>console.log(err))
-     }
+import { currentProfile } from 'api/Profile';
+
+     import { profileStore } from 'stores/profile'
+     import { onMount } from 'svelte';
+     // dispa
+     onMount(()=>{
+          window.handleGoogleSignIn = res => {
+               // console.log(res)
+               fetch('http://localhost:8000/auth/google', {
+                    method: 'POST',
+                    body: JSON.stringify(res),
+                    mode: 'no-cors',
+                    credentials: 'include'
+               }).then(res=>profileStore.set(1))
+               
+               console.log($profileStore)
+          }
+     })
 </script>
 
 <svelte:head>

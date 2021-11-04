@@ -2,6 +2,7 @@
 import Container from 'lib/components/Container.svelte';
 
     import SignInModal from 'lib/components/sign-in/SignInModal.svelte'
+    import { active } from 'tinro'
 </script>
 
 <svelte:head>
@@ -9,12 +10,12 @@ import Container from 'lib/components/Container.svelte';
 </svelte:head>
 
 <main>
-    <div class="back-wrapper">    
-        <a class="back-button" href="/">
+    <!-- <div class="back-wrapper">    
+        <a class="back-button" href="/" >
             <span class="material-icons-round">arrow_back</span>
             Back to home screen
         </a>
-    </div>
+    </div> -->
     <SignInModal />
 </main>
 

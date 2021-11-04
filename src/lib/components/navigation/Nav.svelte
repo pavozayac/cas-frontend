@@ -6,8 +6,9 @@
     import DropDownNavMenu from 'lib/components/navigation/DropDownNavMenu.svelte'
     import { onMount } from 'svelte';
     import { currentProfile } from 'api/Profile'
-    import { active } from 'tinro'
+    import { active, router } from 'tinro'
 import { avatarSrc } from 'api/utils';
+import { logout } from 'api/Auth';
     
     let navVisible: boolean = true;
     let y1:number = 0, y2: number;
@@ -48,9 +49,10 @@ import { avatarSrc } from 'api/utils';
         }
     }*/
 
-    onMount(async () => {
-        
-    })
+    async function logoutAction(){
+        logout()
+        router.goto('/sign-in')
+    }
 
 
 </script>
@@ -119,6 +121,9 @@ import { avatarSrc } from 'api/utils';
             </a> -->
             <div></div>
         {:then profile}
+            <button class="logout-button" on:click={logoutAction}>
+                <span class="material-icons-round">power_settings_new</span>
+            </button>
             <a href="/profiles/current" class="profile-link">
                 <div class="profile-info">
                     <span class="profile-name">{profile.first_name} {profile.last_name}</span>
@@ -340,6 +345,17 @@ import { avatarSrc } from 'api/utils';
         border-bottom-left-radius: 0;
         padding-right: 1rem;
         padding-left: 0.5rem;
+        transition: all 200ms;
+        background: var(--bg-grey-lower);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    .logout-button {
+        height: 100%;
+        border-radius: 9999px;
+        padding: 1rem;
         transition: all 200ms;
         background: var(--bg-grey-lower);
         cursor: pointer;

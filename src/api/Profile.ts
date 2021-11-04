@@ -1,4 +1,5 @@
 import { route } from './utils'
+import { profileStore } from 'stores/profile'
 
 interface Avatar {
     filename: string,
@@ -21,7 +22,31 @@ export async function currentProfile(): Promise<Profile> {
     try {
         const res = await fetch(route('profiles/current'), {
             method: 'GET',
-            credentials: 'include'
+            credentials: 'include',
+            mode: 'cors',
+
+        })
+
+        if (res.status != 200) {
+            throw 'Current profile unavailable'
+        }
+
+        const response = await res.json()
+        console.log('Res')
+        console.log(response)
+        profileStore.set(response)
+        return response
+    } catch (err) {
+        throw err
+    }
+}
+
+export async function getProfile(profile_id: number): Promise<Profile> {
+    try {
+        const res = await fetch(route(`profiles/id/${profile_id}`), {
+            method: 'GET',
+            credentials: 'include',
+            mode: 'cors',
         })
 
         if (res.status != 200) {
@@ -40,6 +65,7 @@ export async function updateProfile(values): Promise<void> {
             method: 'PUT',
             credentials: 'include',
             body: JSON.stringify(values),
+            mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -64,6 +90,7 @@ export async function updateProfileAvatar(values): Promise<void> {
         const res = await fetch(route('profiles/avatar'), {
             method: 'PUT',
             credentials: 'include',
+            mode: 'cors',
             body: data
         })
 

@@ -9,7 +9,36 @@
   import Container from 'lib/components/Container.svelte';
 import EditProfile from 'routes/profiles/EditProfile.svelte'
 import AddReflectionRoute from 'routes/reflections/AddReflectionRoute.svelte'
+import BookmarksRoute from 'routes/bookmarks/bookmarksRoute.svelte'
+import { currentProfile } from 'api/Profile'
+import { onMount } from 'svelte';
+import { profileStore } from 'stores/profile' 
 
+// onMount(()=>{
+//   (async function (){
+//     $profileStore = await currentProfile()
+//   })()
+// })
+
+let authed = false
+onMount(()=>{
+
+  profileStore.subscribe(value=>{
+    if (value !== null){
+      console.log('value')
+      console.log(value)
+      authed = true
+    } else {
+      authed = false
+    }
+  })
+
+  setInterval(()=>{
+    console.log($profileStore)
+    console.log(localStorage.getItem('profileStore'))
+  }, 500)
+
+  })
 </script>
 
 <svelte:head>
@@ -25,9 +54,24 @@ import AddReflectionRoute from 'routes/reflections/AddReflectionRoute.svelte'
   <title>CAS Portal</title>
 </svelte:head>
 
+{@debug $profileStore }
+{@debug authed}
 
+{#if JSON.parse(localStorage.getItem('profileStore')) == null}
+  <Route>
+    <Route path='/sign-in/*'>
+      <SignIn/>
+    </Route>
+    <Route fallback redirect="/sign-in" />
+  </Route> 
+  
+{:else}
 <Route path='/'>
   <Index/>
+</Route>
+
+<Route path="/bookmarks">
+  <BookmarksRoute />
 </Route>
 
 <Route path='/sign-in/*'>
@@ -46,3 +90,4 @@ import AddReflectionRoute from 'routes/reflections/AddReflectionRoute.svelte'
 <Route path="/add-reflection">
   <AddReflectionRoute />
 </Route>
+{/if}

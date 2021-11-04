@@ -1,11 +1,19 @@
+
 <script lang="ts">
     import App from 'App.svelte'
     import type { is_promise } from 'svelte/internal';
     import Carousel from './Carousel.svelte'
     import { cubicInOut } from 'svelte/easing'
     import { slide } from 'svelte/transition'
+    import { favouriteReflection, getReflection, unfavouriteReflection } from 'api/Reflection';
+    import type { Reflection } from 'api/Reflection'
+import { getProfile } from 'api/Profile';
+import { attachmentSrc, avatarSrc } from 'api/utils';
+import { ref } from 'yup';
 
-    let bookmarked: boolean = false
+    export let id
+
+    // let bookmarked: boolean = false
 
     let commentsVisible: boolean = false
 
@@ -67,39 +75,61 @@
             }
         }
     }
+
+    
+    let bookmarked: boolean
+
+    async function getReflectionAndSetState(id) {
+        let reflection = await getReflection(id)
+        bookmarked = reflection.is_favourite
+        return reflection
+    }
+
+    function toggleReflection(reflection: Reflection){
+        if (bookmarked == true){
+            unfavouriteReflection(reflection.id)
+        } else {
+            favouriteReflection(reflection.id)
+        }
+        bookmarked = !bookmarked
+    }
 </script>
 
+{#await getReflectionAndSetState(id) then reflection}
 <div class="card-container">
     <div class="top-widgets">
         <div class="date">
-            {day} {month} {year} {time}
+            {reflection.date_added}
         </div>
         <div class="categories">
 
         </div>
+        {#await getProfile(reflection.profile_id)}
+        {:then profile}
         <div class="profile-info">
-            <span class="profile-name">Profile Name</span>
-            <img alt="Profile picture" class="profile-icon" src={pics_urls[0]} />
+            <span class="profile-name">{profile.first_name} {profile.last_name}</span>
+            <img alt="Profile picture" class="profile-icon" src={avatarSrc(profile.avatar)} />
         </div>
+        {/await}
     </div>
 
     <div class="carousel-wrapper">
-       <Carousel urls={pics_urls}/>
+       <Carousel urls={reflection.attachments.map(attachment=>attachmentSrc(reflection, attachment))}/>
     </div>
     <div class="text-section-wrapper">
         <h2>
-            Lorem ipsum dolor sit amet.
+            {reflection.title}
         </h2>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in viverra leo, sed finibus enim. Quisque dignissim a felis quis mollis. Praesent quis dignissim justo, id lacinia neque. Morbi laoreet, orci at luctus hendrerit, velit nibh scelerisque urna, et scelerisque dolor dolor in justo. Maecenas eleifend non nibh eget aliquam. Curabitur id pellentesque arcu. Nulla sodales vel enim sed aliquam.
+            {reflection.text_content}
         </p>
         <div class="actions-buttons">
-            <button class:bookmarked on:click={()=>bookmarked = !bookmarked}>
+            <button class:bookmarked={bookmarked} on:click={()=>{ toggleReflection(reflection) }}>
                 <span class="material-icons-outlined">{bookmarked ? 'done' : 'bookmark_border'}</span> {bookmarked ? 'Bookmarked' : 'Bookmark'}
             </button>
-            <button on:click={()=>commentsVisible = !commentsVisible}>
+            <!-- <button on:click={()=>commentsVisible = !commentsVisible}>
                 <span class="material-icons-outlined">comment</span> Comments
-            </button>
+            </button> -->
         </div>
     </div>
     {#if commentsVisible}
@@ -126,7 +156,7 @@
     </div>
     {/if}
 </div>
-
+{/await}
 <style lang="postcss">
     .comment-section {
         background: var(--bg-grey);

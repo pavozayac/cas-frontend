@@ -1,4 +1,6 @@
 <script lang="ts">
+import { profileStore } from "stores/profile";
+
 import { onDestroy, onMount } from "svelte";
 
 
@@ -26,7 +28,7 @@ import { onDestroy, onMount } from "svelte";
                         }),
                         mode: 'no-cors',
                         credentials: 'include'
-                    }).then(res=>console.log(res))
+                    }).then(res=>profileStore.set(res.json()))
                 }
             );
         });

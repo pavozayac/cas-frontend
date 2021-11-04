@@ -4,7 +4,7 @@
     import SideMenu from 'lib/components/navigation/SideMenu.svelte'
     import Container from 'lib/components/Container.svelte'
     import CenterWrapper from 'lib/components/CenterWrapper.svelte';
-    import { filterReflections } from 'api/Reflection';
+    import { filterFavouriteReflections, filterReflections } from 'api/Reflection';
     import { onMount } from 'svelte';
     import type { Reflection } from 'api/Reflection'
 
@@ -17,7 +17,8 @@
 <main>
     <Container>
         <CenterWrapper>
-            {#await filterReflections() then reflections}
+            {#await filterFavouriteReflections()}
+            {:then reflections}
                 {#each reflections as reflection}
                     <Card id={reflection.id}/>
                 {/each}

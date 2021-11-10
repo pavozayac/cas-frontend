@@ -37,6 +37,7 @@ export async function currentProfile(): Promise<Profile> {
         profileStore.set(response)
         return response
     } catch (err) {
+        profileStore.set(null)
         throw err
     }
 }

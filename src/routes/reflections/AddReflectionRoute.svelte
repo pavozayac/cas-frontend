@@ -18,6 +18,21 @@ import Checkboxes from "lib/components/forms/Checkboxes.svelte";
 import Submit from 'lib/components/forms/Submit.svelte'
 import { postReflection } from "api/Reflection";
 
+function extraValidate(values) {
+    const errors = {}
+    console.log(values)
+
+    if (!values.tags || values?.tags.length < 1){
+        errors.oneTag = 'Must have at least one tag'
+    }
+
+    if (!values.files || values?.files.length < 1){
+        errors.attachments = 'Must have at least one attachment'
+    }
+
+    return errors
+}
+
 </script>
 
 <Nav/>
@@ -27,20 +42,20 @@ import { postReflection } from "api/Reflection";
 <Container>
 <div class="wrapper">
     <h1>Post a reflection</h1>
-    <Form validationSchema={addReflectionSchema} let:errors let:data={formData} let:setField let:validate submitAction={postReflection}>
+    <Form extraValidate={extraValidate} validationSchema={addReflectionSchema} let:errors let:data={formData} let:setField let:validate submitAction={postReflection}>
         <TextField {errors} name="title" type="text"/>
         <TextArea {errors} name="text_content"/>
         <TextField let:value {errors} name="oneTag" label="Tag" placeholder="Tag" type="text">
             <TagButton {validate} {formData} {setField} />
         </TextField>
         <TagsList {formData}/>
-        <MultipleFileField {formData} {errors} name="attachments" />
         <div data-felte-reporter-tippy-position-for="categories" />
         <Checkboxes {errors} name="categories" text="Categories" items={{
             'Creativity': 'creativity',
             'Activity': 'activity',
             'Service': 'service'
         }}/>
+        <MultipleFileField {formData} {errors} name="attachments" />
         <FileList {formData} />
         <Submit text="Post"/>
     </Form>

@@ -33,6 +33,6 @@ export const addReflectionSchema = yup.object().shape({
     text_content: yup.string().required(),
     tags: yup.array().of(yup.string()).required(),
     categories: yup.array().transform(value=>value === [] ? null : value).of(yup.string()).required(),
-    files: yup.mixed().required(),
+    files:yup.array().of(yup.mixed()).required(),
     oneTag: yup.string().nullable(),
 })

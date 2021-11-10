@@ -33,10 +33,10 @@ onMount(()=>{
     }
   })
 
-  setInterval(()=>{
-    console.log($profileStore)
-    console.log(localStorage.getItem('profileStore'))
-  }, 500)
+  // setInterval(()=>{
+  //   console.log($profileStore)
+  //   console.log(localStorage.getItem('profileStore'))
+  // }, 500)
 
   })
 </script>

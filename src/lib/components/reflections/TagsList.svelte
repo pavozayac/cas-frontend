@@ -1,5 +1,6 @@
 <script lang="ts">
     export let formData
+    export let setError
 
     import { remove } from 'api/utils'
 
@@ -8,7 +9,10 @@
 {#if $formData.tags}
 {#each $formData.tags as tag}
     <div class="tag" on:click={()=>{
-        $formData.tags = remove($formData.tags, tag)    
+        $formData.tags = remove($formData.tags, tag)
+        if ($formData.tags.length > 1){
+            setError('oneTag', 'At least one tag must be chosen')
+        }   
     }}>
         {tag}
         <span class="material-icons-round">close</span>

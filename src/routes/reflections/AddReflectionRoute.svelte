@@ -18,15 +18,17 @@ import Checkboxes from "lib/components/forms/Checkboxes.svelte";
 import Submit from 'lib/components/forms/Submit.svelte'
 import { postReflection } from "api/Reflection";
 
-function extraValidate(values) {
+function extraValidate(values, setTouched) {
     const errors = {}
     console.log(values)
+    console.log("Valuestags: " + values.tags)
+    console.log("Valuesfiles: " + values.files)
 
-    if (!values.tags || values?.tags.length < 1){
+    if (typeof(values.tags) === 'undefined' || values?.tags.length < 1){
         errors.oneTag = 'Must have at least one tag'
     }
 
-    if (!values.files || values?.files.length < 1){
+    if (typeof(values.files) === 'undefined' || values?.files.length < 1){
         errors.attachments = 'Must have at least one attachment'
     }
 

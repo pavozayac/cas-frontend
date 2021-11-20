@@ -7,7 +7,7 @@
     export let submitAction
     export let validationSchema
     export let initialValues: Record<string, any> = {}
-    export let extraValidate: (any) => {} = () => {return {}}
+    export let extraValidate: (any, any) => {} = () => {return {}}
 
     const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit, setField, setError, setTouched, validate } = createForm({
         onSubmit: async values => {
@@ -15,7 +15,7 @@
             // console.log(values)
             await submitAction(values)
         },
-        validate: extraValidate,
+        validate: (values) => extraValidate(values, setTouched),
         extend: [validator, reporter({
             tippyProps: {
                 trigger: 'submit'

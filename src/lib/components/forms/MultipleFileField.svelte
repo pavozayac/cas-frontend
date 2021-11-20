@@ -18,7 +18,7 @@
             $formData.files = [e.target.files[0]]
 
         }
-    }} class:error={$errors[name]} type="file" id="multipleFile"/>
+    }} class:error={$errors[name]} type="file" id="multipleFile" name={name}/>
 </div>
 
 

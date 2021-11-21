@@ -16,8 +16,7 @@ import SideMenu from 'lib/components/navigation/SideMenu.svelte';
 <CenterWrapper>
 <Container>
 <CenterWrapper>
-    {#await currentProfile()}
-    {:then profile}
+    {#await currentProfile() then profile}
     <div class="upper-data">
         <div class="edit-wrapper">
             <ThinButton text="Edit profile" target="/profiles/current/edit" fullIconName="edit"/>

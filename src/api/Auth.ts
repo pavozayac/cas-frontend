@@ -52,3 +52,18 @@ export async function register(values) {
         mode: 'cors',
     })
 }
+
+export async function confirmEmail(code: string){
+    const res = await fetch(route(`confirm-email/${code}`), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+    })
+    const body = await res.json()
+
+    if (!res.ok){
+        throw 'Confirmation code invalid'
+    }
+}

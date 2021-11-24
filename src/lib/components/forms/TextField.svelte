@@ -29,6 +29,7 @@
         padding: 1rem;
         border-radius: .5rem;
         margin-bottom: .5rem;
+        width: 100%;
     }
 
 

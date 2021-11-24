@@ -1,87 +1,124 @@
 <script lang="ts">
-    import { createForm } from 'felte'
-    import { signInFormSchema, registerSchema } from 'lib/validationSchemas'
-    import { validator } from '@felte/validator-yup'
-    import reporter from '@felte/reporter-tippy'
-    import GoogleButton from './GoogleSignInButton.svelte'
-    import FacebookButton from './FacebookSignInButton.svelte'
-    import Form from 'lib/components/forms/Form.svelte'
-    import TextField from 'lib/components/forms/TextField.svelte';
-    import Submit from 'lib/components/forms/Submit.svelte'
-    import Group from 'lib/components/transitions/Group.svelte'
-    import Phase from 'lib/components/transitions/Phase.svelte'
-    import Container from '../Container.svelte';
+    import { createForm } from "felte";
+    import { signInFormSchema, registerSchema } from "lib/validationSchemas";
+    import { validator } from "@felte/validator-yup";
+    import reporter from "@felte/reporter-tippy";
+    import GoogleButton from "./GoogleSignInButton.svelte";
+    import FacebookButton from "./FacebookSignInButton.svelte";
+    import Form from "lib/components/forms/Form.svelte";
+    import TextField from "lib/components/forms/TextField.svelte";
+    import Submit from "lib/components/forms/Submit.svelte";
+    import Group from "lib/components/transitions/Group.svelte";
+    import Phase from "lib/components/transitions/Phase.svelte";
+    import Container from "../Container.svelte";
 
-    import { login, register } from 'api/Auth'
-    import { route } from 'api/utils'
-    import axios from 'axios';
+    import { login, register } from "api/Auth";
+    import { route } from "api/utils";
+    import axios from "axios";
 
-    import { router, active, Route } from 'tinro'
-    import RadioGroup from '../forms/RadioGroup.svelte';
-import CenterWrapper from '../CenterWrapper.svelte'
+    import { router, active, Route } from "tinro";
+    import RadioGroup from "../forms/RadioGroup.svelte";
+    import CenterWrapper from "../CenterWrapper.svelte";
+    import ThinButton from "../generic/ThinButton.svelte";
+    import SubtleButton from "../generic/SubtleButton.svelte";
 
     const { form, errors } = createForm({
         onSubmit: async (values) => {
-            console.log(values)
-            console.log(await login(values.email, values.password))
-            router.goto('/')
+            console.log(values);
+            console.log(await login(values.email, values.password));
+            router.goto("/");
         },
-        extend: [validator, reporter({
-            tippyProps: {
-                trigger: 'submit'
-            }
-        })],
+        extend: [
+            validator,
+            reporter({
+                tippyProps: {
+                    trigger: "submit",
+                },
+            }),
+        ],
         validateSchema: signInFormSchema,
-    })
+    });
 
     const register_redirect = async (values) => {
-        console.log(values.email)
+        console.log(values.email);
         const res = await register(values);
-        router.goto('/sign-in')
-    }           
-
+        router.goto("/sign-in");
+    };
 </script>
 
 {@debug $errors}
 <Container>
-<CenterWrapper>
-<div class="modal-wrapper">
-    <Route path="/">     
-        <div class="title">
-            <h3>Sign in to CAS Portal</h3>
-        </div>
-        <form use:form>
-            <input class:error="{$errors.email}" class="email" type="email" name="email" placeholder="Email address"/>
-            <input class:error="{$errors.password}" class="password" type="password" name="password" placeholder="Password" />
-            <input class="sign-in-button" type="submit" value="Sign in" />
-        </form>
+    <CenterWrapper>
+        <div class="modal-wrapper">
+            <Route path="/">
+                <div class="title">
+                    <h3>Sign in to CAS Portal</h3>
+                </div>
+                <form use:form>
+                    <input
+                        class:error={$errors.email}
+                        class="email"
+                        type="email"
+                        name="email"
+                        placeholder="Email address"
+                    />
+                    <input
+                        class:error={$errors.password}
+                        class="password"
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                    />
+                    <input
+                        class="sign-in-button"
+                        type="submit"
+                        value="Sign in"
+                    />
+                </form>
+                <SubtleButton style="color: var(--bg-dark-grey); margin-top: 1rem; " target="/forgot-my-password" fullIconName="question_mark" text="Forgot my password" />
 
-            <!-- <div class="social-wrapper">
+                <!-- <div class="social-wrapper">
                 <GoogleButton/>
                 <FacebookButton/>   
             </div> -->
-        <a class="register-button" use:active href="/sign-in/register">Register</a>
-    </Route>
+                <a class="register-button" use:active href="/sign-in/register"
+                    >Register</a
+                >
+            </Route>
 
-    <Route path="/register">
-        <Form let:errors let:handleSubmit validationSchema={registerSchema} submitAction={register_redirect}>
-            <TextField {errors} name="email" type="email"/>
-            <TextField {errors} name="first_name" type="text" />
-            <TextField {errors} name="last_name" type="text" />
-            <br/>
-            <TextField {errors} name="password" type="password" />
-            <TextField {errors} name="repeat_password" type="password" />
-            <RadioGroup initialValue={0} text="Post visibility" name="post_visibility" items={{
-                'Only you can see your posts': 0,
-                'Only your group can see your posts': 1,
-                'Anybody can see your posts': 2
-            }}/>
-            <br/>
-            <Submit text='Register' />
-        </Form>
-    </Route>
-</div>
-</CenterWrapper>
+            <Route path="/register">
+                <Form
+                    let:errors
+                    let:handleSubmit
+                    validationSchema={registerSchema}
+                    submitAction={register_redirect}
+                >
+                    <TextField {errors} name="email" type="email" />
+                    <TextField {errors} name="first_name" type="text" />
+                    <TextField {errors} name="last_name" type="text" />
+                    <br />
+                    <TextField {errors} name="password" type="password" />
+                    <TextField
+                        {errors}
+                        name="repeat_password"
+                        type="password"
+                    />
+                    <RadioGroup
+                        initialValue={0}
+                        text="Post visibility"
+                        name="post_visibility"
+                        items={{
+                            "Only you can see your posts": 0,
+                            "Only your group can see your posts": 1,
+                            "Anybody can see your posts": 2,
+                        }}
+                    />
+                    <br />
+                    <Submit text="Register" />
+                </Form>
+            </Route>
+        </div>
+    </CenterWrapper>
 </Container>
 
 <style>
@@ -134,7 +171,7 @@ import CenterWrapper from '../CenterWrapper.svelte'
         border-radius: 9999px;
         background: var(--accent-green);
         color: white;
-        font-size: .9rem;
+        font-size: 0.9rem;
         font-family: Rubik, sans-serif;
         letter-spacing: 1px;
         text-transform: uppercase;
@@ -144,7 +181,6 @@ import CenterWrapper from '../CenterWrapper.svelte'
         box-shadow: 0 0 0 2px var(--accent-red);
     }
 
-   
     input {
         width: 80%;
         margin-top: 1rem;
@@ -154,7 +190,8 @@ import CenterWrapper from '../CenterWrapper.svelte'
         font-family: Rubik, sans-serif;
     }
 
-    .email, .password {
+    .email,
+    .password {
         box-sizing: border-box;
         border-radius: 9999px;
         width: 100%;
@@ -164,10 +201,10 @@ import CenterWrapper from '../CenterWrapper.svelte'
         padding: 1rem 2rem;
     }
 
-    .email:focus, .password:focus {
-        filter: brightness(.9);
+    .email:focus,
+    .password:focus {
+        filter: brightness(0.9);
     }
-    
 
     .sign-in-button {
         width: 100%;
@@ -178,13 +215,13 @@ import CenterWrapper from '../CenterWrapper.svelte'
         border: none;
         cursor: pointer;
         padding: 1rem 2rem;
-        font-size: .9rem;
+        font-size: 0.9rem;
         font-family: Rubik, sans-serif;
         letter-spacing: 1px;
         text-transform: uppercase;
     }
 
     button:hover {
-        filter: brightness(.9);
+        filter: brightness(0.9);
     }
 </style>

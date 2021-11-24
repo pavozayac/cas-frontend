@@ -4,10 +4,10 @@
     import reporter from '@felte/reporter-tippy'
     import { onMount, setContext } from 'svelte';
     
-    export let submitAction
+    export let submitAction: (value: any) => any
     export let validationSchema
-    export let initialValues: Record<string, any> = {}
-    export let extraValidate: (any, any) => {} = () => {return {}}
+    export let initialValues: Record<string, any> = null
+    export let extraValidate: (any: any, any1: any) => {} = () => {return {}}
 
     const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit, setField, setError, setTouched, validate } = createForm({
         onSubmit: async values => {
@@ -50,4 +50,13 @@
 <form use:form>
     <slot {errors} {data} {setField} {setError} {handleSubmit} {validate} ></slot>
 </form>
+
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%
+    }
+</style>
 

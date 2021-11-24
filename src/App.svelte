@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Route, router } from "tinro";
+  import { meta, Route, router } from "tinro";
   import Nav from "lib/components/navigation/Nav.svelte";
   import Index from "routes/index.svelte";
   import SignIn from "routes/signin/SignInRoute.svelte";
@@ -10,11 +10,13 @@
   import EditProfile from "routes/profiles/EditProfile.svelte";
   import AddReflectionRoute from "routes/reflections/AddReflectionRoute.svelte";
   import BookmarksRoute from "routes/bookmarks/BookmarksRoute.svelte";
-  import ConfirmEmailRoute from "routes/confirm-email/ConfirmEmailRoute.svelte";
+  import ConfirmEmailRoute from "routes/confirmation_and_recovery/ConfirmEmailRoute.svelte";
 
   import { currentProfile } from "api/Profile";
   import { onMount } from "svelte";
   import { profileStore } from "stores/profile";
+import RecoverPasswordRoute from "routes/confirmation_and_recovery/RecoverPasswordRoute.svelte";
+import ResetPasswordRoute from "routes/confirmation_and_recovery/ResetPasswordRoute.svelte";
 
   // onMount(()=>{
   //   (async function (){
@@ -73,6 +75,12 @@
     </Route>
     <Route path="/confirm-email/:code" let:meta>
       <ConfirmEmailRoute {meta}/>
+    </Route>
+    <Route path="/forgot-my-password">
+      <RecoverPasswordRoute />
+    </Route>
+    <Route path='/reset-password/:code' let:meta>
+      <ResetPasswordRoute {meta} />
     </Route>
     <Route fallback redirect="/sign-in" />
   </Route>

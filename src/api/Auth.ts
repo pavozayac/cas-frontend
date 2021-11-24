@@ -53,7 +53,7 @@ export async function register(values) {
     })
 }
 
-export async function confirmEmail(code: string){
+export async function confirmEmail(code: string) {
     const res = await fetch(route(`confirm-email/${code}`), {
         method: 'POST',
         headers: {
@@ -61,9 +61,43 @@ export async function confirmEmail(code: string){
         },
         mode: 'cors',
     })
-    const body = await res.json()
+    // const body = await res.json()
 
-    if (!res.ok){
+    if (!res.ok) {
+        throw 'Confirmation code invalid'
+    }
+}
+
+export async function sendRecoveryRequest(email: string) {
+    const res = await fetch(route(`send-recovery-mail`), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+        body: JSON.stringify({
+            email
+        })
+    })
+    // const body = await res.json()
+
+    if (!res.ok) {
+        throw 'Confirmation code invalid'
+    }
+}
+
+export async function resetPassword(code: string, values) {
+    const res = await fetch(route(`recover-password/${code}`), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+        body: JSON.stringify(values)
+    })
+    // const body = await res.json()
+
+    if (!res.ok) {
         throw 'Confirmation code invalid'
     }
 }

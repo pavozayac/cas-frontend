@@ -9,11 +9,12 @@
     {#if fullIconName}
         <span class="material-icons-round">{fullIconName}</span>
     {/if}
-    {text}
+    <span class="text">{text}
 </a>
 
 <style>
     a {
+        width: 100vw;
         display: flex;
         align-items: center;
         padding: 0.5rem;
@@ -23,14 +24,22 @@
         border-radius: 9999px;
         cursor: pointer;
         width: auto;
+        background: var(--bg-grey);
     }   
 
+    .text {
+        /* text-decoration: underline; */
+        color: var(--bg-dark-grey);
+        font-size: .8rem;
+    }
+
     a:hover {
-        background: var(--bg-grey-lower);
+        background: var(--bg-grey);
     }
 
     span {
-        font-size: 1.2rem;
+        text-decoration: none;
+        font-size: .8rem;
         margin-right: 0.5rem;
     }
     

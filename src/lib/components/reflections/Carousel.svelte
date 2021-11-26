@@ -1,4 +1,6 @@
 <script lang="ts">
+import Preload from "lib/Preload.svelte";
+
 
     export let urls: string[];
     export let roundedImages: boolean = true;
@@ -11,14 +13,6 @@
     }
     
     $: if (slider) slider.style.right = `${offset*100}%`;
-
-    function preload(src) {
-        return new Promise(function(resolve) {
-            let img = new Image()
-            img.onload = resolve
-            img.src = src
-        })
-    }
 
 
 </script>
@@ -40,9 +34,7 @@
     <div id="images" style={roundedImages ? 'border-radius: 0.5rem;' : ''}>
         <div id="slider" bind:this={slider} >
             {#each urls as src}
-                {#await preload(src) then img}
-                    <img style={roundedImages ? 'border-radius: 0.5rem;' : ''} alt="" {src} />                
-                {/await}
+                <Preload alt="Reflection evidence" {src} />
             {/each}
         </div>
         

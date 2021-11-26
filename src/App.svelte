@@ -17,6 +17,7 @@
   import { profileStore } from "stores/profile";
 import RecoverPasswordRoute from "routes/confirmation_and_recovery/RecoverPasswordRoute.svelte";
 import ResetPasswordRoute from "routes/confirmation_and_recovery/ResetPasswordRoute.svelte";
+import RegisterRoute from "routes/register/RegisterRoute.svelte";
 
   // onMount(()=>{
   //   (async function (){
@@ -70,8 +71,11 @@ import ResetPasswordRoute from "routes/confirmation_and_recovery/ResetPasswordRo
 
 {#if JSON.parse(localStorage.getItem("profileStore")) == null}
   <Route>
-    <Route path="/sign-in/*">
+    <Route path="/sign-in">
       <SignIn />
+    </Route>
+    <Route path="/register">
+      <RegisterRoute />
     </Route>
     <Route path="/confirm-email/:code" let:meta>
       <ConfirmEmailRoute {meta}/>
@@ -85,16 +89,12 @@ import ResetPasswordRoute from "routes/confirmation_and_recovery/ResetPasswordRo
     <Route fallback redirect="/sign-in" />
   </Route>
 {:else}
-  <Route path="/">
+  <Route fallback path="/">
     <Index />
   </Route>
 
   <Route path="/bookmarks">
     <BookmarksRoute />
-  </Route>
-
-  <Route path="/sign-in/*">
-    <SignIn />
   </Route>
 
   <Route path="/profiles/*">

@@ -16,16 +16,16 @@ export interface Reflection {
     creativity: boolean,
     activity: boolean,
     service: boolean,
-    tags: Array<{name: string}>,
+    tags: Array<{ name: string }>,
     date_added: Date,
     profile_id: number,
     is_favourite: boolean,
     attachments: Array<Attachment>
 }
 
-export async function postReflection(values){
+export async function postReflection(values) {
     console.log('bruh')
-    let tags = values.tags.map(tag => {return {'name': tag}})
+    let tags = values.tags.map(tag => { return { 'name': tag } })
     console.log(tags)
     let data = {
         title: values.title,
@@ -51,9 +51,9 @@ export async function postReflection(values){
             throw 'Current profile unavailable'
         }
 
-        const reflection =  await res.json()
+        const reflection = await res.json()
 
-        for (const file of values.files){
+        for (const file of values.files) {
             let data = new FormData()
             data.append('file', file)
 
@@ -63,7 +63,7 @@ export async function postReflection(values){
                 mode: 'cors',
                 body: data
             })
-    
+
             if (res.status != 200) {
                 throw 'Upload failed'
             }
@@ -75,7 +75,7 @@ export async function postReflection(values){
     }
 }
 
-export async function filterReflections(): Promise<Array<Reflection>>{
+export async function filterReflections(): Promise<Array<Reflection>> {
     try {
         const res = await fetch(route('reflections/query'), {
             method: 'POST',
@@ -86,7 +86,7 @@ export async function filterReflections(): Promise<Array<Reflection>>{
                 sorts: {
                     "date_added": 'desc'
                 }
-            }), 
+            }),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -102,7 +102,7 @@ export async function filterReflections(): Promise<Array<Reflection>>{
     }
 }
 
-export async function getReflection(id: number): Promise<Reflection>{
+export async function getReflection(id: number): Promise<Reflection> {
     try {
         const res = await fetch(route(`reflections/${id}`), {
             method: 'GET',
@@ -120,7 +120,7 @@ export async function getReflection(id: number): Promise<Reflection>{
     }
 }
 
-export async function favouriteReflection(reflection_id: number){
+export async function favouriteReflection(reflection_id: number) {
     try {
         const res = await fetch(route(`reflections/${reflection_id}/favourite`), {
             method: 'POST',
@@ -138,7 +138,7 @@ export async function favouriteReflection(reflection_id: number){
     }
 }
 
-export async function unfavouriteReflection(reflection_id: number){
+export async function unfavouriteReflection(reflection_id: number) {
     try {
         const res = await fetch(route(`reflections/${reflection_id}/favourite`), {
             method: 'DELETE',
@@ -156,7 +156,7 @@ export async function unfavouriteReflection(reflection_id: number){
     }
 }
 
-export async function filterFavouriteReflections(): Promise<Array<Reflection>>{
+export async function filterFavouriteReflections(): Promise<Array<Reflection>> {
     try {
         const res = await fetch(route('reflections/favourites'), {
             method: 'POST',
@@ -166,7 +166,7 @@ export async function filterFavouriteReflections(): Promise<Array<Reflection>>{
                 sorts: {
                     "date_added": 'desc'
                 }
-            }), 
+            }),
             headers: {
                 'Content-Type': 'application/json'
             },

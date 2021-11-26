@@ -17,7 +17,6 @@ import { profileAvatar, profileUpdateSchema } from "lib/validationSchemas";
 {:then profile}
     
 <CenterWrapper>
-    <Container>
         <div class="wrapper">
             <ThinButton target="/profiles/current" fullIconName="arrow_back" text="Back to profile" />
             <h1>Edit profile</h1>
@@ -46,7 +45,6 @@ import { profileAvatar, profileUpdateSchema } from "lib/validationSchemas";
                 </Form>
             </div>
         </div>
-    </Container>
 </CenterWrapper>    
     
 {/await}

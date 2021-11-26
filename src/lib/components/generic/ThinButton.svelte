@@ -9,11 +9,12 @@
     {#if fullIconName}
         <span class="material-icons-round">{fullIconName}</span>
     {/if}
-    {text}
+    <span class="text">{text}</span>
 </a>
 
 <style>
     a {
+        width: fit-content; 
         display: flex;
         align-items: center;
         padding: 0.5rem;
@@ -32,6 +33,10 @@
     span {
         font-size: 1.2rem;
         margin-right: 0.5rem;
+    }
+
+    .text {
+        font-size: .9rem;
     }
     
 </style>

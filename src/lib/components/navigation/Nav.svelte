@@ -1,17 +1,20 @@
 <script lang="ts">
-    import Svg from 'svelte-inline-svg';
-    import Tiles from './SideMenu.svelte';
-    import { fade } from 'svelte/transition'
-    import { menuVisible } from 'stores/nav'
-    import DropDownNavMenu from 'lib/components/navigation/DropDownNavMenu.svelte'
-    import { onMount } from 'svelte';
-    import { currentProfile } from 'api/Profile'
-    import { active, router } from 'tinro'
-import { avatarSrc } from 'api/utils';
-import { logout } from 'api/Auth';
-    
+    import Svg from "svelte-inline-svg";
+    import Tiles from "./SideMenu.svelte";
+    import { fade } from "svelte/transition";
+    import { menuVisible } from "stores/nav";
+    import DropDownNavMenu from "lib/components/navigation/DropDownNavMenu.svelte";
+    import { onMount } from "svelte";
+    import { currentProfile } from "api/Profile";
+    import { active, router } from "tinro";
+    import { avatarSrc } from "api/utils";
+    import { logout } from "api/Auth";
+    import { swr } from "api/swr";
+    import Loading from "../generic/Loading.svelte";
+
     let navVisible: boolean = true;
-    let y1:number = 0, y2: number;
+    let y1: number = 0,
+        y2: number;
     let nav: HTMLElement;
     let navBorder: HTMLElement;
 
@@ -19,20 +22,24 @@ import { logout } from 'api/Auth';
 
     const maxDelta: number = 30;
 
-    function handleMousemove (e: MouseEvent) {
+    function handleMousemove(e: MouseEvent) {
         mouseX = e.clientX;
         mouseY = e.clientY;
     }
 
-    $: {    
+    $: {
         let delta: number = y2 - y1;
-        console.log(delta)
+        console.log(delta);
         y1 = y2;
 
-        if(delta > maxDelta){
+        if (delta > maxDelta) {
             navVisible = false;
             nav.style.top = "-100%";
-        } else if (delta < -maxDelta || nav && (y2 < nav.clientHeight) || nav && (mouseY < nav.clientHeight)){
+        } else if (
+            delta < -maxDelta ||
+            (nav && y2 < nav.clientHeight) ||
+            (nav && mouseY < nav.clientHeight)
+        ) {
             navVisible = true;
             nav.style.top = "0";
         }
@@ -49,106 +56,168 @@ import { logout } from 'api/Auth';
         }
     }*/
 
-    async function logoutAction(){
-        logout()
-        router.goto('/sign-in')
+    async function logoutAction() {
+        logout();
+        router.goto("/sign-in");
     }
+    let { dataStore } = swr(currentProfile, "currentProfile", []);
 
-
+    onMount(() => {});
 </script>
 
-<svelte:window bind:scrollY={y2}/>
+<svelte:window bind:scrollY={y2} />
 <svelte:body on:mousemove={handleMousemove} />
 
-<div class="nav-wrapper"  bind:this={nav}>
-<nav>
-    <!--<div bind:this={navBorder} class={`-z-1 absolute h-full p-4 border-b-3 border-gray-300 transition-all duration-500 ${y2 == 0 ? "w-0 left-1/2 opacity-0" : "w-full left-0"}`}></div>-->
-    
-    <!--<button on:click={()=>$tilesVisible = true}><span id="navIcon" class={`md:hidden material-icons-round`}>menu</span></button>    -->
-    
-    <div class="logo-wrapper">
-        <a class="logo" href="/">
-                <svg class="logo-svg" width="203.3mm" height="78.868mm" version="1.1" viewBox="0 0 203.3 78.868" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<div class="nav-wrapper" bind:this={nav}>
+    <nav>
+        <!--<div bind:this={navBorder} class={`-z-1 absolute h-full p-4 border-b-3 border-gray-300 transition-all duration-500 ${y2 == 0 ? "w-0 left-1/2 opacity-0" : "w-full left-0"}`}></div>-->
+
+        <!--<button on:click={()=>$tilesVisible = true}><span id="navIcon" class={`md:hidden material-icons-round`}>menu</span></button>    -->
+
+        <div class="logo-wrapper">
+            <a class="logo" href="/">
+                <svg
+                    class="logo-svg"
+                    width="203.3mm"
+                    height="78.868mm"
+                    version="1.1"
+                    viewBox="0 0 203.3 78.868"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:cc="http://creativecommons.org/ns#"
+                    xmlns:dc="http://purl.org/dc/elements/1.1/"
+                    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                >
                     <metadata>
-                     <rdf:RDF>
-                      <cc:Work rdf:about="">
-                       <dc:format>image/svg+xml</dc:format>
-                       <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-                       <dc:title/>
-                      </cc:Work>
-                     </rdf:RDF>
+                        <rdf:RDF>
+                            <cc:Work rdf:about="">
+                                <dc:format>image/svg+xml</dc:format>
+                                <dc:type
+                                    rdf:resource="http://purl.org/dc/dcmitype/StillImage"
+                                />
+                                <dc:title />
+                            </cc:Work>
+                        </rdf:RDF>
                     </metadata>
                     <g transform="translate(1.6524 -60.566)">
-                     <path d="m152.82 73.264a19.991 19.246 0 0 0-28.271 0 19.991 19.246 0 0 0-4.7e-4 27.219l33.125 31.891 28.271-27.219z" fill="#00e676" opacity=".8"/>
-                     <path d="m190.8 73.264a19.991 19.246 0 0 0-28.271-3e-6l-33.125 31.891 28.271 27.218 33.125-31.891a19.991 19.246 0 0 0 0-27.218z" fill="#00e676" opacity=".8"/>
-                     <g fill="#1e88e5">
-                      <path d="m51.113 90.197a23.883 23.883 0 0 1-23.883 23.883 23.883 23.883 0 0 1-23.883-23.883 23.883 23.883 0 0 1 23.883-23.883 23.883 23.883 0 0 1 23.883 23.883z" opacity=".8"/>
-                      <g stroke-linecap="round" stroke-linejoin="round">
-                       <path d="m27.23 89.265a11.197 10.957 0 0 0-11.197 10.957v33.463h22.393v-33.463a11.197 10.957 0 0 0-11.197-10.957z" opacity=".8" stroke-width=".79816"/>
-                       <path d="m16.034 118.07h22.393v3.9736h-22.393z" opacity=".8" stroke-width=".70009"/>
-                       <path d="m16.034 125.52h22.393v3.9736h-22.393z" opacity=".8" stroke-width=".70009"/>
-                      </g>
-                     </g>
-                     <path d="m94.062 65.566-19.67 20.845-19.671 20.845h39.341z" fill="#f50057" opacity=".8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0272"/>
-                     <path d="m75.153 134.43 19.67-20.845 19.671-20.845h-39.341z" fill="#f50057" opacity=".8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0272"/>
+                        <path
+                            d="m152.82 73.264a19.991 19.246 0 0 0-28.271 0 19.991 19.246 0 0 0-4.7e-4 27.219l33.125 31.891 28.271-27.219z"
+                            fill="#00e676"
+                            opacity=".8"
+                        />
+                        <path
+                            d="m190.8 73.264a19.991 19.246 0 0 0-28.271-3e-6l-33.125 31.891 28.271 27.218 33.125-31.891a19.991 19.246 0 0 0 0-27.218z"
+                            fill="#00e676"
+                            opacity=".8"
+                        />
+                        <g fill="#1e88e5">
+                            <path
+                                d="m51.113 90.197a23.883 23.883 0 0 1-23.883 23.883 23.883 23.883 0 0 1-23.883-23.883 23.883 23.883 0 0 1 23.883-23.883 23.883 23.883 0 0 1 23.883 23.883z"
+                                opacity=".8"
+                            />
+                            <g stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="m27.23 89.265a11.197 10.957 0 0 0-11.197 10.957v33.463h22.393v-33.463a11.197 10.957 0 0 0-11.197-10.957z"
+                                    opacity=".8"
+                                    stroke-width=".79816"
+                                />
+                                <path
+                                    d="m16.034 118.07h22.393v3.9736h-22.393z"
+                                    opacity=".8"
+                                    stroke-width=".70009"
+                                />
+                                <path
+                                    d="m16.034 125.52h22.393v3.9736h-22.393z"
+                                    opacity=".8"
+                                    stroke-width=".70009"
+                                />
+                            </g>
+                        </g>
+                        <path
+                            d="m94.062 65.566-19.67 20.845-19.671 20.845h39.341z"
+                            fill="#f50057"
+                            opacity=".8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.0272"
+                        />
+                        <path
+                            d="m75.153 134.43 19.67-20.845 19.671-20.845h-39.341z"
+                            fill="#f50057"
+                            opacity=".8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.0272"
+                        />
                     </g>
                 </svg>
-                <div class="logo-text-wrapper"><span class="logoTextBold">CAS</span> Portal</div>
-        </a>
-    </div>
-
-    <div class="utilities-wrapper">
-        <button class="menu-icon" on:click={()=>$menuVisible = !$menuVisible}><span class="material-icons-round">menu</span></button>
-        <input id="searchBox" class="searchbox" placeholder="Search"/>
-        <div class="search-button-wrapper">
-            <button id="searchButton" class="search-button"><span id="searchIcon" class="search-icon material-icons-round">search</span></button>
+                <div class="logo-text-wrapper">
+                    <span class="logoTextBold">CAS</span> Portal
+                </div>
+            </a>
         </div>
-        <DropDownNavMenu />
-    </div>
-    
 
-    <!--<div>
+        <div class="utilities-wrapper">
+            <button
+                class="menu-icon"
+                on:click={() => ($menuVisible = !$menuVisible)}
+                ><span class="material-icons-round">menu</span></button
+            >
+            <input id="searchBox" class="searchbox" placeholder="Search" />
+            <div class="search-button-wrapper">
+                <button id="searchButton" class="search-button"
+                    ><span
+                        id="searchIcon"
+                        class="search-icon material-icons-round">search</span
+                    ></button
+                >
+            </div>
+            <DropDownNavMenu />
+        </div>
+
+        <!--<div>
         <span class="logoLetters text-3xl text-blue-500">c</span>
         <span class="logoLetters text-3xl text-red-500">a</span>
         <span class="logoLetters text-3xl text-green-500">s</span>
     </div>-->
-    <div class="sign-in-button-wrapper">
-        {#await currentProfile()}
-            <!-- <a href="sign-in" style="text-decoration: none" use:active>
-                <div class="sign-in-button">
-                    <span id="lockIcon" class="material-icons-round">lock</span>Sign in
-                </div>
-            </a> -->
-            <div></div>
-        {:then profile}
-            <button class="logout-button" on:click={logoutAction}>
-                <span class="material-icons-round">power_settings_new</span>
-            </button>
-            <a href="/profiles/current" class="profile-link">
-                <div class="profile-info">
-                    <span class="profile-name">{profile.first_name} {profile.last_name}</span>
-                    {#if profile.avatar}
-                        <img alt="Profile picture" class="profile-icon" src={avatarSrc(profile.avatar)} />
-                    {:else}
-                        <div style="background: red;" class="profile-icon"/>
-                    {/if}
-                </div>
-            </a>
-        {:catch error}
-            <!-- {error} -->
-            <a href="sign-in" style="text-decoration: none" use:active>
-                <div class="sign-in-button">
-                    <span id="lockIcon" class="material-icons-round">lock</span>Sign in
-                </div>
-            </a>
-        {/await}
-    <!-- <div class="sign-in-button-wrapper"> -->
-    </div>
-
-
-    
-
-</nav>
+        <div class="sign-in-button-wrapper">
+            {#await $dataStore}
+                <Loading />
+            {:then profile}
+                <button class="logout-button" on:click={logoutAction}>
+                    <span class="material-icons-round">power_settings_new</span>
+                </button>
+                <a href="/profiles/current" class="profile-link">
+                    <div class="profile-info">
+                        <span class="profile-name"
+                            >{profile.first_name} {profile.last_name}</span
+                        >
+                        {#if profile.avatar}
+                            <img
+                                alt="Profile picture"
+                                class="profile-icon"
+                                src={avatarSrc(profile.avatar)}
+                            />
+                        {:else}
+                            <div
+                                style="background: red;"
+                                class="profile-icon"
+                            />
+                        {/if}
+                    </div>
+                </a>
+            {:catch error}
+                <!-- {error} -->
+                <a href="sign-in" style="text-decoration: none" use:active>
+                    <div class="sign-in-button">
+                        <span id="lockIcon" class="material-icons-round"
+                            >lock</span
+                        >Sign in
+                    </div>
+                </a>
+            {/await}
+            <!-- <div class="sign-in-button-wrapper"> -->
+        </div>
+    </nav>
 </div>
 
 <style>
@@ -182,14 +251,14 @@ import { logout } from 'api/Auth';
         /*flex-direction: row;
         justify-content: space-between;*/
         border-radius: 0.5rem;
-        
+
         /*justify-content: space-between;
         align-items: center;*/
         background: transparent;
         height: 4rem;
     }
 
-    .profile-link:hover .profile-info{
+    .profile-link:hover .profile-info {
         background: var(--bg-grey-lower);
     }
 
@@ -219,10 +288,9 @@ import { logout } from 'api/Auth';
         margin-right: 1rem;
     }
 
-
     .logo-wrapper {
         flex: 1;
-        height: 3rem; 
+        height: 3rem;
         overflow: hidden;
         display: flex;
         justify-content: flex-start;
@@ -242,17 +310,14 @@ import { logout } from 'api/Auth';
         transition: all 200ms;
         background: var(--bg-grey);
     }
-    
+
     .logo:focus {
         outline: none;
     }
 
     .logo:hover {
         background: var(--bg-grey-lower);
-
     }
-    
-    
 
     .logo-svg {
         width: 100px;
@@ -292,7 +357,7 @@ import { logout } from 'api/Auth';
     }
 
     .menu-icon:hover {
-        filter: brightness(.9);
+        filter: brightness(0.9);
     }
 
     @media screen and (min-width: 1380px) {
@@ -315,7 +380,7 @@ import { logout } from 'api/Auth';
         outline: none;
         border: none;
     }
-    
+
     .searchbox:focus {
         outline: none;
     }
@@ -364,12 +429,12 @@ import { logout } from 'api/Auth';
     }
 
     .search-button:hover {
-        filter: brightness(.9);
+        filter: brightness(0.9);
     }
 
     .search-button:focus {
         outline: none;
-        filter: brightness(.9);
+        filter: brightness(0.9);
     }
 
     .search-icon {
@@ -387,7 +452,6 @@ import { logout } from 'api/Auth';
         flex: 1;
         height: 3rem;
     }
-
 
     .sign-in-button {
         font-family: Rubik, sans-serif;
@@ -428,7 +492,7 @@ import { logout } from 'api/Auth';
         border: 0;
         outline: 0;
     }
-    
+
     #lockIcon {
         font-size: 1.25rem; /* 20px */
         margin-right: 0.5rem; /* 8px */
@@ -450,7 +514,6 @@ import { logout } from 'api/Auth';
 
     #searchIcon {
         font-size: 1.875rem; /* 30px */
-
     }
 
     #searchBox {
@@ -466,8 +529,8 @@ import { logout } from 'api/Auth';
         color: #444;
     }
 
-    #searchBox:focus  {
-        filter: brightness(.9);
+    #searchBox:focus {
+        filter: brightness(0.9);
     }
 
     @media screen and (min-width: 768px) {
@@ -486,5 +549,5 @@ import { logout } from 'api/Auth';
         .utilities-wrapper {
             width: 40%;
         }
-    }   
+    }
 </style>

@@ -7,6 +7,7 @@ import { sendRecoveryRequest } from "api/Auth";
     import Form from "lib/components/forms/Form.svelte";
     import Submit from "lib/components/forms/Submit.svelte";
     import TextField from "lib/components/forms/TextField.svelte";
+import ThinButton from "lib/components/generic/ThinButton.svelte";
     import { passwordRecoverySchema } from "lib/validationSchemas";
 
     const submitAction = async (values) => {
@@ -18,6 +19,7 @@ import { sendRecoveryRequest } from "api/Auth";
 <AbsoluteCenterContainer>
     <!-- <Container>
         <CenterWrapper> -->
+    <ThinButton target="/sign-in" text="Back to sign-in" fullIconName="arrow_back" />
     <div class="wrapper">
         <h2>Forgot my password</h2>
         <Form validationSchema={passwordRecoverySchema} submitAction={submitAction} let:errors>

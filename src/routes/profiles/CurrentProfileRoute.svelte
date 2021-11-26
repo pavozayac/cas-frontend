@@ -8,6 +8,9 @@ import CenterWrapper from 'lib/components/CenterWrapper.svelte';
 import { avatarSrc } from 'api/utils';
 import Nav from 'lib/components/navigation/Nav.svelte';
 import SideMenu from 'lib/components/navigation/SideMenu.svelte';
+import { swr } from 'api/swr';
+
+    const { dataStore } = swr(currentProfile, 'currentProfile', []);
 
 </script>
 <Nav/>
@@ -16,7 +19,7 @@ import SideMenu from 'lib/components/navigation/SideMenu.svelte';
 <CenterWrapper>
 <Container>
 <CenterWrapper>
-    {#await currentProfile() then profile}
+    {#await $dataStore then profile}
     <div class="upper-data">
         <div class="edit-wrapper">
             <ThinButton text="Edit profile" target="/profiles/current/edit" fullIconName="edit"/>
@@ -36,10 +39,10 @@ import SideMenu from 'lib/components/navigation/SideMenu.svelte';
     </div>
     {/await}
     <div class="posts-container">
-        <Card/>
-        <Card/>
-        <Card/>
-        <Card/>
+        <Card id={0}/>
+        <Card id={1}/>
+        <Card id={2}/>
+        <Card id={3}/>
     </div>
 
 </CenterWrapper>

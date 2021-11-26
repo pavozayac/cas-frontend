@@ -1,5 +1,6 @@
 <script lang="ts">
 import { currentProfile } from 'api/Profile';
+import { route } from 'api/utils';
 
      import { profileStore } from 'stores/profile'
      import { onMount } from 'svelte';
@@ -7,7 +8,7 @@ import { currentProfile } from 'api/Profile';
      onMount(()=>{
           window.handleGoogleSignIn = res => {
                // console.log(res)
-               fetch('http://localhost:8000/auth/google', {
+               fetch(route('auth/google'), {
                     method: 'POST',
                     body: JSON.stringify(res),
                     mode: 'no-cors',

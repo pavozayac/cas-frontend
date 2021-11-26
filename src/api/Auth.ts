@@ -10,7 +10,6 @@ export interface JWT {
 
 export async function login(email: string, password: string): Promise<JWT> {
     // const res = await axios.post(route('login'), { email, password })
-
     const res = await fetch(route('login'), {
         method: 'POST',
         body: JSON.stringify({
@@ -25,7 +24,14 @@ export async function login(email: string, password: string): Promise<JWT> {
         mode: 'cors',
 
     })
+
     const response = await res.json()
+
+    if (!res.ok) {
+        console.log()
+        throw new Error('Authentication error');
+    }
+    
     profileStore.set(response)
     return response
 }

@@ -3,8 +3,6 @@
     import { signInFormSchema, registerSchema } from "lib/validationSchemas";
     import { validator } from "@felte/validator-yup";
     import reporter from "@felte/reporter-tippy";
-    import GoogleButton from "./GoogleSignInButton.svelte";
-    import FacebookButton from "./FacebookSignInButton.svelte";
     import Form from "lib/components/forms/Form.svelte";
     import TextField from "lib/components/forms/TextField.svelte";
     import Submit from "lib/components/forms/Submit.svelte";
@@ -13,83 +11,59 @@
     import AbsoluteCenterContainer from "../AbsoluteCenterContainer.svelte";
 
     import { login, register } from "api/Auth";
-    import { route } from "api/utils";
-    import axios from "axios";
 
-    import { router, active, Route } from "tinro";
+    import { router } from "tinro";
     import RadioGroup from "../forms/RadioGroup.svelte";
     import CenterWrapper from "../CenterWrapper.svelte";
     import ThinButton from "../generic/ThinButton.svelte";
     import SubtleButton from "../generic/SubtleButton.svelte";
 
-    const { form, errors } = createForm({
-        onSubmit: async (values) => {
-            await login(values.email, values.password);
-            router.goto("/");
-        },
-        onError: (err) => {
-            return {
-                password: "Invalid credentials",
-            };
-        },
-        extend: [
-            validator,
-            reporter({
-                tippyProps: {
-                    trigger: "submit",
-                },
-            }),
-        ],
-        validateSchema: signInFormSchema,
-    });
+    const register_redirect = async (values) => {
+        console.log(values.email);
+        const res = await register(values);
+        router.goto("/sign-in");
+    };
+
+    const onError = (errors) => {
+        errors.password = "Invalid credentials";
+    };
+
 </script>
 
-{@debug $errors}
-<div class="modal-wrapper">
-    <div class="title">
-        <h2>Sign in to CAS Portal</h2>
-    </div>
-    <form use:form>
-        <input
-            class:error={$errors.email}
-            class="email"
-            type="email"
-            name="email"
-            placeholder="Email address"
-        />
-        <input
-            class:error={$errors.password}
-            class="password"
-            type="password"
-            name="password"
-            placeholder="Password"
-        />
-        <input class="sign-in-button" type="submit" value="Sign in" />
-    </form>
-    <SubtleButton
-        style="color: var(--bg-dark-grey); margin-top: 1rem;"
-        target="/forgot-my-password"
-        fullIconName="question_mark"
-        text="Forgot my password"
+<Form
+    let:errors
+    let:handleSubmit
+    validationSchema={registerSchema}
+    submitAction={register_redirect}
+    {onError}
+>
+    <TextField {errors} name="email" type="email" />
+    <TextField {errors} name="first_name" type="text" />
+    <TextField {errors} name="last_name" type="text" />
+    <br />
+    <TextField {errors} name="password" type="password" />
+    <TextField {errors} name="repeat_password" type="password" />
+    <RadioGroup
+        initialValue={0}
+        text="Post visibility"
+        name="post_visibility"
+        items={{
+            "Only you can see your posts": 0,
+            "Only your group can see your posts": 1,
+            "Anybody can see your posts": 2,
+        }}
     />
-    <div class="social-wrapper">
-        <GoogleButton />
-        <FacebookButton />
-    </div>
-    <a class="register-button" use:active href="/register">Register</a>
-</div>
+    <br />
+    <Submit text="Register" />
+</Form>
+
 
 <style>
-    h2 {
-        font-family: Rubik, sans-serif;
-        font-weight: 600;
-    }
-
     .register-button {
         cursor: pointer;
         text-align: center;
         text-transform: uppercase;
-        margin-top: 1rem;
+        margin-top: 2rem;
         width: 60%;
         color: var(--accent-blue);
         background: white;
@@ -120,6 +94,7 @@
     }
 
     .social-wrapper {
+        margin-top: 2rem;
         display: flex;
         flex-direction: column;
         align-items: center;

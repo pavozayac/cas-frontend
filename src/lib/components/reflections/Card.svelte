@@ -1,162 +1,211 @@
-
 <script lang="ts">
-    import App from 'App.svelte'
-    import type { is_promise } from 'svelte/internal';
-    import Carousel from './Carousel.svelte'
-    import { cubicInOut } from 'svelte/easing'
-    import { slide } from 'svelte/transition'
-    import { favouriteReflection, getReflection, unfavouriteReflection } from 'api/Reflection';
-    import type { Reflection } from 'api/Reflection'
-import { getProfile } from 'api/Profile';
-import { attachmentSrc, avatarSrc } from 'api/utils';
-import { ref } from 'yup';
+    import App from "App.svelte";
+    import { is_promise, onMount } from "svelte/internal";
+    import Carousel from "./Carousel.svelte";
+    import { cubicInOut } from "svelte/easing";
+    import { slide } from "svelte/transition";
+    import {
+        favouriteReflection,
+        getReflection,
+        unfavouriteReflection,
+    } from "api/Reflection";
+    import type { Reflection } from "api/Reflection";
+    import { getProfile } from "api/Profile";
+    import { attachmentSrc, avatarSrc } from "api/utils";
+    import { ref } from "yup";
+    import { swr } from "api/swr";
+    import Loading from "../generic/Loading.svelte";
+    import Container from "../Container.svelte";
+    import { profileAvatar } from "lib/validationSchemas";
+    import Preload from "lib/Preload.svelte";
 
-    export let id
+    export let id;
 
     // let bookmarked: boolean = false
 
-    let commentsVisible: boolean = false
+    let commentsVisible: boolean = false;
 
-    const date = new Date()
+    const date = new Date();
 
-    $: day = date.getDate()
-    $: date.setMonth(date.getMonth())
-    $: month = date.toLocaleString('en-us', {month: "long"})
-    $: year = date.getFullYear()
-    $: time = date.toLocaleTimeString('en-uk', {timeStyle: 'short'})
+    $: day = date.getDate();
+    $: date.setMonth(date.getMonth());
+    $: month = date.toLocaleString("en-us", { month: "long" });
+    $: year = date.getFullYear();
+    $: time = date.toLocaleTimeString("en-uk", { timeStyle: "short" });
 
     let pics_urls = [
-        'https://placekitten.com/1280/720',
-        'https://placekitten.com/1920/1080',
-        'https://placekitten.com/1366/768',
-        'https://c.files.bbci.co.uk/12A9B/production/_111434467_gettyimages-1143489763.jpg',
-    ]
+        "https://placekitten.com/1280/720",
+        "https://placekitten.com/1920/1080",
+        "https://placekitten.com/1366/768",
+        "https://c.files.bbci.co.uk/12A9B/production/_111434467_gettyimages-1143489763.jpg",
+    ];
 
     let mock_comments = [
         {
             profile: {
-                nickname: 'Bruh',
-                profileImage: 'https://placekitten.com/400/400'
+                nickname: "Bruh",
+                profileImage: "https://placekitten.com/400/400",
             },
-            text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
         },
         {
             profile: {
-                nickname: 'Bruh',
-                profileImage: 'https://placekitten.com/400/400'
+                nickname: "Bruh",
+                profileImage: "https://placekitten.com/400/400",
             },
-            text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
         },
         {
             profile: {
-                nickname: 'Bruh',
-                profileImage: 'https://placekitten.com/400/400'
+                nickname: "Bruh",
+                profileImage: "https://placekitten.com/400/400",
             },
-            text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
         },
         {
             profile: {
-                nickname: 'Bruh',
-                profileImage: 'https://placekitten.com/400/400'
+                nickname: "Bruh",
+                profileImage: "https://placekitten.com/400/400",
             },
-            text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-        }
-    ]
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        },
+    ];
 
-    function commentsIn (node, { delay = 0, duration = 300}) {
+    function commentsIn(node, { delay = 0, duration = 300 }) {
         return {
             delay,
             duration,
-            css: t => {
-                const eased = cubicInOut(t)
+            css: (t) => {
+                const eased = cubicInOut(t);
                 return `
                     transform: scaleY(${eased});
-                `
-            }
-        }
+                `;
+            },
+        };
     }
 
-    
-    let bookmarked: boolean
+    // let bookmarked: boolean;
 
-    async function getReflectionAndSetState(id) {
-        let reflection = await getReflection(id)
-        bookmarked = reflection.is_favourite
-        return reflection
-    }
+    let { dataStore, reload } = swr(getReflection, "reflection", [id]);
 
-    function toggleReflection(reflection: Reflection){
-        if (bookmarked == true){
-            unfavouriteReflection(reflection.id)
+    function toggleReflection(reflection: Reflection) {
+        if (reflection.is_favourite) {
+            unfavouriteReflection(reflection.id);
         } else {
-            favouriteReflection(reflection.id)
+            favouriteReflection(reflection.id);
         }
-        bookmarked = !bookmarked
+        reflection.is_favourite = !reflection.is_favourite;
     }
+
+    // onMount(async () => {
+    //     bookmarked = (await $reflection_swr).is_favourite;
+    // });
 </script>
 
-{#await getReflectionAndSetState(id) then reflection}
-<div class="card-container">
-    <div class="top-widgets">
-        <div class="date">
-            {reflection.date_added}
-        </div>
-        <div class="categories">
-
-        </div>
-        {#await getProfile(reflection.profile_id)}
-        {:then profile}
-        <div class="profile-info">
-            <span class="profile-name">{profile.first_name} {profile.last_name}</span>
-            <img alt="Profile picture" class="profile-icon" src={avatarSrc(profile.avatar)} />
-        </div>
-        {/await}
-    </div>
-
-    <div class="carousel-wrapper">
-       <Carousel urls={reflection.attachments.map(attachment=>attachmentSrc(reflection, attachment))}/>
-    </div>
-    <div class="text-section-wrapper">
-        <h2>
-            {reflection.title}
-        </h2>
-        <p>
-            {reflection.text_content}
-        </p>
-        <div class="actions-buttons">
-            <button class:bookmarked={bookmarked} on:click={()=>{ toggleReflection(reflection) }}>
-                <span class="material-icons-outlined">{bookmarked ? 'done' : 'bookmark_border'}</span> {bookmarked ? 'Bookmarked' : 'Bookmark'}
-            </button>
-            <!-- <button on:click={()=>commentsVisible = !commentsVisible}>
-                <span class="material-icons-outlined">comment</span> Comments
-            </button> -->
-        </div>
-    </div>
-    {#if commentsVisible}
-    <div class="comment-section" transition:slide>
-        <div class="comments-wrapper">
-            <div class="add-comment">
-                <form class="add-comment-form">
-                    <input class="add-comment-input" type="text" placeholder="Add your comment"/>
-                    <input class="add-comment-button" type="submit" value="Post" />
-                </form>
+{#await $dataStore}
+    <Container>
+        <Loading />
+    </Container>
+{:then reflection}
+    <div class="card-container">
+        <div class="top-widgets">
+            <div class="date">
+                {reflection.date_added}
             </div>
-            {#each mock_comments as comment}
-                <div class="comment">
-                    <div class="comment-profile">
-                        <img alt="Commenter profile image" class="comment-profile-image" src={comment.profile.profileImage} />
-                    </div>
-                    <p class="comment-text">{comment.text}</p>
+            <div class="categories" />
+            {#await getProfile(reflection.profile_id) then profile}
+                <div class="profile-info">
+                    <span class="profile-name"
+                        >{profile.first_name} {profile.last_name}</span
+                    >
+                    {#if profile.avatar}
+                        <Preload
+                            alt="Profile picture"
+                            src={avatarSrc(profile.avatar)}
+                        />
+                    {:else}
+                        <div class="profile-icon" style="background: red;" />
+                    {/if}
                 </div>
-            {/each}
+            {/await}
         </div>
-        <button class="close-button" on:click={()=>commentsVisible=false}>
-            <span class="material-icons-outlined">close</span> Close
-        </button>
+
+        <div class="carousel-wrapper">
+            <!-- <Carousel
+                urls={reflection.attachments.map((attachment) =>
+                    attachmentSrc(reflection, attachment)
+                )}
+            /> -->
+        </div>
+        <div class="text-section-wrapper">
+            <h2>
+                {reflection.title}
+            </h2>
+            <p>
+                {reflection.text_content}
+            </p>
+            <div class="actions-buttons">
+                <button
+                    class:bookmarked={reflection.is_favourite}
+                    on:click={() => {
+                        toggleReflection(reflection);
+                        reload();
+                    }}
+                >
+                    <span class="material-icons-outlined"
+                        >{reflection.is_favourite
+                            ? "done"
+                            : "bookmark_border"}</span
+                    >
+                    {reflection.is_favourite ? "Bookmarked" : "Bookmark"}
+                </button>
+                <button on:click={() => (commentsVisible = !commentsVisible)}>
+                    <span class="material-icons-outlined">comment</span> Comments
+                </button>
+            </div>
+        </div>
+        {#if commentsVisible}
+            <div class="comment-section" transition:slide>
+                <div class="comments-wrapper">
+                    <div class="add-comment">
+                        <form class="add-comment-form">
+                            <input
+                                class="add-comment-input"
+                                type="text"
+                                placeholder="Add your comment"
+                            />
+                            <input
+                                class="add-comment-button"
+                                type="submit"
+                                value="Post"
+                            />
+                        </form>
+                    </div>
+                    {#each mock_comments as comment}
+                        <div class="comment">
+                            <div class="comment-profile">
+                                <Preload
+                                    alt="Commenter profile image"
+                                    src={comment.profile.profileImage}
+                                />
+                            </div>
+                            <p class="comment-text">{comment.text}</p>
+                        </div>
+                    {/each}
+                </div>
+                <button
+                    class="close-button"
+                    on:click={() => (commentsVisible = false)}
+                >
+                    <span class="material-icons-outlined">close</span> Close
+                </button>
+            </div>
+        {/if}
     </div>
-    {/if}
-</div>
+{:catch error}
+    Error
 {/await}
+
 <style lang="postcss">
     .comment-section {
         background: var(--bg-grey);
@@ -191,7 +240,7 @@ import { ref } from 'yup';
         justify-content: flex-start;
     }
 
-    .comment-profile-image {
+    .comment-profile :global(img) {
         width: 3rem;
         height: 3rem;
         border-radius: 9999px;
@@ -261,7 +310,7 @@ import { ref } from 'yup';
         background: var(--bg-grey);
     }
 
-    .profile-icon {
+    .profile-info :global(img) {
         border-radius: 9999px;
         width: 3rem;
         height: 3rem;
@@ -289,7 +338,7 @@ import { ref } from 'yup';
         font-size: 1em;
         margin-right: 1rem;
     }
-    
+
     button {
         background: var(--accent-blue);
         color: white;
@@ -313,14 +362,14 @@ import { ref } from 'yup';
     }
 
     button:hover {
-        filter: brightness(.9);
+        filter: brightness(0.9);
     }
 
     .text-section-wrapper {
         padding: 1.25rem;
         border-radius: 10rem;
     }
-    
+
     .text-section-wrapper h2 {
         font-size: 1.5rem; /* 24px */
         font-weight: 700;
@@ -336,7 +385,10 @@ import { ref } from 'yup';
         width: 100%;
         color: gray;
         font-weight: 300;
-        font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+            "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+            "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+            "Noto Color Emoji";
     }
 
     @media screen and (min-width: 768px) {
@@ -349,5 +401,4 @@ import { ref } from 'yup';
             width: 40rem;
         }
     }
-
 </style>

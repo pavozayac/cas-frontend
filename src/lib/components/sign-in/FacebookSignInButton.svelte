@@ -1,4 +1,6 @@
 <script lang="ts">
+import { route } from "api/utils";
+
 import { profileStore } from "stores/profile";
 
 import { onDestroy, onMount } from "svelte";
@@ -16,7 +18,7 @@ import { onDestroy, onMount } from "svelte";
                 { fields: "first_name,last_name,email" },
                 function (res) {
                     console.log(res)
-                    fetch('https://localhost:8000/auth/facebook', {
+                    fetch(route('auth/facebook'), {
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'

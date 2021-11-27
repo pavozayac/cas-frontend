@@ -44,7 +44,7 @@
     });
 </script>
 
-{@debug $errors}
+<!-- {@debug $errors} -->
 <div class="modal-wrapper">
     <div class="title">
         <h2>Sign in to CAS Portal</h2>

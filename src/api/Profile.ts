@@ -8,7 +8,7 @@ interface Avatar {
     date_added: Date
 }
 
-interface Profile {
+export interface Profile {
     first_name: string,
     last_name: string,
     post_visibility: number,

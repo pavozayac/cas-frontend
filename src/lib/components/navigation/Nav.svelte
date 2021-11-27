@@ -29,7 +29,7 @@
 
     $: {
         let delta: number = y2 - y1;
-        console.log(delta);
+        // console.log(delta);
         y1 = y2;
 
         if (delta > maxDelta) {
@@ -60,7 +60,7 @@
         logout();
         router.goto("/sign-in");
     }
-    let { dataStore } = swr(currentProfile, "currentProfile", []);
+    let [dataStore] = swr(currentProfile, "currentProfile", []);
 
     onMount(() => {});
 </script>
@@ -199,7 +199,7 @@
                             />
                         {:else}
                             <div
-                                style="background: red;"
+                                style="background: var(--bg-darker-grey);"
                                 class="profile-icon"
                             />
                         {/if}
@@ -283,6 +283,7 @@
     }
 
     .profile-name {
+        font-family: Rubik, sans-serif;
         font-size: 1rem;
         font-weight: 400;
         margin-right: 1rem;

@@ -44,9 +44,9 @@
 <!-- 
 {@debug $data}
 {@debug isValid}
-{@debug $isSubmitting} -->
+{@debug $isSubmitting}
 {@debug $errors}
-{@debug $data}
+{@debug $data} -->
 
 
 <form use:form>

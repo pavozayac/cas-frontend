@@ -12,7 +12,7 @@
     import type { Reflection } from "api/Reflection";
     import { swr } from "api/swr";
 
-    const { dataStore } = swr(filterFavouriteReflections, "bookmarks", []);
+    const [dataStore] = swr(filterFavouriteReflections, "bookmarks", []);
 </script>
 
 <Nav />

@@ -10,7 +10,7 @@ import Nav from 'lib/components/navigation/Nav.svelte';
 import SideMenu from 'lib/components/navigation/SideMenu.svelte';
 import { swr } from 'api/swr';
 
-    const { dataStore } = swr(currentProfile, 'currentProfile', []);
+    const [dataStore] = swr(currentProfile, 'currentProfile', []);
 
 </script>
 <Nav/>

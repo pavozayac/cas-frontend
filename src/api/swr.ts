@@ -2,17 +2,14 @@ import { Writable, writable } from "svelte/store";
 
 const cache = new Map();
 
-interface SWR {
-    dataStore: Writable<Promise<any>>,
-    reload: Function
-}
+type SWR<C> = [Writable<Promise<C>>, Function];
 
-export function swr(fetcher: (...args) => any, kind: string, args): SWR {
-    let store = writable(new Promise(() => { }));
+export function swr<T>(fetcher: (...fetcherArgs) => Promise<T>, kind: string, args): [Writable<Promise<T>>, Function] {
+    let store: Writable<Promise<T>> = writable(new Promise(() => { }));
 
     if (cache.has(JSON.stringify({ kind, args }))) {
         store.set(Promise.resolve(cache.get(JSON.stringify({ kind, args }))))
-        console.log('has')
+        // console.log('has')
     }
 
     const load = async () => {
@@ -22,8 +19,5 @@ export function swr(fetcher: (...args) => any, kind: string, args): SWR {
     }
 
     load();
-    return {
-        dataStore: store,
-        reload: load
-    };
+    return [store, load];
 }

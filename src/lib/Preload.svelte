@@ -1,5 +1,5 @@
 <script lang="ts">
-import Loading from "./components/generic/Loading.svelte";
+    import Loading from "./components/generic/Loading.svelte";
 
 
     export let src: string
@@ -15,26 +15,17 @@ import Loading from "./components/generic/Loading.svelte";
 
 </script>
 
-{#await preload(src)}
-    <Loading />
-{:then _}
-    <img {src} {alt} />
-{/await}
-<!-- 
-<style">
-    div {
-        position: relative;
-        height: 0;
-        padding-bottom: 50%;
-    }
+    {#await preload(src)}
+        <div class="picture" style="background: var(--bg-dark-grey);"></div>
+    {:then _}
+        <img class="picture" {src} {alt}/>
+    {/await}
 
-    img {
-        position: absolute;
-        inset: 0;
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-        border-radius: 0.5rem;
+
+<style>
+    .container {
+        margin: 0;
+        width: fit-content;
+        height: fit-content;
     }
-    
-</style> -->
+</style>

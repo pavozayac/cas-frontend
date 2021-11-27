@@ -1,3 +1,4 @@
+import { writable, Writable } from 'svelte/store'
 import { route, hasObject } from './utils'
 
 interface Attachment {
@@ -22,6 +23,15 @@ export interface Reflection {
     is_favourite: boolean,
     attachments: Array<Attachment>
 }
+
+export class Reflection implements Reflection {
+    constructor(data) {
+        for (let key in data) {
+            this[key] = data[key]
+        }
+    }
+}
+
 
 export async function postReflection(values) {
     console.log('bruh')
@@ -75,7 +85,7 @@ export async function postReflection(values) {
     }
 }
 
-export async function filterReflections(): Promise<Array<Reflection>> {
+export async function filterReflections(): Promise<Reflection[]> {
     try {
         const res = await fetch(route('reflections/query'), {
             method: 'POST',
@@ -93,10 +103,10 @@ export async function filterReflections(): Promise<Array<Reflection>> {
         })
 
         if (res.status != 200) {
-            throw 'Current profile unavailable'
+            throw await res.text()
         }
 
-        return res.json()
+        return await res.json();
     } catch (err) {
         throw err
     }
@@ -114,7 +124,7 @@ export async function getReflection(id: number): Promise<Reflection> {
             throw 'Current profile unavailable'
         }
 
-        return res.json()
+        return new Reflection(await res.json());
     } catch (err) {
         throw err
     }
@@ -129,7 +139,7 @@ export async function favouriteReflection(reflection_id: number) {
         })
 
         if (res.status != 200) {
-            throw 'Current profile unavailable'
+            throw await res.text()
         }
 
         return res.json()
@@ -156,7 +166,7 @@ export async function unfavouriteReflection(reflection_id: number) {
     }
 }
 
-export async function filterFavouriteReflections(): Promise<Array<Reflection>> {
+export async function filterFavouriteReflections(): Promise<Reflection[]> {
     try {
         const res = await fetch(route('reflections/favourites'), {
             method: 'POST',

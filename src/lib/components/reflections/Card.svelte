@@ -1,23 +1,18 @@
 <script lang="ts">
-    import App from "App.svelte";
-    import { is_promise, onMount } from "svelte/internal";
-    import Carousel from "./Carousel.svelte";
-    import { cubicInOut } from "svelte/easing";
-    import { slide } from "svelte/transition";
+    import type { Reflection } from "api/Reflection";
     import {
         favouriteReflection,
         getReflection,
         unfavouriteReflection,
     } from "api/Reflection";
-    import type { Reflection } from "api/Reflection";
-    import { getProfile } from "api/Profile";
-    import { attachmentSrc, avatarSrc } from "api/utils";
-    import { ref } from "yup";
     import { swr } from "api/swr";
-    import Loading from "../generic/Loading.svelte";
+    import { cubicInOut } from "svelte/easing";
+    import { slide } from "svelte/transition";
     import Container from "../Container.svelte";
-    import { profileAvatar } from "lib/validationSchemas";
-    import Preload from "lib/Preload.svelte";
+    import Loading from "../generic/Loading.svelte";
+    import ProfileButton from "../generic/ProfileButton.svelte";
+    import AddCommentBox from "./comments/AddCommentBox.svelte";
+    import Comment from "./comments/Comment.svelte";
 
     export let id;
 
@@ -32,13 +27,6 @@
     $: month = date.toLocaleString("en-us", { month: "long" });
     $: year = date.getFullYear();
     $: time = date.toLocaleTimeString("en-uk", { timeStyle: "short" });
-
-    let pics_urls = [
-        "https://placekitten.com/1280/720",
-        "https://placekitten.com/1920/1080",
-        "https://placekitten.com/1366/768",
-        "https://c.files.bbci.co.uk/12A9B/production/_111434467_gettyimages-1143489763.jpg",
-    ];
 
     let mock_comments = [
         {
@@ -86,21 +74,44 @@
 
     // let bookmarked: boolean;
 
-    let { dataStore, reload } = swr(getReflection, "reflection", [id]);
+    let [dataStore, reload] = swr<Reflection>(getReflection, "reflection", [
+        id,
+    ]);
 
-    function toggleReflection(reflection: Reflection) {
+    // let bookmarked = writable(null);
+
+    // async function loadBookmark () {
+    //     $bookmarked = (await $dataStore).is_favourite;
+    //     return;
+    // }
+
+    // dataStore.subscribe(prom => {
+    //     prom.then(ref => $bookmarked = ref.is_favourite);
+    // });
+
+    // afterUpdate(()=>{
+    //     $dataStore.then(res=>{
+    //         bookmarked = res.is_favourite;
+    //     })
+    // })
+
+    async function toggleReflection(reflection: Reflection) {
         if (reflection.is_favourite) {
-            unfavouriteReflection(reflection.id);
+            await unfavouriteReflection(reflection.id);
         } else {
-            favouriteReflection(reflection.id);
+            await favouriteReflection(reflection.id);
         }
-        reflection.is_favourite = !reflection.is_favourite;
+        reload();
     }
 
     // onMount(async () => {
-    //     bookmarked = (await $reflection_swr).is_favourite;
+    //     bookmarked.subscribe(async value => {
+    //         toggleReflection((await $dataStore), value);
+    //     })
     // });
 </script>
+
+<!-- {@debug bookmarked} -->
 
 {#await $dataStore}
     <Container>
@@ -113,21 +124,7 @@
                 {reflection.date_added}
             </div>
             <div class="categories" />
-            {#await getProfile(reflection.profile_id) then profile}
-                <div class="profile-info">
-                    <span class="profile-name"
-                        >{profile.first_name} {profile.last_name}</span
-                    >
-                    {#if profile.avatar}
-                        <Preload
-                            alt="Profile picture"
-                            src={avatarSrc(profile.avatar)}
-                        />
-                    {:else}
-                        <div class="profile-icon" style="background: red;" />
-                    {/if}
-                </div>
-            {/await}
+            <ProfileButton id={reflection.profile_id} />
         </div>
 
         <div class="carousel-wrapper">
@@ -149,7 +146,6 @@
                     class:bookmarked={reflection.is_favourite}
                     on:click={() => {
                         toggleReflection(reflection);
-                        reload();
                     }}
                 >
                     <span class="material-icons-outlined"
@@ -167,30 +163,9 @@
         {#if commentsVisible}
             <div class="comment-section" transition:slide>
                 <div class="comments-wrapper">
-                    <div class="add-comment">
-                        <form class="add-comment-form">
-                            <input
-                                class="add-comment-input"
-                                type="text"
-                                placeholder="Add your comment"
-                            />
-                            <input
-                                class="add-comment-button"
-                                type="submit"
-                                value="Post"
-                            />
-                        </form>
-                    </div>
+                    <AddCommentBox />
                     {#each mock_comments as comment}
-                        <div class="comment">
-                            <div class="comment-profile">
-                                <Preload
-                                    alt="Commenter profile image"
-                                    src={comment.profile.profileImage}
-                                />
-                            </div>
-                            <p class="comment-text">{comment.text}</p>
-                        </div>
+                        <Comment {comment} />
                     {/each}
                 </div>
                 <button
@@ -228,62 +203,6 @@
         color: var(--accent-blue);
     }
 
-    .comment {
-        background: var(--bg-grey-lower);
-        padding: 1rem;
-        box-sizing: border-box;
-        border-radius: 1rem;
-        margin-bottom: 1rem;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-    }
-
-    .comment-profile :global(img) {
-        width: 3rem;
-        height: 3rem;
-        border-radius: 9999px;
-        object-fit: cover;
-    }
-
-    .comment-text {
-        margin-left: 2rem;
-    }
-
-    .add-comment-form {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-
-    .add-comment-input {
-        width: 100%;
-        margin-right: 1rem;
-        outline: none;
-        border: 2px solid var(--bg-grey-lower);
-        box-sizing: border-box;
-        border-radius: 1rem;
-        padding: 1rem;
-        background: var(--bg-grey);
-    }
-
-    input::placeholder {
-        font-family: Rubik, sans-serif;
-    }
-
-    .add-comment-button {
-        font-family: Rubik, sans-serif;
-        outline: none;
-        border: none;
-        padding: 1rem;
-        background: var(--accent-blue);
-        border-radius: 1rem;
-        height: 100%;
-        color: white;
-    }
-
     .top-widgets {
         display: flex;
         align-items: center;
@@ -295,32 +214,6 @@
 
     .date {
         color: var(--bg-darker-grey);
-    }
-
-    .profile-info {
-        display: flex;
-        align-items: center;
-        padding: 0.4rem 1rem;
-        border-radius: 9999px;
-        cursor: pointer;
-        transition: all 200ms;
-    }
-
-    .profile-info:hover {
-        background: var(--bg-grey);
-    }
-
-    .profile-info :global(img) {
-        border-radius: 9999px;
-        width: 3rem;
-        height: 3rem;
-        object-fit: cover;
-    }
-
-    .profile-name {
-        font-size: 1rem;
-        font-weight: 400;
-        margin-right: 1rem;
     }
 
     .card-container {

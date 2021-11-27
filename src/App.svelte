@@ -65,9 +65,9 @@ import RegisterRoute from "routes/register/RegisterRoute.svelte";
 
   <title>CAS Portal</title>
 </svelte:head>
-
+<!-- 
 {@debug $profileStore}
-{@debug authed}
+{@debug authed} -->
 
 {#if JSON.parse(localStorage.getItem("profileStore")) == null}
   <Route>

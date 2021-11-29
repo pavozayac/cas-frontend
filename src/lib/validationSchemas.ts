@@ -46,3 +46,12 @@ export const passowrdResetSchema = yup.object().shape({
     password: yup.string().required('Password is required'),
     repeat_password: yup.string().required('Password is required').oneOf([yup.ref('password')], 'Passwords must match'),
 })
+
+export const commentSchema = yup.object().shape({
+    content: yup.string().max(200, 'Comment too long').required('Cannot post empty comment')
+})
+
+export const groupSchema = yup.object().shape({
+    name: yup.string().required('Group name required'),
+    graduation_year: yup.number().min(new Date().getFullYear()).max(new Date().getFullYear() + 2).required('Graduation year required')
+})

@@ -18,6 +18,7 @@
 import RecoverPasswordRoute from "routes/confirmation_and_recovery/RecoverPasswordRoute.svelte";
 import ResetPasswordRoute from "routes/confirmation_and_recovery/ResetPasswordRoute.svelte";
 import RegisterRoute from "routes/register/RegisterRoute.svelte";
+import CreateGroupRoute from "routes/groups/CreateGroupRoute.svelte";
 
   // onMount(()=>{
   //   (async function (){
@@ -108,5 +109,9 @@ import RegisterRoute from "routes/register/RegisterRoute.svelte";
 
   <Route path="/add-reflection">
     <AddReflectionRoute />
+  </Route>
+
+  <Route path="/create-group">
+    <CreateGroupRoute />
   </Route>
 {/if}

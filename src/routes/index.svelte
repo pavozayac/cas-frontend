@@ -6,10 +6,9 @@
     import CenterWrapper from "lib/components/CenterWrapper.svelte";
     import { filterReflections } from "api/Reflection";
     import { onMount } from "svelte";
-    import type { Reflection } from "api/Reflection";
     import { swr } from "api/swr";
 
-    const [dataStore] = swr(filterReflections, "indexReflections", []);
+    const [dataStore] = swr(filterReflections, "indexReflections", [{date_added: 'desc'}, {}]);
 </script>
 
 <Nav />

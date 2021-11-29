@@ -7,57 +7,30 @@
     } from "api/Reflection";
     import { swr } from "api/swr";
     import { cubicInOut } from "svelte/easing";
+    import { writable } from "svelte/store";
+    import type { Writable } from 'svelte/store'
     import { slide } from "svelte/transition";
     import Container from "../Container.svelte";
     import Loading from "../generic/Loading.svelte";
     import ProfileButton from "../generic/ProfileButton.svelte";
     import AddCommentBox from "./comments/AddCommentBox.svelte";
     import Comment from "./comments/Comment.svelte";
+import { queryComments } from "api/Comment";
+import CommentSection from "./comments/CommentSection.svelte";
 
     export let id;
 
     // let bookmarked: boolean = false
 
-    let commentsVisible: boolean = false;
+    const commentsVisible: Writable<boolean> = writable(false);
 
-    const date = new Date();
+    // const date = new Date();
 
-    $: day = date.getDate();
-    $: date.setMonth(date.getMonth());
-    $: month = date.toLocaleString("en-us", { month: "long" });
-    $: year = date.getFullYear();
-    $: time = date.toLocaleTimeString("en-uk", { timeStyle: "short" });
-
-    let mock_comments = [
-        {
-            profile: {
-                nickname: "Bruh",
-                profileImage: "https://placekitten.com/400/400",
-            },
-            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        },
-        {
-            profile: {
-                nickname: "Bruh",
-                profileImage: "https://placekitten.com/400/400",
-            },
-            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        },
-        {
-            profile: {
-                nickname: "Bruh",
-                profileImage: "https://placekitten.com/400/400",
-            },
-            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        },
-        {
-            profile: {
-                nickname: "Bruh",
-                profileImage: "https://placekitten.com/400/400",
-            },
-            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        },
-    ];
+    // $: day = date.getDate();
+    // $: date.setMonth(date.getMonth());
+    // $: month = date.toLocaleString("en-us", { month: "long" });
+    // $: year = date.getFullYear();
+    // $: time = date.toLocaleTimeString("en-uk", { timeStyle: "short" });
 
     function commentsIn(node, { delay = 0, duration = 300 }) {
         return {
@@ -74,9 +47,10 @@
 
     // let bookmarked: boolean;
 
-    let [dataStore, reload] = swr<Reflection>(getReflection, "reflection", [
+    let [dataStore, reload] = swr(getReflection, "reflection", [
         id,
     ]);
+
 
     // let bookmarked = writable(null);
 
@@ -121,7 +95,7 @@
     <div class="card-container">
         <div class="top-widgets">
             <div class="date">
-                {reflection.date_added}
+                {new Date(reflection.date_added).getDate()}.{new Date(reflection.date_added).getMonth()}.{new Date(reflection.date_added).getFullYear()}
             </div>
             <div class="categories" />
             <ProfileButton id={reflection.profile_id} />
@@ -141,6 +115,11 @@
             <p>
                 {reflection.text_content}
             </p>
+            <div class="tags">
+                {#each reflection.tags.slice(0, 5) as tag}
+                    <div class="tag">#{tag.name}</div>
+                {/each}
+            </div>
             <div class="actions-buttons">
                 <button
                     class:bookmarked={reflection.is_favourite}
@@ -155,52 +134,29 @@
                     >
                     {reflection.is_favourite ? "Bookmarked" : "Bookmark"}
                 </button>
-                <button on:click={() => (commentsVisible = !commentsVisible)}>
+                <button on:click={() => {$commentsVisible = !$commentsVisible; console.log($commentsVisible)}}>
                     <span class="material-icons-outlined">comment</span> Comments
                 </button>
             </div>
         </div>
-        {#if commentsVisible}
-            <div class="comment-section" transition:slide>
-                <div class="comments-wrapper">
-                    <AddCommentBox />
-                    {#each mock_comments as comment}
-                        <Comment {comment} />
-                    {/each}
-                </div>
-                <button
-                    class="close-button"
-                    on:click={() => (commentsVisible = false)}
-                >
-                    <span class="material-icons-outlined">close</span> Close
-                </button>
-            </div>
-        {/if}
+        <CommentSection {commentsVisible} reflection_id={reflection.id} />
     </div>
 {:catch error}
     Error
 {/await}
 
 <style lang="postcss">
-    .comment-section {
-        background: var(--bg-grey);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        transition: all;
-    }
-
-    .comments-wrapper {
+    .tags {
         width: 100%;
+        display: flex;
     }
 
-    .close-button {
-        margin: 0;
-        outline: 2px solid var(--accent-blue);
-        background: inherit;
-        color: var(--accent-blue);
+    .tag {
+        color: black;
+        padding: .5rem 1rem;
+        border-radius: 9999px;
+        background: var(--accent-green);
+        margin-right: .5rem;
     }
 
     .top-widgets {
@@ -270,7 +226,7 @@
     }
 
     .actions-buttons {
-        padding-top: 1.25rem;
+        padding-top: .5rem;
         display: flex;
         flex-direction: row;
         justify-content: left;

@@ -1,4 +1,5 @@
 import { writable, Writable } from 'svelte/store'
+import type { BulkComment } from './Comment'
 import { route, hasObject } from './utils'
 
 interface Attachment {
@@ -17,6 +18,7 @@ export interface Reflection {
     creativity: boolean,
     activity: boolean,
     service: boolean,
+    comments: BulkComment[],
     tags: Array<{ name: string }>,
     date_added: Date,
     profile_id: number,
@@ -24,12 +26,24 @@ export interface Reflection {
     attachments: Array<Attachment>
 }
 
-export class Reflection implements Reflection {
-    constructor(data) {
-        for (let key in data) {
-            this[key] = data[key]
-        }
+export interface ReflectionFilters {
+    title?: string,
+    creativity?: boolean,
+    activity?: boolean,
+    service?: boolean,
+    profile?: {
+      group_id?: number,
+      post_visibility?: number,
+      last_online_gte?: Date,
+      last_online_lte?: Date,
+      date_joined_gte?: Date,
+      date_joined_lte?: Date
     }
+}
+
+export interface ReflectionSorts {
+    title?: 'asc' | 'desc'
+    date_added?: 'asc' | 'desc'
 }
 
 
@@ -85,17 +99,15 @@ export async function postReflection(values) {
     }
 }
 
-export async function filterReflections(): Promise<Reflection[]> {
+export async function filterReflections(sorts: ReflectionSorts, filters: ReflectionFilters): Promise<Reflection[]> {
     try {
         const res = await fetch(route('reflections/query'), {
             method: 'POST',
             credentials: 'include',
             mode: 'cors',
             body: JSON.stringify({
-                filters: {},
-                sorts: {
-                    "date_added": 'desc'
-                }
+                filters: filters,
+                sorts: sorts
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -124,7 +136,7 @@ export async function getReflection(id: number): Promise<Reflection> {
             throw 'Current profile unavailable'
         }
 
-        return new Reflection(await res.json());
+        return await res.json();
     } catch (err) {
         throw err
     }

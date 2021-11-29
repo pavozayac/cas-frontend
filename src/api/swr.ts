@@ -4,8 +4,11 @@ const cache = new Map();
 
 type SWR<C> = [Writable<Promise<C>>, Function];
 
-export function swr<T>(fetcher: (...fetcherArgs) => Promise<T>, kind: string, args): [Writable<Promise<T>>, Function] {
-    let store: Writable<Promise<T>> = writable(new Promise(() => { }));
+type ReturnPromiseType<T extends (...args: any) => Promise<any>> = T extends (...args: any) => Promise<infer R> ? R : any;
+
+
+export function swr<F extends (...args: any[]) => Promise<any>>(fetcher: F, kind: string, args: Parameters<F>): SWR<ReturnPromiseType<F>> {
+    let store: Writable<Promise<ReturnPromiseType<F>>> = writable(new Promise(() => { }));
 
     if (cache.has(JSON.stringify({ kind, args }))) {
         store.set(Promise.resolve(cache.get(JSON.stringify({ kind, args }))))

@@ -1,37 +1,46 @@
 <script lang="ts">
+    import { capitalizeFirst } from "./formUtils";
 
-    import { capitalizeFirst } from './formUtils'
+    export let errors;
+    export let type: string;
+    export let name: string;
+    export let label: string = name;
+    export let placeholder = capitalizeFirst(name).replaceAll("_", " ");
+    export let stopProp: bool = false;
+    export let min = undefined;
+    export let max = undefined;
 
-    export let errors
-    export let type: string
-    export let name: string
-    export let label: string = name
-    export let placeholder = capitalizeFirst(name).replaceAll('_', ' ')
-    export let stopProp: bool = false
-
-    let value
-
+    let value;
 </script>
 
 <div class="wrapper">
     <label class="label" for={name}>
-        {capitalizeFirst(label).replaceAll('_', ' ')}
+        {capitalizeFirst(label).replaceAll("_", " ")}
     </label>
     <div class="input-wrapper">
-        <input on:change={(e)=>value=e.target.value} class:error={$errors[name]} {type} {name} {placeholder} id={name} /> 
-        <slot {value}></slot>
+        <input
+            min={min || undefined}
+            max={max || undefined}
+            on:change={(e) => (value = e.target.value)}
+            class:error={$errors[name]}
+            {type}
+            {name}
+            {placeholder}
+            id={name}
+        />
+        <slot {value} />
     </div>
-</div>  
+</div>
 
 <style>
     .wrapper {
         background: var(--bg-light);
         padding: 1rem;
-        border-radius: .5rem;
-        margin-bottom: .5rem;
+        box-sizing: border-box;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
         width: 100%;
     }
-
 
     input::placeholder {
         font-family: Rubik, sans-serif;
@@ -52,14 +61,13 @@
     }
 
     input:focus {
-        filter: brightness(.9);
+        filter: brightness(0.9);
     }
 
     .input-wrapper {
-        margin-top: .5rem;
+        margin-top: 0.5rem;
         display: flex;
         justify-content: center;
         align-items: center;
     }
-
 </style>

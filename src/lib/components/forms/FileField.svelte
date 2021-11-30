@@ -17,6 +17,7 @@
     .wrapper {
         background: var(--bg-light);
         padding: 1rem;
+        box-sizing: border-box;
         border-radius: .5rem;
         margin-bottom: .5rem;
         width: 100%;

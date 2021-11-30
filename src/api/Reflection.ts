@@ -26,18 +26,23 @@ export interface Reflection {
     attachments: Array<Attachment>
 }
 
+export interface BulkReflection {
+    id: number;
+}
+
 export interface ReflectionFilters {
     title?: string,
     creativity?: boolean,
     activity?: boolean,
     service?: boolean,
     profile?: {
-      group_id?: number,
-      post_visibility?: number,
-      last_online_gte?: Date,
-      last_online_lte?: Date,
-      date_joined_gte?: Date,
-      date_joined_lte?: Date
+        id?: number,
+        group_id?: number,
+        post_visibility?: number,
+        last_online_gte?: Date,
+        last_online_lte?: Date,
+        date_joined_gte?: Date,
+        date_joined_lte?: Date
     }
 }
 
@@ -45,7 +50,6 @@ export interface ReflectionSorts {
     title?: 'asc' | 'desc'
     date_added?: 'asc' | 'desc'
 }
-
 
 export async function postReflection(values) {
     console.log('bruh')
@@ -99,7 +103,7 @@ export async function postReflection(values) {
     }
 }
 
-export async function filterReflections(sorts: ReflectionSorts, filters: ReflectionFilters): Promise<Reflection[]> {
+export async function filterReflections(sorts: ReflectionSorts, filters: ReflectionFilters): Promise<BulkReflection[]> {
     try {
         const res = await fetch(route('reflections/query'), {
             method: 'POST',

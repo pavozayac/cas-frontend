@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Card from "lib/components/reflections/Card.svelte";
+    import Card from "lib/components/reflections/ReflectionCard.svelte";
     import Nav from "lib/components/navigation/Nav.svelte";
     import SideMenu from "lib/components/navigation/SideMenu.svelte";
     import Container from "lib/components/Container.svelte";

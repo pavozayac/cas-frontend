@@ -33,7 +33,8 @@
         {/if}
 
         {#if profile.avatar}
-            <Preload alt="Profile picture" src={avatarSrc(profile.avatar)} />
+            <img class="picture" src={avatarSrc(profile.avatar)} alt="Profile avatar"/>
+            <!-- <Preload alt="Profile picture" src={avatarSrc(profile.avatar)} /> -->
         {:else}
             <div class="picture" style="background: var(--bg-grey-lower);" />
         {/if}
@@ -60,7 +61,7 @@
         background: var(--bg-grey);
     }
 
-    .profile-info :global(.picture) {
+    .profile-info .picture {
         border-radius: 9999px;
         height: 3rem;
         width: 3rem;

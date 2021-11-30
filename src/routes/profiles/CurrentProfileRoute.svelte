@@ -2,7 +2,7 @@
     import Container from "lib/components/Container.svelte";
     import { onMount } from "svelte";
     import { currentProfile } from "api/Profile";
-    import Card from "lib/components/reflections/Card.svelte";
+    import Card from "lib/components/reflections/ReflectionCard.svelte";
     import ThinButton from "lib/components/generic/ThinButton.svelte";
     import CenterWrapper from "lib/components/CenterWrapper.svelte";
     import { avatarSrc } from "api/utils";

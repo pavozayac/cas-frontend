@@ -1,4 +1,6 @@
 <script lang="ts">
+import { fade } from "svelte/transition";
+
     import Loading from "./components/generic/Loading.svelte";
 
 
@@ -16,7 +18,7 @@
 </script>
 
     {#await preload(src)}
-        <div class="picture" style="background: var(--bg-dark-grey);"></div>
+        <div class="picture" style="background: var(--bg-grey-lower);"></div>
     {:then _}
         <img class="picture" {src} {alt}/>
     {/await}

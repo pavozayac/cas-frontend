@@ -1,13 +1,15 @@
 <script lang="ts">
     import { filterReflections } from "api/Reflection";
     import { swr } from "api/swr";
-    import Card from "lib/components/reflections/Card.svelte";
+    import Card from "lib/components/reflections/ReflectionCard.svelte";
 
     export let profile_id: number;
 
     const [reflectionsStore, reload] = swr(filterReflections, "reflections", [
         {date_added: 'desc'},
-        {},
+        {profile: {
+            id: profile_id
+        }},
     ]);
 </script>
 

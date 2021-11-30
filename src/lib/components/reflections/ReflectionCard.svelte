@@ -179,7 +179,7 @@ import CommentSection from "./comments/CommentSection.svelte";
         flex-direction: column;
         border-radius: 0.5rem;
         overflow: hidden;
-        margin-top: 1.25rem;
+        /* margin-top: 1.25rem; */
         margin-bottom: 1.25rem;
     }
 

@@ -28,7 +28,7 @@ export async function currentProfile(): Promise<Profile> {
         })
 
         if (res.status != 200) {
-            throw 'Current profile unavailable'
+            throw await res.text()
         }
 
         const response = await res.json()
@@ -51,7 +51,7 @@ export async function getProfile(profile_id: number): Promise<Profile> {
         })
 
         if (res.status != 200) {
-            throw 'Current profile unavailable'
+            throw await res.text()
         }
 
         return res.json()
@@ -73,7 +73,7 @@ export async function updateProfile(values): Promise<void> {
         })
 
         if (res.status != 200) {
-            throw 'Current profile unavailable'
+            throw await res.text()
         }
 
         return res.json()
@@ -96,7 +96,7 @@ export async function updateProfileAvatar(values): Promise<void> {
         })
 
         if (res.status != 200) {
-            throw 'Current profile unavailable'
+            throw await res.text()
         }
 
         return res.json()

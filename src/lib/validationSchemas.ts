@@ -53,5 +53,8 @@ export const commentSchema = yup.object().shape({
 
 export const groupSchema = yup.object().shape({
     name: yup.string().required('Group name required'),
-    graduation_year: yup.number().min(new Date().getFullYear()).max(new Date().getFullYear() + 2).required('Graduation year required')
+    description: yup.string().required('Description required'),
+    graduation_year: yup.number().min(new Date().getFullYear()).max(new Date().getFullYear() + 2).required('Graduation year required'),
+    file: yup.mixed().test('Size test', 'File too large', value => value ? value.size <= 5000000 : false).required('File required'),
 })
+

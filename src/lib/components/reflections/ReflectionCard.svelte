@@ -97,7 +97,15 @@ import CommentSection from "./comments/CommentSection.svelte";
             <div class="date">
                 {new Date(reflection.date_added).getDate()}.{new Date(reflection.date_added).getMonth()}.{new Date(reflection.date_added).getFullYear()}
             </div>
-            <div class="categories" />
+            <div class="categories">
+                {#if reflection.creativity} 
+                    <div class="category creativity">Creativity</div>
+                {:else if reflection.activity}
+                    <div class="category activity">Activity</div>
+                {:else if reflection.service}
+                    <div class="category service">Service</div>
+                {/if}
+            </div>
             <ProfileButton id={reflection.profile_id} />
         </div>
 
@@ -238,6 +246,29 @@ import CommentSection from "./comments/CommentSection.svelte";
             "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
             "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
             "Noto Color Emoji";
+    }
+
+    .categories {
+        display: flex;
+        justify-content: flex-start;
+        width: 50%;
+    }
+
+    .category {
+        border-radius: 9999px;
+        padding: .1rem .5rem;
+    }
+
+    .creativity {
+        border: 2px solid var(--accent-blue);
+    }
+
+    .activity {
+        border: 2px solid var(--accent-red);
+    }
+
+    .service {
+        border: 2px solid var(--accent-green);
     }
 
     @media screen and (min-width: 768px) {

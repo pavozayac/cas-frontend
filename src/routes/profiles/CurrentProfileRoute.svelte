@@ -10,7 +10,8 @@
     import SideMenu from "lib/components/navigation/SideMenu.svelte";
     import { swr } from "api/swr";
     import { filterReflections } from "api/Reflection";
-    import ProfileReflections from "./ProfileReflections.svelte";
+    import ProfileReflections from "../../lib/components/generic/ReflectionsList.svelte";
+import InformationTile from "lib/components/generic/InformationTile.svelte";
 
     const [dataStore] = swr(currentProfile, "currentProfile", []);
 </script>
@@ -47,12 +48,19 @@
                             >{profile.first_name} {profile.last_name}</span
                         >
                         <div class="detail-info">
-                            <div class="tile">Joined {profile.date_joined}</div>
-                            <div class="tile">Posted {23} times</div>
+                            <InformationTile iconName={'star'} label={'Joined'}>{profile.date_joined}</InformationTile>
+                            <InformationTile iconName={'create'} label={'Posts'}>23</InformationTile>
                         </div>
                     </div>
                 </div>
-                <ProfileReflections profile_id={profile.id} />
+                <ProfileReflections fetcher={filterReflections} kind={'currentProfileReflections'} args={[
+                    {
+                        date_added: 'desc'
+                    }, 
+                    {
+                        profile_id: profile.id
+                    }
+                ]} />
             {/await}
         </CenterWrapper>
     </Container>
@@ -64,7 +72,6 @@
     }
 
     .upper-data {
-        margin-top: 1rem;
         background: white;
         width: 40rem;
         border-radius: 0.5rem;
@@ -72,6 +79,7 @@
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
+        margin-bottom: 1rem;
     }
 
     .profile-name {
@@ -102,14 +110,5 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
-    }
-
-    .tile {
-        padding: 2rem 2rem;
-        font-size: 1.2rem;
-        background: var(--bg-light);
-        border-radius: 1rem;
-        text-align: center;
-        color: var(--bg-dark-grey);
     }
 </style>

@@ -26,7 +26,7 @@ import TextArea from "../forms/TextArea.svelte";
         </div>
     </div>
     <TextArea name="description" {errors} placeholder="Description"/>
-    <FileField name="file" {errors}/>
+    <FileField label="Group avatar" name="file" {errors}/>
     <Submit text="Create group"/>
 </Form>
 

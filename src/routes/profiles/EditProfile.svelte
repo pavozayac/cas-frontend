@@ -1,52 +1,100 @@
 <script lang="ts">
-import { currentProfile, updateProfile, updateProfileAvatar } from "api/Profile";
+    import {
+        currentProfile,
+        updateProfile,
+        updateProfileAvatar,
+    } from "api/Profile";
+    import { swr } from "api/swr";
+import { avatarSrc } from "api/utils";
 
-import CenterWrapper from "lib/components/CenterWrapper.svelte";
-import Container from "lib/components/Container.svelte";
-import FileField from "lib/components/forms/FileField.svelte";
-import Form from "lib/components/forms/Form.svelte";
-import RadioGroup from "lib/components/forms/RadioGroup.svelte";
-import Submit from "lib/components/forms/Submit.svelte";
-import TextField from "lib/components/forms/TextField.svelte";
-import ThinButton from "lib/components/generic/ThinButton.svelte";
-import { profileAvatar, profileUpdateSchema } from "lib/validationSchemas";
+    import CenterWrapper from "lib/components/CenterWrapper.svelte";
+    import Container from "lib/components/Container.svelte";
+    import FileField from "lib/components/forms/FileField.svelte";
+    import Form from "lib/components/forms/Form.svelte";
+    import RadioGroup from "lib/components/forms/RadioGroup.svelte";
+    import Submit from "lib/components/forms/Submit.svelte";
+    import TextField from "lib/components/forms/TextField.svelte";
+    import Divider from "lib/components/generic/Divider.svelte";
+import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
+    import ThinButton from "lib/components/generic/ThinButton.svelte";
+    import Nav from "lib/components/navigation/Nav.svelte";
+    import SideMenu from "lib/components/navigation/SideMenu.svelte";
+    import { profileAvatar, profileUpdateSchema } from "lib/validationSchemas";
 
+    let [profileStore, reload] = swr(currentProfile, "currentProfile", []);
 </script>
-{#await currentProfile()}
-    
-{:then profile}
-    
-<CenterWrapper>
-        <div class="wrapper">
-            <ThinButton target="/profiles/current" fullIconName="arrow_back" text="Back to profile" />
-            <h1>Edit profile</h1>
-            <div class="form-wrapper">   
-                <Form initialValues={{
-                    first_name: profile.first_name,
-                    last_name: profile.last_name,
-                    // post_visibility: profile.post_visibility
-                }}
-                  let:errors validationSchema={profileUpdateSchema} submitAction={updateProfile}>
-                    <TextField {errors} name="first_name" type="text"/>
-                    <TextField {errors} name="last_name" type="text"/>
-                    <RadioGroup initialValue={0} text="Post visibility" name="post_visibility" items={{
-                        'Only you can see your posts': 0,
-                        'Only your group can see your posts': 1,
-                        'Anybody can see your posts': 2
-                    }}/>
-                    <br/>
-                    <Submit text="Update profile" />
-                </Form>
-            </div>
-            <div class="form-wrapper">
-                <Form let:errors validationSchema={profileAvatar} submitAction={updateProfileAvatar}>
-                    <FileField {errors} name="file"/>
-                    <Submit text="Change avatar"/>
-                </Form>
-            </div>
-        </div>
-</CenterWrapper>    
-    
+
+<Nav />
+<SideMenu />
+
+{#await $profileStore then profile}
+    <CenterWrapper>
+        <Container>
+            <CenterWrapper>
+                <div class="wrapper">
+                    <LeftCenterRightFlex>
+                        <ThinButton slot="left"
+                            target="/profiles/current"
+                            fullIconName="arrow_back"
+                            text="Back to profile"
+                        />
+                        <h2 slot="center">Edit profile</h2>
+                    </LeftCenterRightFlex>
+                    <Divider>
+                        <div class="form-wrapper">
+                            <Form
+                                initialValues={{
+                                    first_name: profile.first_name,
+                                    last_name: profile.last_name,
+                                    // post_visibility: profile.post_visibility
+                                }}
+                                let:errors
+                                validationSchema={profileUpdateSchema}
+                                submitAction={updateProfile}
+                            >
+                                <TextField
+                                    {errors}
+                                    name="first_name"
+                                    type="text"
+                                />
+                                <TextField
+                                    {errors}
+                                    name="last_name"
+                                    type="text"
+                                />
+                                <RadioGroup
+                                    initialValue={0}
+                                    text="Post visibility"
+                                    name="post_visibility"
+                                    items={{
+                                        "Only you can see your posts": 0,
+                                        "Only your group can see your posts": 1,
+                                        "Anybody can see your posts": 2,
+                                    }}
+                                />
+                                <br />
+                                <Submit text="Update profile" />
+                            </Form>
+                        </div>
+                        <div class="form-wrapper">
+                            <div class="avatar-wrapper">
+                                <img class="avatar-preview" src={avatarSrc(profile.avatar)} alt="Profile avatar" />
+                            </div>
+
+                            <Form
+                                let:errors
+                                validationSchema={profileAvatar}
+                                submitAction={updateProfileAvatar}
+                            >
+                                <FileField {errors} name="file" />
+                                <Submit text="Change avatar" />
+                            </Form>
+                        </div>
+                    </Divider>
+                </div>
+            </CenterWrapper>
+        </Container>
+    </CenterWrapper>
 {/await}
 
 <style>
@@ -54,13 +102,25 @@ import { profileAvatar, profileUpdateSchema } from "lib/validationSchemas";
         padding: 2rem;
         margin-top: 1rem;
         background: white;
-        border-radius: .5rem;
+        border-radius: 0.5rem;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
     .form-wrapper {
-        margin-top: 2rem;
+        margin-top: 1rem;
+    }
+
+    .avatar-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    .avatar-preview {
+        object-fit: cover;
+        height: 15rem;
+        width: 15rem;
+        border-radius: 9999px;
     }
 </style>

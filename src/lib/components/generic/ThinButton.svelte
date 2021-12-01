@@ -14,16 +14,16 @@
 
 <style>
     a {
-        width: fit-content; 
-        display: flex;
+        display: inline-flex;
         align-items: center;
         padding: 0.5rem;
         font-family: Rubik, sans-serif; 
         background: transparent; 
-        margin-bottom: 1rem;
+        /* margin-bottom: 1rem; */
         border-radius: 9999px;
         cursor: pointer;
-        width: auto;
+        /* width: auto; */
+        /* width: fit-content; */
     }   
 
     a:hover {

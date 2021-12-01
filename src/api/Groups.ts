@@ -8,6 +8,8 @@ export interface Group {
     coordinator_id: number;
     date_created: Date;
     avatar: Avatar;
+    members_count: number;
+    reflections_count: number;
 }
 
 export interface BulkGroup {
@@ -22,15 +24,15 @@ interface Avatar {
 }
 
 export interface GroupFilters {
-    coordinator_id: number;
-    name: string;
-    date_created_gte: Date;
-    date_created_lte: Date;
+    coordinator_id?: number;
+    name?: string;
+    date_created_gte?: Date;
+    date_created_lte?: Date;
 }
 
 export interface GroupSorts {
-    date_created: 'asc' | 'desc';
-    name: 'asc' | 'desc';
+    date_created?: 'asc' | 'desc';
+    name?: 'asc' | 'desc';
 }
 
 export async function filterGroups(sorts: GroupSorts, filters: GroupFilters): Promise<Group[]> {
@@ -59,7 +61,7 @@ export async function filterGroups(sorts: GroupSorts, filters: GroupFilters): Pr
 }
 
 
-export async function getGroup(id: number): Promise<Group> {
+export async function getGroup(id: string): Promise<Group> {
     try {
         const res = await fetch(route(`groups/${id}`), {
             method: 'GET',
@@ -68,7 +70,7 @@ export async function getGroup(id: number): Promise<Group> {
         })
 
         if (res.status != 200) {
-            throw 'Current profile unavailable'
+            throw await res.text()
         }
 
         return await res.json();
@@ -131,5 +133,39 @@ export async function createGroup(group) {
     } catch (err) {
         throw err;
     }
+}
 
+
+export async function updateGroup(group, group_id) {
+    const { file, ...groupData } = group
+
+    try {
+        const res = await fetch(route(`groups/${group_id}`), {
+            method: 'PUT',
+            credentials: 'include',
+            mode: 'cors',
+            body: JSON.stringify({
+                ...groupData
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (res.status != 200) {
+            throw await res.text();
+        }
+
+
+        const detail = await res.json();
+
+        if (file){
+            await updateGroupAvatar(group)
+        }
+
+        return detail;
+
+    } catch (err) {
+        throw err;
+    }
 }

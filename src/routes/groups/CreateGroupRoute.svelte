@@ -17,7 +17,6 @@ import SideMenu from "lib/components/navigation/SideMenu.svelte";
             <h2>Create a group</h2>
             <CreateGroupForm />
         </div>
-
     </Container>
 </AbsoluteCenterContainer>
 

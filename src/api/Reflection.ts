@@ -110,8 +110,8 @@ export async function filterReflections(sorts: ReflectionSorts, filters: Reflect
             credentials: 'include',
             mode: 'cors',
             body: JSON.stringify({
-                filters: filters,
-                sorts: sorts
+                sorts: sorts,
+                filters: filters
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -137,7 +137,7 @@ export async function getReflection(id: number): Promise<Reflection> {
         })
 
         if (res.status != 200) {
-            throw 'Current profile unavailable'
+            throw await res.text()
         }
 
         return await res.json();

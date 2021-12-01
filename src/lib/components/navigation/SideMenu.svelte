@@ -1,15 +1,41 @@
 <script lang="ts">
-    import { menuElements } from 'lib/constants'
+import { getGroup } from "api/Groups";
+
+    import { currentProfile } from "api/Profile";
+
+    import { swr } from "api/swr";
+
+    import { menuElements } from "lib/constants";
+import ManageGroupButton from "./ManageGroupButton.svelte";
 
     export let nav = false;
 
+    let [profileStore, reload] = swr(currentProfile, "currentProfile", []);
 </script>
 
-<div class={`tiles-container ${!nav && "tiles-container-nonav"} ${$$props.class}`}>
-    {#each menuElements as el}
-        <a href={el.target} class="tile"><i class={el.iconType}>{el.icon}</i><span class="tile-text">{el.name}</span></a>
-    {/each}
-</div>
+{#await $profileStore then profile}
+    <div
+        class={`tiles-container ${!nav && "tiles-container-nonav"} ${
+            $$props.class
+        }`}
+    >
+        {#each menuElements as el}
+            <a href={el.target} class="tile"
+                ><i class={el.iconType}>{el.icon}</i><span class="tile-text"
+                    >{el.name}</span
+                ></a
+            >
+        {/each}
+        {#if profile.group_id != null}
+        <a href={`/groups/${profile.group_id}`} class="tile"
+            ><i class="material-icons-round">group</i>
+            <span class="tile-text">Your group</span>
+        </a>
+        {/if}
+        <ManageGroupButton group_id={profile.group_id} profile_id={profile.id} />
+
+    </div>
+{/await}
 
 <style>
     .tiles-container {
@@ -55,11 +81,9 @@
     }
 
     .tile:hover {
-        filter: brightness(.9);
+        filter: brightness(0.9);
         color: var(--accent-blue);
     }
-
-
 
     i {
         font-size: 2rem;

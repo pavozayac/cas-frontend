@@ -3,14 +3,12 @@
     import { swr } from "api/swr";
     import Card from "lib/components/reflections/ReflectionCard.svelte";
 
-    export let profile_id: number;
+    // export let profile_id: number;
+    export let fetcher: (...args: any[]) => Promise<any>
+    export let kind: string
+    export let args: any[]
 
-    const [reflectionsStore, reload] = swr(filterReflections, "reflections", [
-        {date_added: 'desc'},
-        {profile: {
-            id: profile_id
-        }},
-    ]);
+    const [reflectionsStore, reload] = swr(fetcher, kind, args);
 </script>
 
 {#await $reflectionsStore then reflections}

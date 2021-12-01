@@ -14,7 +14,7 @@
 <Nav />
 <SideMenu />
 
-<main>
+<CenterWrapper>
     <Container>
         <CenterWrapper>
             {#await $dataStore then reflectionIDs}
@@ -24,7 +24,7 @@
             {/await}
         </CenterWrapper>
     </Container>
-</main>
+</CenterWrapper>
 
 <style>
     :global(body) {
@@ -38,20 +38,5 @@
     :global(button) {
         outline: none;
         border: 0;
-    }
-
-    main {
-        box-sizing: border-box;
-        width: 100%;
-        max-width: 100%;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        padding: 1rem;
-        background: var(--bg-grey);
-        /* padding-top: 4rem; */
     }
 </style>

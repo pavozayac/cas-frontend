@@ -7,36 +7,27 @@
     import { writable } from "svelte/store";
     import type { Writable } from 'svelte/store';
 
-    export let current = false;
     export let id: number = 0;
     export let error = false;
     export let noName = false;
 
-    let profileData: Writable<Promise<Profile>> = writable(new Promise(() => {}));
+    let [profileData] = swr(getProfile, "profiles", [id]);
 
-    if (id !== null) {
-        let [dataStore] = swr(
-            current ? currentProfile : getProfile,
-            "profiles",
-            current ? [] : [id]
-        );
-        profileData = dataStore;
-    }
 </script>
 
 {#await $profileData then profile}
     <div class="profile-info">
-        {#if !noName}
-            <span class="profile-name"
-                >{profile.first_name} {profile.last_name}</span
-            >
-        {/if}
-
         {#if profile.avatar}
             <img class="picture" src={avatarSrc(profile.avatar)} alt="Profile avatar"/>
             <!-- <Preload alt="Profile picture" src={avatarSrc(profile.avatar)} /> -->
         {:else}
             <div class="picture" style="background: var(--bg-grey-lower);" />
+        {/if}
+
+        {#if !noName}
+            <span class="profile-name"
+                >{profile.first_name} {profile.last_name}</span
+            >
         {/if}
     </div>
 {:catch err}
@@ -47,10 +38,12 @@
 
 <style>
     .profile-info {
+        width: 100%;
+        background: var(--bg-grey-lower);
         display: inline-flex;
         flex-direction: row;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: flex-start;
         padding: 0.3rem 0.5rem;
         border-radius: 9999px;
         cursor: pointer;
@@ -58,13 +51,13 @@
     }
 
     .profile-info:hover {
-        background: var(--bg-grey);
+        background: var(--bg-darker-grey);
     }
 
     .profile-info .picture {
         border-radius: 9999px;
-        height: 2.5rem;
-        width: 2.5rem;
+        height: 3.5rem;
+        width: 3.5rem;
         object-fit: cover;
     }
 

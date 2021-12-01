@@ -2,12 +2,13 @@
     import { capitalizeFirst } from "./formUtils";
 
     export let name: string
+    export let label = capitalizeFirst(name).replaceAll('_', ' ')
     export let errors
 </script>
 
 <div class="wrapper">
     <label class="label" for={name}>
-        {capitalizeFirst(name).replaceAll('_', ' ')}
+        {label}
     </label>
     <input class:error={$errors[name]} type="file" {name} id={name} />
 </div>

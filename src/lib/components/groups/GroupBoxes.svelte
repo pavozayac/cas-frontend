@@ -1,21 +1,31 @@
 <script lang="ts">
+    import { currentProfile } from "api/Profile";
+    import { swr } from "api/swr";
+
     import Form from "lib/components/forms/Form.svelte";
     import TextField from "lib/components/forms/TextField.svelte";
 
-
-
+    let [profileStore, reloadProfile] = swr(
+        currentProfile,
+        "currentProfile",
+        []
+    );
 </script>
 
-<div class="wrapper">
-    <a class="join-group-button">
-        <span class="material-icons-round">login</span>
-        Join a group
-    </a>
-    <a class="create-group-button" href="/create-group">
-        <span class="material-icons-round">add</span>
-        Create a group
-    </a>
-</div>
+{#await $profileStore then profile}
+{#if profile.group_id == null}
+    <div class="wrapper">
+        <a class="join-group-button">
+            <span class="material-icons-round">login</span>
+            Join a group
+        </a>
+        <a class="create-group-button" href="/create-group">
+            <span class="material-icons-round">add</span>
+            Create a group
+        </a>
+    </div>
+{/if}
+{/await}
 
 <style>
     .wrapper {
@@ -42,7 +52,7 @@
     }
 
     a:hover {
-        filter: brightness(.9);
+        filter: brightness(0.9);
     }
 
     span {

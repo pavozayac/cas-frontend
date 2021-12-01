@@ -20,6 +20,11 @@ import ResetPasswordRoute from "routes/confirmation_and_recovery/ResetPasswordRo
 import RegisterRoute from "routes/register/RegisterRoute.svelte";
 import CreateGroupRoute from "routes/groups/CreateGroupRoute.svelte";
 import GroupsRoute from "routes/groups/GroupsRoute.svelte";
+import GroupRoute from "routes/groups/GroupRoute.svelte";
+import EditGroupRoute from "routes/groups/EditGroupRoute.svelte";
+import { swr } from "api/swr";
+import ManageGroupRoute from "routes/groups/ManageGroupRoute.svelte";
+import MembersRoute from "routes/groups/MembersRoute.svelte";
 
   // onMount(()=>{
   //   (async function (){
@@ -44,6 +49,8 @@ import GroupsRoute from "routes/groups/GroupsRoute.svelte";
     //   console.log(localStorage.getItem('profileStore'))
     // }, 500)
   });
+
+  let [profileData, reload] = swr(currentProfile, "currentProfile", []);
 </script>
 
 <svelte:head>
@@ -112,9 +119,27 @@ import GroupsRoute from "routes/groups/GroupsRoute.svelte";
     <AddReflectionRoute />
   </Route>
 
-  <Route path="/groups">
-    <GroupsRoute />
+  <Route path="/groups/*">
+    <Route path="/">
+      <GroupsRoute />
+    </Route>  
+    <Route path="/:id/*" let:meta>
+      <Route path="/">  
+        <GroupRoute {meta} />
+      </Route>
+      <Route path="/edit">
+        <EditGroupRoute {meta} />
+      </Route>
+      <Route path="/manage-group">
+        <ManageGroupRoute profile_id={$profileStore.id} {meta}/>
+      </Route>
+      <Route path="/members">
+        <MembersRoute group_id={meta.params.id} />
+      </Route>
+    </Route>
   </Route>
+
+
 
   <Route path="/create-group">
     <CreateGroupRoute />

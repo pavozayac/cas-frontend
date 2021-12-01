@@ -22,6 +22,10 @@ export function attachmentSrc(reflection, attachment){
     return `${backendUrl}reflections/${reflection.id}/attachment/${attachment.id}`
 }
 
+export function groupAvatarSrc(avatar){
+    return `${backendUrl}groups/avatar/${avatar.id}`
+}
+
 export function remove(array, value){
     for (let i = 0; i < array.length; i++){
         if (array[i] == value){

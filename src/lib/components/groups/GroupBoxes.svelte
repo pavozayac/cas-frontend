@@ -1,26 +1,41 @@
 <script lang="ts">
+import { createGroupJoinRequest } from "api/Groups";
+
     import { currentProfile } from "api/Profile";
     import { swr } from "api/swr";
 
     import Form from "lib/components/forms/Form.svelte";
     import TextField from "lib/components/forms/TextField.svelte";
+import { joinGroupSchema } from "lib/validationSchemas";
+import Submit from "../forms/Submit.svelte";
+import LeftCenterRightFlex from "../generic/LeftCenterRightFlex.svelte";
 
     let [profileStore, reloadProfile] = swr(
         currentProfile,
         "currentProfile",
         []
     );
+
+    function onError(errors) {
+        return {
+            code: 'Join request has already been sent'
+        }
+    }
 </script>
 
 {#await $profileStore then profile}
 {#if profile.group_id == null}
     <div class="wrapper">
-        <a class="join-group-button">
-            <span class="material-icons-round">login</span>
-            Join a group
-        </a>
+        <Form {onError} validationSchema={joinGroupSchema} submitAction={createGroupJoinRequest} let:errors>
+            <div class="join-wrapper">
+                <TextField type="text" {errors} noMargin name="code" label="Join Group" placeholder="Code"/>
+                <button class="join" type="submit">
+                    <span class="material-icons-round joinicon">star</span>Join
+                </button>
+            </div>
+        </Form>
         <a class="create-group-button" href="/create-group">
-            <span class="material-icons-round">add</span>
+            <span class="material-icons-round create-icon">add</span>
             Create a group
         </a>
     </div>
@@ -28,6 +43,30 @@
 {/await}
 
 <style>
+    .join-wrapper {
+        display: flex;
+        flex-direction: row;
+    }
+
+    button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: Rubik, sans-serif;
+        box-sizing: border-box;
+        padding: .5rem 2rem;
+        margin-left: .5rem;
+        border-radius: .5rem;
+        background: var(--accent-blue);
+        color: white;
+        cursor: pointer;
+    }
+
+    button:hover {
+        filter: brightness(.9);
+    }
+    
     .wrapper {
         margin-top: 1rem;
         width: 100%;
@@ -39,11 +78,12 @@
     a {
         width: 100%;
         padding: 1.2rem;
+        box-sizing: border-box;
         font-size: 1.1rem;
         font-family: Rubik, sans-serif;
         outline: none;
         background-color: var(--bg-grey-lower);
-        border-radius: 9999px;
+        border-radius: 1rem;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -55,7 +95,7 @@
         filter: brightness(0.9);
     }
 
-    span {
+    span.create-icon {
         margin-right: 1rem;
         font-size: 1.7rem;
     }

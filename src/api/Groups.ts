@@ -1,3 +1,4 @@
+import type { Profile } from "./Profile";
 import { route } from "./utils";
 
 export interface Group {
@@ -167,5 +168,52 @@ export async function updateGroup(group, group_id) {
 
     } catch (err) {
         throw err;
+    }
+}
+
+export interface GroupJoinRequest {
+    id: number;
+    group_id: string;
+    profile: Profile;
+    date_added: Date;
+}
+
+export async function createGroupJoinRequest(values) {
+    try {
+        const res = await fetch(route(`groups/${values.code}/join-requests`), {
+            method: 'POST',
+            credentials: 'include',
+            mode: 'cors',
+        })
+
+        if (res.status != 200) {
+            if (res.status == 409){
+                throw 'Join request has already been sent'
+            } else{
+                throw await res.text()
+            }
+        }
+
+        return await res.json();
+    } catch (err) {
+        throw err
+    }
+}
+
+export async function getJoinRequests(group_id) {
+    try {
+        const res = await fetch(route(`groups/${group_id}/join-requests`), {
+            method: 'GET',
+            credentials: 'include',
+            mode: 'cors',
+        })
+
+        if (res.status != 200) {
+            throw await res.text()
+        }
+
+        return await res.json();
+    } catch (err) {
+        throw err
     }
 }

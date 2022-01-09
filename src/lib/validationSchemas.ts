@@ -66,3 +66,7 @@ export const groupUpdateSchema = yup.object().shape({
     graduation_year: yup.number().min(new Date().getFullYear()).max(new Date().getFullYear() + 2).required('Graduation year required'),
     file: yup.mixed().test('Size test', 'File too large', value => value ? value.size <= 5000000 : true),
 })
+
+export const joinGroupSchema = yup.object().shape({
+    code: yup.string().required('Code is required')
+})

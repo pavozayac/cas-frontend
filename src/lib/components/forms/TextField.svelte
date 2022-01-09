@@ -9,11 +9,12 @@
     export let stopProp: bool = false;
     export let min = undefined;
     export let max = undefined;
+    export let noMargin = false;
 
     let value;
 </script>
 
-<div class="wrapper">
+<div class="wrapper" class:margin={!noMargin}>
     <label class="label" for={name}>
         {capitalizeFirst(label).replaceAll("_", " ")}
     </label>
@@ -38,8 +39,11 @@
         padding: 1rem;
         box-sizing: border-box;
         border-radius: 0.5rem;
-        margin-bottom: 0.5rem;
         width: 100%;
+    }
+
+    .margin {
+        margin-bottom: .5rem;
     }
 
     input::placeholder {

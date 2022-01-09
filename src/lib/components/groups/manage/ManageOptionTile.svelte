@@ -44,7 +44,8 @@
     }
 
     span {
-        font-size: 4rem;
+        font-size: 3rem;
+        padding: 1rem;
         font-weight: 200;
     }
 </style>

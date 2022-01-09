@@ -24,8 +24,9 @@
 
     const { form, errors } = createForm({
         onSubmit: async (values) => {
-            await login(values.email, values.password);
-            router.goto("/");
+            const jwt = await login(values.email, values.password);
+            console.log('bruh');
+            router.goto("/", true);
         },
         onError: (err) => {
             return {
@@ -74,7 +75,7 @@
     />
     <div class="social-wrapper">
         <GoogleButton />
-        <FacebookButton />
+        <!-- <FacebookButton /> -->
     </div>
     <a class="register-button" use:active href="/register">Register</a>
 </div>

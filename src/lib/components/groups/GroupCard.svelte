@@ -59,7 +59,7 @@
         align-items: center;
         border-radius: 0.5rem;
         overflow: hidden;
-        margin-top: 1.25rem;
+        /* margin-top: 1.25rem; */
         /* margin-bottom: 1.25rem; */
         padding: 1rem;
         box-sizing: border-box;

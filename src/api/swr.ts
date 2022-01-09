@@ -16,11 +16,20 @@ export function swr<F extends (...args: any[]) => Promise<any>>(fetcher: F, kind
     }
 
     const load = async () => {
-        const response = await fetcher(...args);
-        cache.set(JSON.stringify({ kind, args }), response)
-        store.set(Promise.resolve(response));
+        try {
+            const response = await fetcher(...args);
+            cache.set(JSON.stringify({ kind, args }), response)
+            store.set(Promise.resolve(response));
+        } catch (err) {
+            cache.set(JSON.stringify({ kind, args }), err)
+            store.set(Promise.reject(err));;
+        }
+    }
+    try {
+        load();
+    } catch (err) {
+        throw err;
     }
 
-    load();
     return [store, load];
 }

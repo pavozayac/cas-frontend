@@ -23,9 +23,9 @@ import { router } from "tinro";
                 <LeftCenterRightFlex>
                     <ThinButton
                         slot="left"
-                        target={`/groups/${meta.params.id}`}
+                        target={`/groups/${meta.params.id}/manage-group`}
                         fullIconName="arrow_back"
-                        text="Back to group"
+                        text="Back to group management"
                     />
                     <h2 slot="center">Edit group</h2>
                 </LeftCenterRightFlex>

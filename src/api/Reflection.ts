@@ -103,6 +103,58 @@ export async function postReflection(values) {
     }
 }
 
+export async function updateReflection(values, reflection_id: number) {
+    console.log('bruh')
+    let tags = values.tags.map(tag => { return { 'name': tag } })
+    console.log(tags)
+    let data = {
+        title: values.title,
+        text_content: values.text_content,
+        creativity: hasObject(values.categories, 'creativity'),
+        activity: hasObject(values.categories, 'activity'),
+        service: hasObject(values.categories, 'service'),
+        tags: tags
+    }
+
+    try {
+        const res = await fetch(route(`reflections/${reflection_id}`), {
+            method: 'PUT',
+            credentials: 'include',
+            body: JSON.stringify(data),
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (res.status != 200) {
+            throw 'Current profile unavailable'
+        }
+
+        const reflection = await res.json()
+
+        for (const file of values.files) {
+            let data = new FormData()
+            data.append('file', file)
+
+            const res = await fetch(route(`reflections/${reflection.id}/attachment`), {
+                method: 'POST',
+                credentials: 'include',
+                mode: 'cors',
+                body: data
+            })
+
+            if (res.status != 200) {
+                throw 'Upload failed'
+            }
+        }
+
+
+    } catch (err) {
+        throw err
+    }
+}
+
 export async function filterReflections(sorts: ReflectionSorts, filters: ReflectionFilters): Promise<BulkReflection[]> {
     try {
         const res = await fetch(route('reflections/query'), {

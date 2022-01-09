@@ -45,6 +45,7 @@ export async function logout() {
 
     const response = await res.json()
     profileStore.set(null)
+    localStorage.setItem('profileStore', JSON.stringify(null))
     return response
 }
 

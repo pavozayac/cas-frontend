@@ -25,7 +25,7 @@
 </script>
 
 {#await $profileData then profile}
-    <div class="profile-info">
+    <a class="profile-info" href={current ? "#" : `/profiles/others/${id}`}>
         {#if !noName}
             <span class="profile-name"
                 >{profile.first_name} {profile.last_name}</span
@@ -38,7 +38,7 @@
         {:else}
             <div class="picture" style="background: var(--bg-grey-lower);" />
         {/if}
-    </div>
+    </a>
 {:catch err}
     {#if error}
         <slot />

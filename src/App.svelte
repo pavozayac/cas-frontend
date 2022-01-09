@@ -12,7 +12,7 @@
   import BookmarksRoute from "routes/bookmarks/BookmarksRoute.svelte";
   import ConfirmEmailRoute from "routes/confirmation_and_recovery/ConfirmEmailRoute.svelte";
 
-  import { currentProfile } from "api/Profile";
+  import { currentProfile, getProfile } from "api/Profile";
   import { onMount } from "svelte";
   import { profileStore } from "stores/profile";
 import RecoverPasswordRoute from "routes/confirmation_and_recovery/RecoverPasswordRoute.svelte";
@@ -25,6 +25,7 @@ import EditGroupRoute from "routes/groups/EditGroupRoute.svelte";
 import { swr } from "api/swr";
 import ManageGroupRoute from "routes/groups/ManageGroupRoute.svelte";
 import MembersRoute from "routes/groups/MembersRoute.svelte";
+import BigProfileCard from "lib/components/profiles/BigProfileCard.svelte";
 
   // onMount(()=>{
   //   (async function (){
@@ -54,23 +55,23 @@ import MembersRoute from "routes/groups/MembersRoute.svelte";
 </script>
 
 <svelte:head>
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="manifest" href="site.webmanifest" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="manifest" href="site.webmanifest" />
 
-  <link
-    href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-    rel="stylesheet"
-  />
-  <link
-    href="https://fonts.googleapis.com/icon?family=Material+Icons+Round"
-    rel="stylesheet"
-  />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Round"
+      rel="stylesheet"
+    />
 
-  <link rel="preconnect" href="https://fonts.gstatic.com" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet"
-  />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
 
   <title>CAS Portal</title>
 </svelte:head>
@@ -107,11 +108,14 @@ import MembersRoute from "routes/groups/MembersRoute.svelte";
   </Route>
 
   <Route path="/profiles/*">
-    <Route path="/current">
-      <CurrentProfileRoute />
-    </Route>
     <Route path="/current/edit">
       <EditProfile />
+    </Route>
+    <Route path="/others/:id" let:meta>
+      <BigProfileCard {meta}/>
+    </Route>
+    <Route fallback path="/current">
+      <CurrentProfileRoute />
     </Route>
   </Route>
 

@@ -57,12 +57,10 @@
     }*/
 
     async function logoutAction() {
-        logout();
-        router.goto("/sign-in");
+        await logout();
+        router.goto("/sign-in", true);
     }
     let [dataStore] = swr(currentProfile, "currentProfile", []);
-
-    onMount(() => {});
 </script>
 
 <svelte:window bind:scrollY={y2} />

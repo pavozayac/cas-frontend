@@ -17,15 +17,6 @@ import InformationTile from "../generic/InformationTile.svelte";
 {#await $profileStore then profile}
 {#await $groupStore then group}
     <div class="upper-data">
-        {#if profile.id == group.coordinator_id}
-        <div class="edit-wrapper">
-            <ThinButton
-                text="Edit group"
-                target={`/groups/${group_id}/edit`}
-                fullIconName="edit"
-            />
-        </div>
-        {/if}
         <div class="profile-info">
             {#if group.avatar}
                 <img

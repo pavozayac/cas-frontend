@@ -45,7 +45,9 @@ export const passwordRecoverySchema = yup.object().shape({
 
 export const passowrdResetSchema = yup.object().shape({
     email: yup.string().email().required('The email address is required'),
-    password: yup.string().required('Password is required'),
+    password: yup.string().min(8, 'Password must have at least 8 characters').test('Safety test', 'Password must contain at least 1 uppercase character, at least 1 lowercase character and at least one digit.', value => {
+        return value.toUpperCase() != value && value.toLowerCase() != value && /\d/.test(value)
+    }).required('Password is required'),
     repeat_password: yup.string().required('Password is required').oneOf([yup.ref('password')], 'Passwords must match'),
 })
 

@@ -104,7 +104,7 @@ export async function getProfile(profile_id: number): Promise<Profile> {
 
         return res.json()
     } catch (err) {
-        throw err
+        throw err;
     }
 }
 

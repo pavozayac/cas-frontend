@@ -25,6 +25,7 @@
     const { form, errors } = createForm({
         onSubmit: async (values) => {
             await login(values.email, values.password);
+            console.log('bruh');
             router.goto("/");
         },
         onError: (err) => {

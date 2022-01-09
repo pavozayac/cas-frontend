@@ -22,6 +22,7 @@ let [profilesStore, reload] = swr(filterProfiles, "profiles", [{group_id: group_
     <Container>
         <CenterWrapper>
             {#each profiles as profile}
+                <h1>Members</h1>
                 <MemberCard id={profile.id} />
             {/each}
         </CenterWrapper>

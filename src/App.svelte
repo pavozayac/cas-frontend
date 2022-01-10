@@ -28,6 +28,7 @@ import MembersRoute from "routes/groups/MembersRoute.svelte";
 import BigProfileCard from "lib/components/profiles/BigProfileCard.svelte";
 import Protected from 'lib/components/auth/Protected.svelte'
 import Unprotected from 'lib/components/auth/Unprotected.svelte'
+import EditReflectionRoute from "routes/reflections/EditReflectionRoute.svelte";
 
   // onMount(()=>{
   //   (async function (){
@@ -145,6 +146,12 @@ import Unprotected from 'lib/components/auth/Unprotected.svelte'
   <Route path="/add-reflection">
     <Protected>
       <AddReflectionRoute />
+    </Protected>
+  </Route>
+
+  <Route path="/reflection/:id/edit" let:meta>
+    <Protected>
+      <EditReflectionRoute reflection_id={Number(meta.params.id)} />
     </Protected>
   </Route>
 

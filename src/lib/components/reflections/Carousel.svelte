@@ -34,7 +34,7 @@ import Preload from "lib/Preload.svelte";
     <div id="images" style={roundedImages ? 'border-radius: 0.5rem;' : ''}>
         <div id="slider" bind:this={slider} >
             {#each urls as src}
-                <Preload alt="Reflection evidence" {src} />
+                <Preload img_style="max-height: 30rem; " alt="Reflection evidence" {src} />
             {/each}
         </div>
         

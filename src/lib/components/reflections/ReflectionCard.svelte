@@ -17,6 +17,9 @@
     import Comment from "./comments/Comment.svelte";
 import { queryComments } from "api/Comment";
 import CommentSection from "./comments/CommentSection.svelte";
+import Carousel from "lib/components/reflections/Carousel.svelte"
+import { attachmentSrc } from "api/utils";
+import { currentProfile } from "api/Profile";
 
     export let id;
 
@@ -47,9 +50,13 @@ import CommentSection from "./comments/CommentSection.svelte";
 
     // let bookmarked: boolean;
 
-    let [dataStore, reload] = swr(getReflection, "reflection", [
+    const [dataStore, reload] = swr(getReflection, "reflection", [
         id,
     ]);
+
+    const [profileStore, profileReload] = swr(currentProfile, "currentProfile", []);
+
+
 
 
     // let bookmarked = writable(null);
@@ -110,11 +117,11 @@ import CommentSection from "./comments/CommentSection.svelte";
         </div>
 
         <div class="carousel-wrapper">
-            <!-- <Carousel
+            <Carousel
                 urls={reflection.attachments.map((attachment) =>
                     attachmentSrc(reflection, attachment)
                 )}
-            /> -->
+            />
         </div>
         <div class="text-section-wrapper">
             <h2>
@@ -145,6 +152,13 @@ import CommentSection from "./comments/CommentSection.svelte";
                 <button on:click={() => {$commentsVisible = !$commentsVisible; console.log($commentsVisible)}}>
                     <span class="material-icons-outlined">comment</span> Comments
                 </button>
+                {#await $profileStore then profile}
+                    {#if profile.id == reflection.profile_id}
+                    <a class="edit-button" href={`/reflection/${reflection.id}/edit`}>
+                        <span class="material-icons-outlined">edit</span> Edit
+                    </a>
+                    {/if}
+                {/await}
             </div>
         </div>
         <CommentSection {commentsVisible} reflection_id={reflection.id} />
@@ -196,7 +210,9 @@ import CommentSection from "./comments/CommentSection.svelte";
         margin-right: 1rem;
     }
 
-    button {
+    button, .edit-button {
+        appearance: none;
+        text-decoration: none;
         background: var(--accent-blue);
         color: white;
         width: 100%;
@@ -209,7 +225,10 @@ import CommentSection from "./comments/CommentSection.svelte";
         align-items: center;
         cursor: pointer;
         font-family: Rubik, sans-serif;
-        margin: 1rem;
+        margin: .5rem;
+    }
+
+    .edit-button {
     }
 
     .bookmarked {
@@ -219,6 +238,10 @@ import CommentSection from "./comments/CommentSection.svelte";
     }
 
     button:hover {
+        filter: brightness(0.9);
+    }
+
+    .edit-button:hover {
         filter: brightness(0.9);
     }
 
@@ -240,8 +263,6 @@ import CommentSection from "./comments/CommentSection.svelte";
         justify-content: left;
         align-items: center;
         width: 100%;
-        color: gray;
-        font-weight: 300;
         font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
             "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
             "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",

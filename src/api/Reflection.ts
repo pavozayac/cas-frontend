@@ -52,9 +52,9 @@ export interface ReflectionSorts {
 }
 
 export async function postReflection(values) {
-    console.log('bruh')
+    // console.log('bruh')
     let tags = values.tags.map(tag => { return { 'name': tag } })
-    console.log(tags)
+    // console.log(tags)
     let data = {
         title: values.title,
         text_content: values.text_content,
@@ -103,10 +103,10 @@ export async function postReflection(values) {
     }
 }
 
-export async function updateReflection(values, reflection_id: number) {
-    console.log('bruh')
+export async function updateReflection(value, reflection_id: number) {
+    // console.log('bruh')
     let tags = values.tags.map(tag => { return { 'name': tag } })
-    console.log(tags)
+    // console.log(tags)
     let data = {
         title: values.title,
         text_content: values.text_content,

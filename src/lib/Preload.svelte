@@ -6,6 +6,7 @@ import { fade } from "svelte/transition";
 
     export let src: string
     export let alt: string
+    export let img_style: string = ""
 
     const preload = (src) => {
         return new Promise(res=>{
@@ -20,7 +21,7 @@ import { fade } from "svelte/transition";
     {#await preload(src)}
         <div class="picture" style="background: var(--bg-grey-lower);"></div>
     {:then _}
-        <img class="picture" {src} {alt}/>
+        <img class="picture" {src} {alt} style={img_style}/>
     {/await}
 
 
@@ -29,5 +30,9 @@ import { fade } from "svelte/transition";
         margin: 0;
         width: fit-content;
         height: fit-content;
+    }
+
+    .picture {
+        object-fit: cover;
     }
 </style>

@@ -44,9 +44,9 @@ import InformationTile from "lib/components/generic/InformationTile.svelte";
                                 class="profile-icon"
                             />
                         {/if}
-                        <span class="profile-name"
-                            >{profile.first_name} {profile.last_name}</span
-                        >
+                        <span class="profile-name">
+                            {profile.first_name} {profile.last_name}
+                        </span>
                         <div class="detail-info">
                             <InformationTile iconName={'star'} label={'Joined'}>{profile.date_joined}</InformationTile>
                             <InformationTile iconName={'create'} label={'Posts'}>23</InformationTile>

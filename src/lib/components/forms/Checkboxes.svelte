@@ -4,6 +4,8 @@
     export let text: string
     export let initialValue
     export let errors
+
+    console.log(initialValue)
 </script>
 
 <div class="container" class:error={$errors[name] && $errors[name].length > 0}>
@@ -11,7 +13,7 @@
     {#each Object.entries(items) as [key, value], index}
         <div class="radio-wrapper" class:first={index == 0}>
             <label class="radio-label">
-                <input type="checkbox" name={name} value={value} checked={value == initialValue} />
+                <input type="checkbox" name={name} value={value} checked={initialValue && initialValue[value] == true} />
                 <div class="checkmark">{key}</div>  
             </label>
         </div>

@@ -51,6 +51,16 @@ import { swr } from "api/swr";
 
         return reflection;
     }
+
+    function transformInitialCategories(reflection: Reflection) {
+        const categories = {
+            creativity: reflection.creativity,
+            activity: reflection.activity,
+            service: reflection.service,
+        };
+
+        return categories;
+    }
 </script>
 
 <Nav />
@@ -94,6 +104,7 @@ import { swr } from "api/swr";
                         Activity: "activity",
                         Service: "service",
                     }}
+                    initialValue={transformInitialCategories(reflection)}
                 />
                 <MultipleFileField {formData} {errors} name="attachments" />
                 <FileList {formData} />

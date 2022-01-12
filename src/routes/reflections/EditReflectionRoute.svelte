@@ -27,7 +27,7 @@ import { swr } from "api/swr";
 
     function extraValidate(values, setTouched) {
         const errors = {};
-        console.log(values);
+        // console.log(values);
         console.log("Valuestags: " + values.tags);
         console.log("Valuesfiles: " + values.files);
 
@@ -39,18 +39,12 @@ import { swr } from "api/swr";
             errors.attachments = "Must have at least one attachment";
         }
 
+        if ()
+
         return errors;
     }
 
     const [reflectionStore] = swr(getReflection, "editReflection", [reflection_id]);
-
-    function transformInitialValues(reflection: Reflection) {
-        let newTags = Array();
-        reflection.tags.forEach(tag => newTags.push(tag.name));
-        reflection.tags = newTags;
-
-        return reflection;
-    }
 
     function transformInitialCategories(reflection: Reflection) {
         const categories = {
@@ -60,6 +54,22 @@ import { swr } from "api/swr";
         };
 
         return categories;
+    }
+
+    function transformInitialValues(reflection: Reflection) {
+        let newTags = [];
+        reflection.tags.forEach(tag => newTags.push(tag.name));
+
+
+
+        return {
+            title: reflection.title,
+            text_content: reflection.text_content,
+            tags: newTags,
+            categories: transformInitialCategories(reflection),
+            files: reflection.attachments,
+            oneTag: null,
+        }
     }
 </script>
 
@@ -78,9 +88,11 @@ import { swr } from "api/swr";
                 let:errors
                 let:data={formData}
                 let:setField
+                let:setError
                 let:validate
                 submitAction={async values => await updateReflection(values, reflection_id)}
             >
+                {errors.subscribe(val => console.log(val))}
                 <TextField {errors} name="title" type="text" />
                 <TextArea {errors} name="text_content" />
                 <TextField
@@ -93,7 +105,7 @@ import { swr } from "api/swr";
                 >
                     <TagButton {validate} {formData} {setField} />
                 </TextField>
-                <TagsList {formData} />
+                <TagsList {setError} {formData} />
                 <div data-felte-reporter-tippy-position-for="categories" />
                 <Checkboxes
                     {errors}

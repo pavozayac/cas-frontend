@@ -39,6 +39,17 @@ export const addReflectionSchema = yup.object().shape({
     oneTag: yup.string().nullable(),
 })
 
+export const editReflectionSchema = yup.object().shape({
+    title: yup.string().required(),
+    text_content: yup.string().required(),
+    tags: yup.array().of(yup.string()).required(),
+    categories: yup.array().transform(value => value === [] ? null : value).of(yup.string()).required(),
+    delete_attachment_uuids: yup.array().of(yup.string()).nullable(),
+    new_files: yup.array().of(yup.mixed()).nullable().nullable(),
+    attachments: yup.array().of(yup.object()).nullable(),
+    oneTag: yup.string().nullable(),
+})
+
 export const passwordRecoverySchema = yup.object().shape({
     email: yup.string().email().required('The email address is required'),
 })

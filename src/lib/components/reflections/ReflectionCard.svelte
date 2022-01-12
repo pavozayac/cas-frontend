@@ -8,18 +8,18 @@
     import { swr } from "api/swr";
     import { cubicInOut } from "svelte/easing";
     import { writable } from "svelte/store";
-    import type { Writable } from 'svelte/store'
+    import type { Writable } from "svelte/store";
     import { slide } from "svelte/transition";
     import Container from "../Container.svelte";
     import Loading from "../generic/Loading.svelte";
     import ProfileButton from "../generic/ProfileButton.svelte";
     import AddCommentBox from "./comments/AddCommentBox.svelte";
     import Comment from "./comments/Comment.svelte";
-import { queryComments } from "api/Comment";
-import CommentSection from "./comments/CommentSection.svelte";
-import Carousel from "lib/components/reflections/Carousel.svelte"
-import { attachmentSrc } from "api/utils";
-import { currentProfile } from "api/Profile";
+    import { queryComments } from "api/Comment";
+    import CommentSection from "./comments/CommentSection.svelte";
+    import Carousel from "lib/components/reflections/Carousel.svelte";
+    import { attachmentSrc } from "api/utils";
+    import { currentProfile } from "api/Profile";
 
     export let id;
 
@@ -50,14 +50,13 @@ import { currentProfile } from "api/Profile";
 
     // let bookmarked: boolean;
 
-    const [dataStore, reload] = swr(getReflection, "reflection", [
-        id,
-    ]);
+    const [dataStore, reload] = swr(getReflection, "reflection", [id]);
 
-    const [profileStore, profileReload] = swr(currentProfile, "currentProfile", []);
-
-
-
+    const [profileStore, profileReload] = swr(
+        currentProfile,
+        "currentProfile",
+        []
+    );
 
     // let bookmarked = writable(null);
 
@@ -102,14 +101,18 @@ import { currentProfile } from "api/Profile";
     <div class="card-container">
         <div class="top-widgets">
             <div class="date">
-                {new Date(reflection.date_added).getDate()}.{new Date(reflection.date_added).getMonth()}.{new Date(reflection.date_added).getFullYear()}
+                {new Date(reflection.date_added).getDate()}.{new Date(
+                    reflection.date_added
+                ).getMonth()}.{new Date(reflection.date_added).getFullYear()}
             </div>
             <div class="categories">
-                {#if reflection.creativity} 
+                {#if reflection.creativity}
                     <div class="category creativity">Creativity</div>
-                {:else if reflection.activity}
+                {/if}
+                {#if reflection.activity}
                     <div class="category activity">Activity</div>
-                {:else if reflection.service}
+                {/if}
+                {#if reflection.service}
                     <div class="category service">Service</div>
                 {/if}
             </div>
@@ -149,14 +152,22 @@ import { currentProfile } from "api/Profile";
                     >
                     {reflection.is_favourite ? "Bookmarked" : "Bookmark"}
                 </button>
-                <button on:click={() => {$commentsVisible = !$commentsVisible; console.log($commentsVisible)}}>
+                <button
+                    on:click={() => {
+                        $commentsVisible = !$commentsVisible;
+                        console.log($commentsVisible);
+                    }}
+                >
                     <span class="material-icons-outlined">comment</span> Comments
                 </button>
                 {#await $profileStore then profile}
                     {#if profile.id == reflection.profile_id}
-                    <a class="edit-button" href={`/reflection/${reflection.id}/edit`}>
-                        <span class="material-icons-outlined">edit</span> Edit
-                    </a>
+                        <a
+                            class="edit-button"
+                            href={`/reflection/${reflection.id}/edit`}
+                        >
+                            <span class="material-icons-outlined">edit</span> Edit
+                        </a>
                     {/if}
                 {/await}
             </div>
@@ -175,10 +186,10 @@ import { currentProfile } from "api/Profile";
 
     .tag {
         color: black;
-        padding: .5rem 1rem;
+        padding: 0.5rem 1rem;
         border-radius: 9999px;
         background: var(--accent-green);
-        margin-right: .5rem;
+        margin-right: 0.5rem;
     }
 
     .top-widgets {
@@ -210,7 +221,8 @@ import { currentProfile } from "api/Profile";
         margin-right: 1rem;
     }
 
-    button, .edit-button {
+    button,
+    .edit-button {
         appearance: none;
         text-decoration: none;
         background: var(--accent-blue);
@@ -225,7 +237,7 @@ import { currentProfile } from "api/Profile";
         align-items: center;
         cursor: pointer;
         font-family: Rubik, sans-serif;
-        margin: .5rem;
+        margin: 0.5rem;
     }
 
     .edit-button {
@@ -257,7 +269,7 @@ import { currentProfile } from "api/Profile";
     }
 
     .actions-buttons {
-        padding-top: .5rem;
+        padding-top: 0.5rem;
         display: flex;
         flex-direction: row;
         justify-content: left;
@@ -277,7 +289,7 @@ import { currentProfile } from "api/Profile";
 
     .category {
         border-radius: 9999px;
-        padding: .1rem .5rem;
+        padding: 0.1rem 0.5rem;
     }
 
     .creativity {

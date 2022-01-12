@@ -10,7 +10,7 @@
     export let extraValidate: (any: any, any1: any) => {} = () => {return {}}
     export let onError: (errors: any) => any = (errors) => errors
 
-    const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit, setField, setError, setTouched, validate } = createForm({
+    const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit, setField, setError, setTouched, validate, reset } = createForm({
         onSubmit: async values => {
             // console.log('bruh')
             // console.log(values)
@@ -26,8 +26,15 @@
         validateSchema: validationSchema,
         initialValues: initialValues
     })
-    const key = 'formKey'
-    setContext(key, data)
+    // const key = 'formKey'
+    // setContext(key, data)
+
+    if (initialValues !== null) {
+        console.log('Form valid', $errors);
+        Object.entries(validationSchema).forEach(([key, value]) => {
+            setError(key, null);
+        })
+    }
 
 
     // const altSubmit = createSubmitHandler({

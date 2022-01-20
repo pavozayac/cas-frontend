@@ -7,8 +7,19 @@
     import { filterReflections } from "api/Reflection";
     import { onMount } from "svelte";
     import { swr } from "api/swr";
+import { router } from "tinro";
 
-    const [dataStore] = swr(filterReflections, "indexReflections", [{date_added: 'desc'}, {}]);
+    export let query: Record<string, string>;
+
+    const [dataStore, reload] = swr(filterReflections, "indexReflections", [{date_added: 'desc'}, {full_text_con: query.q || undefined}]);
+
+    let searchPhrase = '';
+
+    router.subscribe(route => {
+        reload([{date_added: 'desc'}, {full_text_con: route.query.q || undefined}]);
+        searchPhrase = route.query.q || null;
+    })
+
 </script>
 
 <Nav />
@@ -17,6 +28,9 @@
 <CenterWrapper>
     <Container>
         <CenterWrapper>
+            {#if searchPhrase}
+                <h2>Searching for: {searchPhrase}</h2>
+            {/if}
             {#await $dataStore then reflectionIDs}
                 {#each reflectionIDs as reflection}
                     <Card id={reflection.id} />

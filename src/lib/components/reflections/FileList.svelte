@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { validImageTypes } from "lib/constants";
+
     export let formData;
 
     import { remove } from "api/utils";
@@ -25,7 +27,6 @@
         return newArray;
     }
 
-    const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
 </script>
 
 <div class="wrapper">

@@ -1,13 +1,13 @@
 import * as yup from 'yup'
 
 export const signInFormSchema = yup.object({
-    email: yup.string().email('Must be a valid email').required('Email address is required'),
+    email: yup.string().email('The email must have format example@examplemail.com').required('Email address is required'),
     password: yup.string().required('Password is required')
 })
 
 export const registerSchema = yup.object({
     email: yup.string().email('Must be a valid email').required('Email address is required'),
-    password: yup.string().min(8, 'Password must have at least 8 characters').test('Safety test', 'Password must contain at least 1 uppercase character, at least 1 lowercase character and at least one digit.', value => {
+    password: yup.string().min(8, 'Password must have at least 8 characters').test('Safety test', 'Password must contain at least 1 uppercase character, at least 1 lowercase character and at least 1 digit', value => {
         return value.toUpperCase() != value && value.toLowerCase() != value && /\d/.test(value)
     }).required('Password is required'),
     repeat_password: yup.string().required('Password is required').oneOf([yup.ref('password')], 'Passwords must match'),
@@ -31,31 +31,32 @@ export const profileAvatar = yup.object({
 })
 
 export const addReflectionSchema = yup.object().shape({
-    title: yup.string().required(),
-    text_content: yup.string().required(),
+    title: yup.string().required('Title required'),
+    text_content: yup.string().required('Text content required'),
     tags: yup.array().of(yup.string()).required(),
-    categories: yup.array().transform(value => value === [] ? null : value).of(yup.string()).required(),
-    files: yup.array().of(yup.mixed()).required(),
+    categories: yup.array().transform(value => value === [] ? null : value).of(yup.string()).min(1, 'At least one category is required').required('Categories are required'),
+    files: yup.array().of(yup.object()).required(),
     oneTag: yup.string().nullable(),
 })
 
 export const editReflectionSchema = yup.object().shape({
-    title: yup.string().required(),
-    text_content: yup.string().required(),
+    attachments: yup.mixed().nullable(),
+    title: yup.string().required('Title required'),
+    text_content: yup.string().required('Text content required'),
     tags: yup.array().of(yup.string()).required(),
-    categories: yup.array().transform(value => value === [] ? null : value).of(yup.string()).required(),
-    delete_attachment_uuids: yup.array().of(yup.string()).nullable(),
-    new_files: yup.array().of(yup.mixed()).nullable().nullable(),
-    attachments: yup.array().of(yup.object()).nullable(),
+    // categories: yup.array().nullable(),
+    // categories: yup.array().transform(value => value === [] ? null : value).of(yup.string()).min(1, 'At least one category is required').required('Categories are required'),
+    delete_uuids: yup.array().of(yup.string()).nullable(),
+    files: yup.array().nullable(),
     oneTag: yup.string().nullable(),
 })
 
 export const passwordRecoverySchema = yup.object().shape({
-    email: yup.string().email().required('The email address is required'),
+    email: yup.string().email('The email must have format example@examplemail.com').required('The email address is required'),
 })
 
 export const passowrdResetSchema = yup.object().shape({
-    email: yup.string().email().required('The email address is required'),
+    email: yup.string().email('The email must have format example@examplemail.com').required('The email address is required'),
     password: yup.string().min(8, 'Password must have at least 8 characters').test('Safety test', 'Password must contain at least 1 uppercase character, at least 1 lowercase character and at least one digit.', value => {
         return value.toUpperCase() != value && value.toLowerCase() != value && /\d/.test(value)
     }).required('Password is required'),

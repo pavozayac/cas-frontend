@@ -12,6 +12,8 @@
     import { filterReflections } from "api/Reflection";
     import ProfileReflections from "../../lib/components/generic/ReflectionsList.svelte";
 import InformationTile from "lib/components/generic/InformationTile.svelte";
+import { getGroup } from "api/Groups";
+import { group } from "d3";
 
     const [dataStore] = swr(currentProfile, "currentProfile", []);
 </script>
@@ -48,8 +50,16 @@ import InformationTile from "lib/components/generic/InformationTile.svelte";
                             {profile.first_name} {profile.last_name}
                         </span>
                         <div class="detail-info">
-                            <InformationTile iconName={'star'} label={'Joined'}>{profile.date_joined}</InformationTile>
-                            <InformationTile iconName={'create'} label={'Posts'}>23</InformationTile>
+                            <InformationTile iconName={'star'} label={'Joined'}>{new Date(profile.date_joined).getDay()} {new Date(profile.date_joined).toLocaleString('en-us', { month: 'short' })} {new Date(profile.date_joined).getFullYear()}</InformationTile>
+                            <InformationTile iconName={'create'} label={'Posts'}>
+                            {#await filterReflections({}, {profile: { id: profile.id } }) then reflections}
+                                {reflections.length}
+                            {/await}
+                            </InformationTile>
+                            {#await getGroup(profile.group_id) then group}
+                            <InformationTile iconName="people" label="Group">{group.name}</InformationTile>
+                            <InformationTile iconName="school" label="Graduation">{group.graduation_year}</InformationTile>
+                            {/await}
                         </div>
                     </div>
                 </div>

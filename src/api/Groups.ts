@@ -218,6 +218,38 @@ export async function getJoinRequests(group_id) {
     }
 }
 
-export async function acceptJoinRequest(request_id) {
-    
+export async function acceptJoinRequest(group_id, profile_id) {
+    try {
+        const res = await fetch(route(`groups/${group_id}/accept-request/${profile_id}`), {
+            method: 'POST',
+            credentials: 'include',
+            mode: 'cors',
+        })
+
+        if (res.status != 200) {
+            throw await res.text();
+        }
+
+        return await res.json();
+    } catch (err) {
+        throw err
+    }
+}
+
+export async function denyJoinRequest(group_id, profile_id) {
+    try {
+        const res = await fetch(route(`groups/${group_id}/deny-request/${profile_id}`), {
+            method: 'POST',
+            credentials: 'include',
+            mode: 'cors',
+        })
+
+        if (res.status != 200) {
+            throw await res.text();
+        }
+
+        return await res.json();
+    } catch (err) {
+        throw err
+    }
 }

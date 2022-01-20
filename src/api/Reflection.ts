@@ -6,7 +6,7 @@ interface Attachment {
     filename: string,
     id: string,
     saved_path: string,
-    date_added: Date,
+    date_added: string,
     reflection_id: number
 }
 
@@ -20,7 +20,7 @@ export interface Reflection {
     service: boolean,
     comments: BulkComment[],
     tags: Array<{ name: string }>,
-    date_added: Date,
+    date_added: string,
     profile_id: number,
     is_favourite: boolean,
     attachments: Array<Attachment>
@@ -35,14 +35,16 @@ export interface ReflectionFilters {
     creativity?: boolean,
     activity?: boolean,
     service?: boolean,
+    date_added_gte?: string,
+    date_added_lte?: string,
     profile?: {
         id?: number,
-        group_id?: number,
+        group_id?: string,
         post_visibility?: number,
-        last_online_gte?: Date,
-        last_online_lte?: Date,
-        date_joined_gte?: Date,
-        date_joined_lte?: Date
+        last_online_gte?: string,
+        last_online_lte?: string,
+        date_joined_gte?: string,
+        date_joined_lte?: string
     }
 }
 
@@ -103,17 +105,33 @@ export async function postReflection(values) {
     }
 }
 
-export async function updateReflection(value, reflection_id: number) {
+export async function updateReflection(values, reflection_id: number) {
     // console.log('bruh')
     let tags = values.tags.map(tag => { return { 'name': tag } })
     // console.log(tags)
     let data = {
         title: values.title,
         text_content: values.text_content,
-        creativity: hasObject(values.categories, 'creativity'),
-        activity: hasObject(values.categories, 'activity'),
-        service: hasObject(values.categories, 'service'),
+        creativity: values.categories.includes('creativity'),
+        activity: values.categories.includes('activity'),
+        service: values.categories.includes('service'),
         tags: tags
+    }
+
+    for (const uuid of values.delete_uuids) {
+        try {
+            const res = await fetch(route(`reflections/${reflection_id}/attachment/${uuid}`), {
+                method: 'DELETE',
+                credentials: 'include',
+                mode: 'cors',
+            })
+            
+            if (res.status != 200) {
+                throw 'Current profile unavailable'
+            }
+        } catch (err) {
+            throw err
+        }
     }
 
     try {
@@ -155,9 +173,11 @@ export async function updateReflection(value, reflection_id: number) {
     }
 }
 
-export async function filterReflections(sorts: ReflectionSorts, filters: ReflectionFilters): Promise<BulkReflection[]> {
+export async function filterReflections(sorts: ReflectionSorts, filters: ReflectionFilters, detail: boolean = false): Promise<BulkReflection[] | Reflection[]> {
+    const filterRoute = detail ? route('reflections/query-detail') : route('reflections/query');
+    
     try {
-        const res = await fetch(route('reflections/query'), {
+        const res = await fetch(filterRoute, {
             method: 'POST',
             credentials: 'include',
             mode: 'cors',

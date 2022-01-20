@@ -69,6 +69,7 @@ import LeftCenterRightFlex from "../generic/LeftCenterRightFlex.svelte";
     
     .wrapper {
         margin-top: 1rem;
+        margin-bottom: 1rem;
         width: 100%;
         display: flex;
         flex-direction: row;

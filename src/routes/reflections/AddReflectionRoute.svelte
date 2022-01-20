@@ -21,6 +21,7 @@
     function extraValidate(values, setTouched) {
         const errors = {};
         console.log(values);
+        console.log(values);
         console.log("Valuestags: " + values.tags);
         console.log("Valuesfiles: " + values.files);
 
@@ -30,6 +31,10 @@
 
         if (typeof values.files === "undefined" || values?.files.length < 1) {
             errors.attachments = "Must have at least one attachment";
+        }
+        if (true){
+        // if (values.categories && values?.categories.length > 1) {
+            setTouched('categories')
         }
 
         return errors;
@@ -70,6 +75,9 @@
                     {errors}
                     name="categories"
                     text="Categories"
+                    initialValue={undefined}
+                    setInit={false}
+                    {formData}
                     items={{
                         Creativity: "creativity",
                         Activity: "activity",

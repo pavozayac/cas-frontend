@@ -15,6 +15,7 @@
             // console.log('bruh')
             // console.log(values)
             await submitAction(values)
+
         },
         onError: onError,
         validate: async (values) => await extraValidate(values, setTouched),
@@ -28,13 +29,14 @@
     })
     // const key = 'formKey'
     // setContext(key, data)
-
-    if (initialValues !== null) {
-        console.log('Form valid', $errors);
-        Object.entries(validationSchema).forEach(([key, value]) => {
-            setError(key, null);
-        })
-    }
+    onMount(() => {
+        if (initialValues !== undefined && initialValues !== null) {
+            console.log('Form valid', $errors);
+            Object.entries(validationSchema).forEach(([key, value]) => {
+                setError(key, null);
+            })
+        }
+    })
 
 
     // const altSubmit = createSubmitHandler({
@@ -49,12 +51,11 @@
     // })
 </script>
 <!-- 
-{@debug $data}
 {@debug isValid}
 {@debug $isSubmitting}
-{@debug $errors}
 {@debug $data} -->
-
+{@debug $errors}
+{@debug $data}
 
 <form use:form>
     <slot {errors} {data} {setField} {setError} {handleSubmit} {validate} ></slot>

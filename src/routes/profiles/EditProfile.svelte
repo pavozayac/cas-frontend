@@ -50,7 +50,7 @@ import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svel
                                 }}
                                 let:errors
                                 validationSchema={profileUpdateSchema}
-                                submitAction={updateProfile}
+                                submitAction={values => {updateProfile(values); reload()}}
                             >
                                 <TextField
                                     {errors}

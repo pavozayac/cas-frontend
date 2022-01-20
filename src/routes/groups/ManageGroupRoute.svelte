@@ -40,7 +40,7 @@
                     />
                     <ManageOptionTile
                         icon="bar_chart"
-                        target={`/groups/${group.id}/members`}
+                        target={`/groups/${group.id}/statistics`}
                         text="Statistics"
                     />
                     <ManageOptionTile

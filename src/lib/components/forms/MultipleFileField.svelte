@@ -1,22 +1,30 @@
 <script lang="ts">
+import Phase from "../transitions/Phase.svelte";
+
     import { capitalizeFirst } from "./formUtils";
 
     export let name: string
     export let errors
     export let formData
-
+    export let text = capitalizeFirst(name).replaceAll('_', ' ')
 </script>
 
 <div class="wrapper">
-    <label class="label" for="">
-        {capitalizeFirst(name).replaceAll('_', ' ')}
+    <label class="label" for="multipleFile">
+        {text}
     </label>
     <input on:change={(e)=>{
+        console.log('dayuuum')
+        // if (!!$formData.files){
+        //     $formData.files = [e.target.files[0]].concat($formData.files)
+        //     // $formData.files = [{bruh: 'bbb'}]
+        // } else {
+        //     $formData.files = [].concat(e.target.files[0])
+        // }
         if ($formData.files){
-            $formData.files = [...$formData.files, e.target.files[0]]
+            $formData.files = [e.target.files[0]].concat($formData.files)
         } else {
             $formData.files = [e.target.files[0]]
-
         }
     }} class:error={$errors[name]} type="file" id="multipleFile" name={name}/>
 </div>

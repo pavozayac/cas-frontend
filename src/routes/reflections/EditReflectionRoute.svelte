@@ -8,7 +8,10 @@
     import TextField from "lib/components/forms/TextField.svelte";
     import Nav from "lib/components/navigation/Nav.svelte";
     import SideMenu from "lib/components/navigation/SideMenu.svelte";
-    import { addReflectionSchema } from "lib/validationSchemas";
+    import {
+        addReflectionSchema,
+        editReflectionSchema,
+    } from "lib/validationSchemas";
     import { subscribe } from "svelte/internal";
     import TagButton from "lib/components/reflections/TagButton.svelte";
     import TagsList from "lib/components/reflections/TagsList.svelte";
@@ -19,57 +22,80 @@
     import { getReflection, updateReflection } from "api/Reflection";
     import type { Reflection } from "api/Reflection";
 
-
-
-import { swr } from "api/swr";
+    import { swr } from "api/swr";
+    import DeleteFileField from "lib/components/forms/DeleteFileField.svelte";
 
     export let reflection_id: number;
 
     function extraValidate(values, setTouched) {
         const errors = {};
         // console.log(values);
-        console.log("Valuestags: " + values.tags);
-        console.log("Valuesfiles: " + values.files);
+        // console.log("Valuestags: " + values.tags);
+        // console.log("Valuesfiles: " + values.files);
 
         if (typeof values.tags === "undefined" || values?.tags.length < 1) {
             errors.oneTag = "Must have at least one tag";
         }
 
-        if (typeof values.files === "undefined" || values?.files.length < 1) {
-            errors.attachments = "Must have at least one attachment";
+        if (values.categories.length < 1) {
+            errors.categories = "Must have at least one category";
         }
 
-        if ()
+        if (
+            values.delete_uuids.length == values.attachments.length && (!values.files || (values.files && values.files.length == 0))
+        ) {
+            console.log('fileediterrors')
+            errors.oneFile = "There must be at least one file attached"
+        }
 
         return errors;
     }
 
-    const [reflectionStore] = swr(getReflection, "editReflection", [reflection_id]);
+    const [reflectionStore] = swr(getReflection, "editReflection", [
+        reflection_id,
+    ]);
 
     function transformInitialCategories(reflection: Reflection) {
-        const categories = {
-            creativity: reflection.creativity,
-            activity: reflection.activity,
-            service: reflection.service,
-        };
+        let cats = [];
 
-        return categories;
+        if (reflection.creativity) {
+            cats.push("creativity");
+        }
+        if (reflection.activity) {
+            cats.push("activity");
+        }
+        if (reflection.service) {
+            cats.push("service");
+        }
+
+        console.log("cats", cats);
+
+        return cats;
+
+        // return {
+        //     "creativity": reflection.creativity,
+        //     "activity": reflection.activity,
+        //     "service": reflection.service,
+        // }
     }
 
     function transformInitialValues(reflection: Reflection) {
         let newTags = [];
-        reflection.tags.forEach(tag => newTags.push(tag.name));
+        reflection.tags.forEach((tag) => newTags.push(tag.name));
 
-
+        console.log("transformed cats", transformInitialCategories(reflection));
 
         return {
+            id: reflection.id,
             title: reflection.title,
             text_content: reflection.text_content,
             tags: newTags,
-            categories: transformInitialCategories(reflection),
-            files: reflection.attachments,
+            categories: Array(...transformInitialCategories(reflection)),
+            delete_uuids: [],
+            attachments: reflection.attachments,
+            files: [],
             oneTag: null,
-        }
+        };
     }
 </script>
 
@@ -77,54 +103,66 @@ import { swr } from "api/swr";
 <SideMenu />
 
 {#await $reflectionStore then reflection}
-<CenterWrapper>
-    <Container>
-        <div class="wrapper">
-            <h1>Edit a reflection</h1>
-            <Form
-                {extraValidate}
-                initialValues={transformInitialValues(reflection)}
-                validationSchema={addReflectionSchema}
-                let:errors
-                let:data={formData}
-                let:setField
-                let:setError
-                let:validate
-                submitAction={async values => await updateReflection(values, reflection_id)}
-            >
-                {errors.subscribe(val => console.log(val))}
-                <TextField {errors} name="title" type="text" />
-                <TextArea {errors} name="text_content" />
-                <TextField
-                    let:value
-                    {errors}
-                    name="oneTag"
-                    label="Tag"
-                    placeholder="Tag"
-                    type="text"
+    <CenterWrapper>
+        <Container>
+            <div class="wrapper">
+                <h1>Edit a reflection</h1>
+                <Form
+                    {extraValidate}
+                    initialValues={transformInitialValues(reflection)}
+                    validationSchema={editReflectionSchema}
+                    let:errors
+                    let:data={formData}
+                    let:setField
+                    let:setError
+                    let:validate
+                    submitAction={async (values) =>
+                        await updateReflection(values, reflection_id)}
                 >
-                    <TagButton {validate} {formData} {setField} />
-                </TextField>
-                <TagsList {setError} {formData} />
-                <div data-felte-reporter-tippy-position-for="categories" />
-                <Checkboxes
-                    {errors}
-                    name="categories"
-                    text="Categories"
-                    items={{
-                        Creativity: "creativity",
-                        Activity: "activity",
-                        Service: "service",
-                    }}
-                    initialValue={transformInitialCategories(reflection)}
-                />
-                <MultipleFileField {formData} {errors} name="attachments" />
-                <FileList {formData} />
-                <Submit text="Post" />
-            </Form>
-        </div>
-    </Container>
-</CenterWrapper>
+                    <!-- {errors.subscribe(val => console.log(val))} -->
+                    <TextField {errors} name="title" type="text" />
+                    <TextArea {errors} name="text_content" />
+                    <TextField
+                        let:value
+                        {errors}
+                        name="oneTag"
+                        label="Tag"
+                        placeholder="Tag"
+                        type="text"
+                    >
+                        <TagButton {validate} {formData} {setField} />
+                    </TextField>
+                    <TagsList {setError} {formData} />
+                    <div data-felte-reporter-tippy-position-for="categories" />
+                    <Checkboxes
+                        {errors}
+                        name="categories"
+                        text="Categories"
+                        items={{
+                            Creativity: "creativity",
+                            Activity: "activity",
+                            Service: "service",
+                        }}
+                        initialValue={transformInitialCategories(reflection)}
+                        {formData}
+                    />
+                    <DeleteFileField
+                        {formData}
+                        {errors}
+                        reflection={transformInitialValues(reflection)}
+                    />
+                    <MultipleFileField
+                        {formData}
+                        {errors}
+                        name="oneFile"
+                        text="New attachments"
+                    />
+                    <FileList {formData} />
+                    <Submit text="Post" />
+                </Form>
+            </div>
+        </Container>
+    </CenterWrapper>
 {/await}
 
 <style>

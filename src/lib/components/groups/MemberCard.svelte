@@ -10,7 +10,7 @@
     export let id: number = 0;
     export let error = false;
     export let noName = false;
-    export let coordinator_id: number
+    export let deleteButton = true;
 
     let [profileData] = swr(getProfile, "profiles", [id]);
 </script>
@@ -40,11 +40,15 @@
         </div>
         <div class="right">
             <span class="posts">
-                Number of posts: {profile.reflections_count}
+                <span class="material-icons-round">description</span>
+                {profile.reflections_count} post{profile.reflections_count == 1 ? '' : 's'}
             </span>
+            {#if deleteButton}
             <button class="delete">
-                <span class="material-icons-round">delete</span>
+                Delete member
+                <span class="material-icons-round">logout</span>
             </button>
+            {/if}
         </div>
     </div>
 {:catch err}
@@ -54,6 +58,17 @@
 {/await}
 
 <style>
+    .delete {
+        display: inline-flex;
+        flex-direction: row;
+    }
+
+    .posts {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+
     button {
         background: none;
         cursor: pointer;
@@ -79,6 +94,7 @@
         border-radius: 1rem;
         cursor: pointer;
         transition: all 200ms;
+        margin-bottom: 1rem;
     }
 
     .profile-info:hover {

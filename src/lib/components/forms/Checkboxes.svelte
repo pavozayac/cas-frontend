@@ -1,19 +1,31 @@
 <script lang="ts">
+import { onMount } from "svelte";
+
+
     export let items: Record<string, any>
     export let name: string
     export let text: string
     export let initialValue
     export let errors
+    export let formData
+    export let setInit = true
 
-    console.log(initialValue)
+    console.log('inVal', initialValue)
+
+    onMount(() => {
+        if (setInit) {
+            $formData[name] = initialValue
+            $errors[name] = null
+        }
+    })
 </script>
 
-<div class="container" class:error={$errors[name] && $errors[name].length > 0}>
+<div class="container" class:error={$errors[name] && typeof $errors[name] == "string"}>
     {text}
     {#each Object.entries(items) as [key, value], index}
         <div class="radio-wrapper" class:first={index == 0}>
             <label class="radio-label">
-                <input type="checkbox" name={name} value={value} checked={initialValue && initialValue[value] == true} />
+            <input type="checkbox" name={name} {value} checked={$formData.categories && $formData.categories.includes(value)} />
                 <div class="checkmark">{key}</div>  
             </label>
         </div>

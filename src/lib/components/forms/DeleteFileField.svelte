@@ -1,38 +1,40 @@
 <script lang="ts">
     import { capitalizeFirst } from "./formUtils";
+    import DeletableFile from "./DeletableFile.svelte";
+import { attachmentSrc } from "api/utils";
 
-    export let name: string
     export let errors
     export let formData
+    export let reflection
 
 </script>
 
 <div class="wrapper">
-    <label class="label" for="">
-        {capitalizeFirst(name).replaceAll('_', ' ')}
-    </label>
-    <input on:change={(e)=>{
-        if ($formData.files){
-            $formData.files = [...$formData.files, e.target.files[0]]
-        } else {
-            $formData.files = [e.target.files[0]]
-
-        }
-    }} class:error={$errors[name]} type="file" id="multipleFile" name={name}/>
+    Delete files
+    <div class="files-container">
+    {#each $formData.attachments as attachment}
+        <DeletableFile {formData} uuid={attachment.id} filename={attachment.filename} src={attachmentSrc(reflection, attachment)}/>
+    {/each}
+    </div>
 </div>
 
 
 <style>
+    .files-container {
+        width: 100%;
+        display: inline-flex;
+    }
+
     .wrapper {
         background: var(--bg-light);
         padding: 1rem;
         box-sizing: border-box;
+        margin-top: 1rem;
         border-radius: .5rem;
         margin-bottom: .5rem;
         width: 100%;
         overflow: hidden;
     }
-
 
     input::placeholder {
         font-family: Rubik, sans-serif;

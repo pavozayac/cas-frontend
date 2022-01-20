@@ -101,9 +101,7 @@
     <div class="card-container">
         <div class="top-widgets">
             <div class="date">
-                {new Date(reflection.date_added).getDate()}.{new Date(
-                    reflection.date_added
-                ).getMonth()}.{new Date(reflection.date_added).getFullYear()}
+                {new Date(reflection.date_added).getDay()} {new Date(reflection.date_added).toLocaleString('en-us', { month: 'short' })} {new Date(reflection.date_added).getFullYear()}
             </div>
             <div class="categories">
                 {#if reflection.creativity}
@@ -178,7 +176,7 @@
     Error
 {/await}
 
-<style lang="postcss">
+<style>
     .tags {
         width: 100%;
         display: flex;
@@ -289,19 +287,24 @@
 
     .category {
         border-radius: 9999px;
-        padding: 0.1rem 0.5rem;
+        padding: 0.3rem 0.5rem;
+        background: var(--bg-grey);
+
     }
 
     .creativity {
-        border: 2px solid var(--accent-blue);
+        text-decoration: underline 2px; 
+        text-decoration-color: var(--accent-blue);
     }
 
     .activity {
-        border: 2px solid var(--accent-red);
+        text-decoration: underline 2px; 
+        text-decoration-color: var(--accent-red);
     }
 
     .service {
-        border: 2px solid var(--accent-green);
+        text-decoration: underline 2px; 
+        text-decoration-color: var(--accent-green);
     }
 
     @media screen and (min-width: 768px) {

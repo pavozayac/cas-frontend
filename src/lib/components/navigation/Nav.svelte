@@ -62,6 +62,13 @@
         });
     }
     let [dataStore] = swr(currentProfile, "currentProfile", []);
+
+    let searchQuery;
+
+    function searchRedirect() {
+        router.goto(`/?q=${searchQuery}`);
+        searchQuery = '';
+    }
 </script>
 
 <svelte:window bind:scrollY={y2} />
@@ -161,9 +168,9 @@
                 on:click={() => ($menuVisible = !$menuVisible)}
                 ><span class="material-icons-round">menu</span></button
             >
-            <input id="searchBox" class="searchbox" placeholder="Search" />
+            <input id="searchBox" class="searchbox" placeholder="Search" bind:value={searchQuery} />
             <div class="search-button-wrapper">
-                <button id="searchButton" class="search-button"
+                <button id="searchButton" class="search-button" on:click={searchRedirect}
                     ><span
                         id="searchIcon"
                         class="search-icon material-icons-round">search</span

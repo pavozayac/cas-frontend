@@ -44,8 +44,10 @@ import LeftCenterRightFlex from "../generic/LeftCenterRightFlex.svelte";
 
 <style>
     .join-wrapper {
+        width: 100%;
         display: flex;
         flex-direction: row;
+        box-sizing: border-box;
     }
 
     button {
@@ -68,6 +70,7 @@ import LeftCenterRightFlex from "../generic/LeftCenterRightFlex.svelte";
     }
     
     .wrapper {
+        box-sizing: border-box;
         margin-top: 1rem;
         margin-bottom: 1rem;
         width: 100%;

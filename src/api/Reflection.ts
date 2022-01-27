@@ -60,9 +60,9 @@ export async function postReflection(values) {
     let data = {
         title: values.title,
         text_content: values.text_content,
-        creativity: hasObject(values.categories, 'creativity'),
-        activity: hasObject(values.categories, 'activity'),
-        service: hasObject(values.categories, 'service'),
+        creativity: values.creativity,
+        activity: values.activity,
+        service: values.service,
         tags: tags
     }
 
@@ -112,9 +112,9 @@ export async function updateReflection(values, reflection_id: number) {
     let data = {
         title: values.title,
         text_content: values.text_content,
-        creativity: values.categories.includes('creativity'),
-        activity: values.categories.includes('activity'),
-        service: values.categories.includes('service'),
+        creativity: values.creativity,
+        activity: values.activity,
+        service: values.service,
         tags: tags
     }
 
@@ -125,7 +125,7 @@ export async function updateReflection(values, reflection_id: number) {
                 credentials: 'include',
                 mode: 'cors',
             })
-            
+
             if (res.status != 200) {
                 throw 'Current profile unavailable'
             }
@@ -175,7 +175,7 @@ export async function updateReflection(values, reflection_id: number) {
 
 export async function filterReflections(sorts: ReflectionSorts, filters: ReflectionFilters, detail: boolean = false): Promise<BulkReflection[] | Reflection[]> {
     const filterRoute = detail ? route('reflections/query-detail') : route('reflections/query');
-    
+
     try {
         const res = await fetch(filterRoute, {
             method: 'POST',
@@ -233,6 +233,24 @@ export async function favouriteReflection(reflection_id: number) {
         return res.json()
     } catch (err) {
         throw err
+    }
+}
+
+export async function deleteReflection(reflection_id: number) {
+    try {
+        const res = await fetch(route(`reflections/${reflection_id}`), {
+            method: 'DELETE',
+            mode: 'cors',
+            credentials: 'include'
+        });
+
+        if (res.status != 200) {
+            throw await res.text();
+        }
+
+        return res.json()
+    } catch (err) {
+        throw err;
     }
 }
 

@@ -20,6 +20,7 @@
     import Carousel from "lib/components/reflections/Carousel.svelte";
     import { attachmentSrc } from "api/utils";
     import { currentProfile } from "api/Profile";
+    import { fade } from 'svelte/transition';
 
     export let id;
 
@@ -52,10 +53,13 @@
 
     const [dataStore, reload] = swr(getReflection, "reflection", [id]);
 
+    let refPromise = getReflection(id);
+
     const [profileStore, profileReload] = swr(
         currentProfile,
         "currentProfile",
-        []
+        [],
+        true
     );
 
     // let bookmarked = writable(null);
@@ -93,12 +97,12 @@
 
 <!-- {@debug bookmarked} -->
 
-{#await $dataStore}
-    <Container>
+{#await refPromise then reflection}
+    <!-- <Container>
         <Loading />
-    </Container>
-{:then reflection}
-    <div class="card-container">
+    </Container> -->
+<!-- {:then reflection} -->
+    <div class="card-container" in:fade={{duration: 150 }}>
         <div class="top-widgets">
             <div class="date">
                 {new Date(reflection.date_added).getDay()} {new Date(reflection.date_added).toLocaleString('en-us', { month: 'short' })} {new Date(reflection.date_added).getFullYear()}
@@ -137,19 +141,21 @@
                 {/each}
             </div>
             <div class="actions-buttons">
+                {#await $dataStore then bookmarkData}
                 <button
-                    class:bookmarked={reflection.is_favourite}
+                    class:bookmarked={bookmarkData.is_favourite}
                     on:click={() => {
-                        toggleReflection(reflection);
+                        toggleReflection(bookmarkData);
                     }}
                 >
                     <span class="material-icons-outlined"
-                        >{reflection.is_favourite
+                        >{bookmarkData.is_favourite
                             ? "done"
                             : "bookmark_border"}</span
                     >
-                    {reflection.is_favourite ? "Bookmarked" : "Bookmark"}
+                    {bookmarkData.is_favourite ? "Bookmarked" : "Bookmark"}
                 </button>
+                {/await}
                 <button
                     on:click={() => {
                         $commentsVisible = !$commentsVisible;
@@ -172,8 +178,6 @@
         </div>
         <CommentSection {commentsVisible} reflection_id={reflection.id} />
     </div>
-{:catch error}
-    Error
 {/await}
 
 <style>

@@ -1,9 +1,11 @@
 <script lang="ts">
     export let label: string;
     export let iconName: string
+    export let style = "";
+    export let hoverable = false;
 </script>
 
-<div class="tile">
+<div class:hoverable class:nonhoverable={!hoverable} on:click|preventDefault|stopPropagation class="tile" {style}>
     <div class="icon-section">
         <span class="material-icons-round icon">{iconName}</span>
     </div>
@@ -14,6 +16,18 @@
 </div>
 
 <style>
+    .hoverable {
+        cursor: pointer;
+    }
+
+    .nonhoverable {
+        cursor: auto;
+    }
+
+    .hoverable:hover {
+        filter: brightness(.9);
+    }
+
     .tile {
         width: 100%;
         padding: 1rem 2rem;
@@ -25,10 +39,11 @@
     }
 
     .icon-section {
-        height: 100%;
+        width: 100%;
         display: flex;
+        flex-direction: row;
         align-items: center;
-        justify-content: cete;
+        justify-content: center;
     }
 
     .icon {
@@ -49,7 +64,7 @@
     }
 
     .label {
-        font-weight: 400;
+        font-weight: 500;
         /* height: 1rem; */
         width: 100%;
         text-align: left;
@@ -57,7 +72,7 @@
     }
 
     .info {
-        font-weight: 500;
+        /* font-weight: 500; */
         padding: 1rem 0;
         width: 100%;
         text-align: left;

@@ -9,7 +9,6 @@
     import Nav from "lib/components/navigation/Nav.svelte";
     import SideMenu from "lib/components/navigation/SideMenu.svelte";
     import {
-        addReflectionSchema,
         editReflectionSchema,
     } from "lib/validationSchemas";
     import { subscribe } from "svelte/internal";
@@ -19,11 +18,15 @@
     import FileList from "lib/components/reflections/FileList.svelte";
     import Checkboxes from "lib/components/forms/Checkboxes.svelte";
     import Submit from "lib/components/forms/Submit.svelte";
-    import { getReflection, updateReflection } from "api/Reflection";
+    import { deleteReflection, getReflection, updateReflection } from "api/Reflection";
     import type { Reflection } from "api/Reflection";
 
     import { swr } from "api/swr";
     import DeleteFileField from "lib/components/forms/DeleteFileField.svelte";
+
+    import { router } from 'tinro';
+import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
+import ThinButton from "lib/components/generic/ThinButton.svelte";
 
     export let reflection_id: number;
 
@@ -37,9 +40,10 @@
             errors.oneTag = "Must have at least one tag";
         }
 
-        if (values.categories.length < 1) {
-            errors.categories = "Must have at least one category";
-        }
+        // if (Object.entries(values.categories).every(([key, value]) => value == false)){
+        //     errors['categories'] = "At least one category is required"
+        //     console.log("Cats are looose")
+        // }
 
         if (
             values.delete_uuids.length == values.attachments.length && (!values.files || (values.files && values.files.length == 0))
@@ -56,7 +60,7 @@
     ]);
 
     function transformInitialCategories(reflection: Reflection) {
-        let cats = [];
+        let cats = new Array();
 
         if (reflection.creativity) {
             cats.push("creativity");
@@ -70,13 +74,13 @@
 
         console.log("cats", cats);
 
-        return cats;
+        // return cats;
 
-        // return {
-        //     "creativity": reflection.creativity,
-        //     "activity": reflection.activity,
-        //     "service": reflection.service,
-        // }
+        return {
+            creativity: reflection.creativity,
+            activity: reflection.activity,
+            service: reflection.service,
+        }
     }
 
     function transformInitialValues(reflection: Reflection) {
@@ -86,15 +90,16 @@
         console.log("transformed cats", transformInitialCategories(reflection));
 
         return {
-            id: reflection.id,
             title: reflection.title,
             text_content: reflection.text_content,
             tags: newTags,
-            categories: Array(...transformInitialCategories(reflection)),
+            // categories: Array(...transformInitialCategories(reflection)),
+            ...transformInitialCategories(reflection),
             delete_uuids: [],
             attachments: reflection.attachments,
             files: [],
             oneTag: null,
+            id: reflection.id
         };
     }
 </script>
@@ -106,18 +111,25 @@
     <CenterWrapper>
         <Container>
             <div class="wrapper">
-                <h1>Edit a reflection</h1>
+                <LeftCenterRightFlex>
+                    <ThinButton action={()=>{ deleteReflection(reflection_id); router.goto('/');}} style="float: right;" slot="right" text="Delete reflection" fullIconName="delete" />
+                </LeftCenterRightFlex>
+                <h1>Now editing: {reflection.title}</h1>
                 <Form
-                    {extraValidate}
                     initialValues={transformInitialValues(reflection)}
                     validationSchema={editReflectionSchema}
                     let:errors
                     let:data={formData}
+                    let:touched
                     let:setField
                     let:setError
                     let:validate
-                    submitAction={async (values) =>
-                        await updateReflection(values, reflection_id)}
+                    {extraValidate}
+                    submitAction={async (values) => {
+                            await updateReflection(values, reflection_id);
+                            router.goto('/profiles/current');
+                        }
+                    }
                 >
                     <!-- {errors.subscribe(val => console.log(val))} -->
                     <TextField {errors} name="title" type="text" />
@@ -133,8 +145,9 @@
                         <TagButton {validate} {formData} {setField} />
                     </TextField>
                     <TagsList {setError} {formData} />
-                    <div data-felte-reporter-tippy-position-for="categories" />
+                    <div data-felte-reporter-tippy-position-for="categories_error" />
                     <Checkboxes
+                        {touched}
                         {errors}
                         name="categories"
                         text="Categories"
@@ -143,7 +156,6 @@
                             Activity: "activity",
                             Service: "service",
                         }}
-                        initialValue={transformInitialCategories(reflection)}
                         {formData}
                     />
                     <DeleteFileField
@@ -158,7 +170,7 @@
                         text="New attachments"
                     />
                     <FileList {formData} />
-                    <Submit text="Post" />
+                    <Submit text="Update" />
                 </Form>
             </div>
         </Container>

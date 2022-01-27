@@ -11,8 +11,8 @@ import { swr } from "api/swr";
     export let commentsVisible: Writable<boolean>;
     export let reflection_id: number
 
-    let [commentsStore, reload] = swr(queryComments, 'comments', [reflection_id])
-    let [profileStore] = swr(currentProfile, 'currentProfile', [])
+    let [commentsStore, reload] = swr(queryComments, 'comments', [reflection_id]);
+    let [profileStore] = swr(currentProfile, 'currentProfile', []);
 
 
 </script>

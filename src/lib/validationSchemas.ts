@@ -30,25 +30,82 @@ export const profileAvatar = yup.object({
     file: yup.mixed().required('File required').test('Size test', 'File too large', value => value.size <= 5000000),
 })
 
+yup.addMethod(yup.mixed, 'anyTrue', function anyTrue(message){
+    return this.test('any-true', message, function (v) {
+        const { path, createError } = this;
+
+        console.log(Object.entries(v))
+        console.log(Object.entries(v).filter(([key,val])=> key != "length").some(
+            ([key, val]) => {
+                return val == true; 
+            }
+        ))
+        if (Object.entries(v).every(
+            ([key, val]) => {
+                return val == false; 
+            }
+        )){
+            console.log('error created')
+            return createError({ path, message: message ?? 'At least one must be chosen'});
+        }
+
+        return true;
+    })  
+})
+
+import * as vest from 'vest';
+
 export const addReflectionSchema = yup.object().shape({
     title: yup.string().required('Title required'),
     text_content: yup.string().required('Text content required'),
     tags: yup.array().of(yup.string()).required(),
-    categories: yup.array().transform(value => value === [] ? null : value).of(yup.string()).min(1, 'At least one category is required').required('Categories are required'),
-    files: yup.array().of(yup.object()).required(),
+    // categories: yup.array().transform(v => v === [] ? null : v).of(yup.string()).min(1, 'At least one category is required').required('Categories are required'),
+    categories_error: yup.mixed().nullable(),
+    creativity: yup.boolean().required(),
+    activity: yup.boolean().required(),
+    service: yup.boolean().required(),
+    files: yup.array().ensure().required(),
     oneTag: yup.string().nullable(),
+}).test(function (v) {
+    const valid = ['creativity', 'activity', 'service'].some(field => v[field] == true);
+
+    if (valid) return true;
+    return this.createError({
+        path: 'categories_error',
+        message: 'At least one category must be chosen'
+    })
 })
 
 export const editReflectionSchema = yup.object().shape({
-    attachments: yup.mixed().nullable(),
     title: yup.string().required('Title required'),
     text_content: yup.string().required('Text content required'),
     tags: yup.array().of(yup.string()).required(),
-    // categories: yup.array().nullable(),
+    categories_error: yup.mixed().nullable(),
+    creativity: yup.boolean().required(),
+    activity: yup.boolean().required(),
+    service: yup.boolean().required(),
+    // categories: yup.mixed().test({ name: 'anyTrue', test: function(values) {
+    //     const valid = ['creativity', 'activity', 'service'].some(field => values[field] == true);
+
+    //     if (valid) return true;
+    //     return this.createError({
+    //         path: 'cat_error    ',
+    //         message: 'At least one category must be chosen'
+    //     })
+    // }}).required(),
     // categories: yup.array().transform(value => value === [] ? null : value).of(yup.string()).min(1, 'At least one category is required').required('Categories are required'),
     delete_uuids: yup.array().of(yup.string()).nullable(),
+    attachments: yup.array().nullable(),
     files: yup.array().nullable(),
     oneTag: yup.string().nullable(),
+    }).test(function (v) {
+    const valid = ['creativity', 'activity', 'service'].some(field => v[field] == true);
+
+    if (valid) return true;
+    return this.createError({
+        path: 'categories_error',
+        message: 'At least one category must be chosen'
+    })
 })
 
 export const passwordRecoverySchema = yup.object().shape({

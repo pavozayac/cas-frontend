@@ -1,6 +1,7 @@
 <script lang="ts">
 import { currentProfile } from 'api/Profile';
 import { route } from 'api/utils';
+import { router } from 'tinro';
 
      import { profileStore } from 'stores/profile'
      import { onMount } from 'svelte';
@@ -13,7 +14,10 @@ import { route } from 'api/utils';
                     body: JSON.stringify(res),
                     mode: 'no-cors',
                     credentials: 'include'
-               }).then(res=>profileStore.set(1))
+               }).then(res=>{
+                    profileStore.set(1);
+                    router.goto('/');
+               })
                
                console.log($profileStore)
           }

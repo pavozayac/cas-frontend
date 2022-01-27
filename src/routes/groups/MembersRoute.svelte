@@ -16,8 +16,8 @@ import ThinButton from "lib/components/generic/ThinButton.svelte";
 
 export let group_id: string
 
-let [profilesStore, reload] = swr(filterProfiles, "profiles", [{group_id: group_id}, {first_name: 'asc'}])
-let [groupStore, reloadGroup] = swr(getGroup, "group", [group_id])
+let [profilesStore, reload] = swr(filterProfiles, "profiles", [{group_id: group_id}, {first_name: 'asc'}]);
+let [groupStore, reloadGroup] = swr(getGroup, "group", [group_id]);
 
 
 function coordinatorFirst(profiles: BulkProfile[], coordinator_id){

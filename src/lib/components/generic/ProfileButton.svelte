@@ -12,16 +12,13 @@
     export let error = false;
     export let noName = false;
 
-    let profileData: Writable<Promise<Profile>> = writable(new Promise(() => {}));
+    // let profileData: Writable<Promise<Profile>> = writable(new Promise(() => {}));
 
-    if (id !== null) {
-        let [dataStore] = swr(
-            current ? currentProfile : getProfile,
-            "profiles",
-            current ? [] : [id]
-        );
-        profileData = dataStore;
-    }
+    let [profileData] = swr(
+        current ? currentProfile : getProfile,
+        "profiles",
+        current ? [] : [id],
+    );
 </script>
 
 {#await $profileData then profile}
@@ -69,9 +66,13 @@
     }
 
     .profile-name {
+        width: 8rem;
         font-size: 1rem;
         font-weight: 400;
         margin-right: 1rem;
+        box-sizing: border-box;
         text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 </style>

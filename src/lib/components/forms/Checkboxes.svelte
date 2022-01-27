@@ -1,31 +1,49 @@
 <script lang="ts">
+import { some } from "d3";
+
 import { onMount } from "svelte";
 
 
     export let items: Record<string, any>
     export let name: string
     export let text: string
-    export let initialValue
+    // export let initialValue
     export let errors
+    export let touched
+    export let setError
     export let formData
-    export let setInit = true
+    export let setInit = true;
 
-    console.log('inVal', initialValue)
+    // console.log('inVal', initialValue)
 
-    onMount(() => {
-        if (setInit) {
-            $formData[name] = initialValue
-            $errors[name] = null
-        }
-    })
+    // onMount(() => {
+    //     if (setInit) {
+    //         $formData[name] = initialValue
+    //         $errors = {
+    //             ...$errors,
+    //             categories: null
+    //         }
+    //     }
+    // })
+
+    // $: if ($errors[name] && $errors[name][0] && typeof $errors[name][0] == "object") {
+    //     console.log("bruh", $errors[name])
+    //     $errors = {
+    //         ...$errors,
+    //         categories: null
+    //     }
+    // }    
 </script>
 
-<div class="container" class:error={$errors[name] && typeof $errors[name] == "string"}>
+<div data-felte-reporter-tippy-position-for={`${name}_error`} />
+
+<input name={`${name}_error`} />
+<div class="container" class:error={$errors[`${name}_error`] != null && !Object.entries(items).some(([key,value]) => $touched[value] == false ) }>
     {text}
-    {#each Object.entries(items) as [key, value], index}
+    {#each Object.entries(items) as [key, value], index (value)}
         <div class="radio-wrapper" class:first={index == 0}>
             <label class="radio-label">
-            <input type="checkbox" name={name} {value} checked={$formData.categories && $formData.categories.includes(value)} />
+            <input type="checkbox" name={value} {value} checked={$formData[value] == true} />
                 <div class="checkmark">{key}</div>  
             </label>
         </div>

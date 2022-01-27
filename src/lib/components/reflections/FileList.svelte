@@ -30,7 +30,7 @@
 </script>
 
 <div class="wrapper">
-    {#if $formData.files}
+    {#if $formData && $formData.files}
         {#each $formData.files as file}
             <div class="file">
                 {#if validImageTypes.includes(file.type)}

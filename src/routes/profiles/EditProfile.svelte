@@ -21,7 +21,7 @@ import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svel
     import SideMenu from "lib/components/navigation/SideMenu.svelte";
     import { profileAvatar, profileUpdateSchema } from "lib/validationSchemas";
 
-    let [profileStore, reload] = swr(currentProfile, "currentProfile", []);
+    const [profileStore, reload] = swr(currentProfile, "currentProfile", []);
 </script>
 
 <Nav />
@@ -46,11 +46,12 @@ import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svel
                                 initialValues={{
                                     first_name: profile.first_name,
                                     last_name: profile.last_name,
-                                    // post_visibility: profile.post_visibility
+                                    post_visibility: profile.post_visibility
                                 }}
                                 let:errors
+                                let:data={formData}
                                 validationSchema={profileUpdateSchema}
-                                submitAction={values => {updateProfile(values); reload()}}
+                                submitAction={async values => {await updateProfile(values); reload()}}
                             >
                                 <TextField
                                     {errors}
@@ -63,7 +64,7 @@ import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svel
                                     type="text"
                                 />
                                 <RadioGroup
-                                    initialValue={0}
+                                    {formData}
                                     text="Post visibility"
                                     name="post_visibility"
                                     items={{
@@ -77,9 +78,11 @@ import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svel
                             </Form>
                         </div>
                         <div class="form-wrapper">
+                            {#if profile.avatar}
                             <div class="avatar-wrapper">
                                 <img class="avatar-preview" src={avatarSrc(profile.avatar)} alt="Profile avatar" />
                             </div>
+                            {/if}
 
                             <Form
                                 let:errors
@@ -87,7 +90,7 @@ import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svel
                                 submitAction={updateProfileAvatar}
                             >
                                 <FileField {errors} name="file" />
-                                <Submit text="Change avatar" />
+                                <Submit text={profile.avatar ? "Change avatar" : "Upload avatar"} />
                             </Form>
                         </div>
                     </Divider>

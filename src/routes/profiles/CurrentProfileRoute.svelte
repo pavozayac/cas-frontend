@@ -42,8 +42,8 @@ import { group } from "d3";
                             />
                         {:else}
                             <div
-                                style="background: red;"
-                                class="profile-icon"
+                            style="background: var(--bg-grey);"
+                            class="profile-icon"
                             />
                         {/if}
                         <span class="profile-name">
@@ -63,13 +63,14 @@ import { group } from "d3";
                         </div>
                     </div>
                 </div>
-                <ProfileReflections fetcher={filterReflections} kind={'currentProfileReflections'} args={[
+                <ProfileReflections fetcher={filterReflections} kind={'currentProfileReflectionsNew'} args={[
                     {
                         date_added: 'desc'
                     }, 
                     {
                         profile_id: profile.id
-                    }
+                    },
+                    false
                 ]} />
             {/await}
         </CenterWrapper>

@@ -2,7 +2,7 @@
     import Container from "lib/components/Container.svelte";
     import { beforeUpdate, onMount } from "svelte";
     import { currentProfile, getProfile } from "api/Profile";
-    import type { Profile } from 'api/Profile';
+    import type { Profile } from "api/Profile";
     import Card from "lib/components/reflections/ReflectionCard.svelte";
     import ThinButton from "lib/components/generic/ThinButton.svelte";
     import CenterWrapper from "lib/components/CenterWrapper.svelte";
@@ -13,25 +13,26 @@
     import { filterReflections } from "api/Reflection";
     import ProfileReflections from "lib/components/generic/ReflectionsList.svelte";
     import InformationTile from "lib/components/generic/InformationTile.svelte";
-    import { router } from 'tinro'
+    import { router } from "tinro";
+import { getGroup } from "api/Groups";
 
     // export let profile: Profile;
     export let meta;
 
     if (meta.params.id) {
-        console.log('bruhbruh')
+        console.log("bruhbruh");
     }
 
     const [dataStore] = swr(getProfile, "getProfile", [Number(meta.params.id)]);
-    
-    beforeUpdate(async ()=>{
+
+    beforeUpdate(async () => {
         try {
             let prof = await $dataStore;
         } catch (err) {
-            console.log('bruhbruh')
-            router.goto('/')
-        }   
-    })
+            console.log("bruhbruh");
+            router.goto("/");
+        }
+    });
 
     // onMount(async () => {
     //     try {
@@ -60,7 +61,7 @@
                             />
                         {:else}
                             <div
-                                style="background: red;"
+                                style="background: var(--bg-grey);"
                                 class="profile-icon"
                             />
                         {/if}
@@ -74,6 +75,30 @@
                             <InformationTile iconName={"create"} label={"Posts"}
                                 >23</InformationTile
                             >
+                            {#if profile.group_id}
+                            {#await getGroup(profile.group_id) then group}
+                                <a
+                                    class="card-container"
+                                    href={`/groups/${group.id}`}
+                                >
+                                    <div class="group-icon">
+                                        <img
+                                            src={groupAvatarSrc(group.avatar)}
+                                            alt="Group avatar"
+                                        />
+                                    </div>
+                                    <div class="text-container">
+                                        <h2>{group.name}</h2>
+                                        <p>
+                                            {group.description}
+                                        </p>
+                                    </div>
+                                    <div class="graduation-container">
+                                        {group.graduation_year}
+                                    </div>
+                                </a>
+                            {/await}
+                            {/if}
                         </div>
                     </div>
                 </div>

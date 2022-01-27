@@ -7,10 +7,10 @@
     export let submitAction: (value: any) => any
     export let validationSchema
     export let initialValues: Record<string, any> = null
-    export let extraValidate: (any: any, any1: any) => {} = () => {return {}}
+    export let extraValidate: (any: any, any1: any, any2?: any) => {} = () => {return {}}
     export let onError: (errors: any) => any = (errors) => errors
 
-    const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit, setField, setError, setTouched, validate, reset } = createForm({
+    const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit, setField, setError, setTouched, validate, reset, touched } = createForm({
         onSubmit: async values => {
             // console.log('bruh')
             // console.log(values)
@@ -18,25 +18,26 @@
 
         },
         onError: onError,
-        validate: async (values) => await extraValidate(values, setTouched),
         extend: [validator, reporter({
             tippyProps: {
-                trigger: 'submit'
+                trigger: 'submit',
+                allowHTML: true
             }
         })],
         validateSchema: validationSchema,
+        validate: (values) => extraValidate(values, setTouched, setError),
         initialValues: initialValues
     })
     // const key = 'formKey'
     // setContext(key, data)
-    onMount(() => {
-        if (initialValues !== undefined && initialValues !== null) {
-            console.log('Form valid', $errors);
-            Object.entries(validationSchema).forEach(([key, value]) => {
-                setError(key, null);
-            })
-        }
-    })
+    // onMount(() => {
+    //     if (initialValues !== undefined && initialValues !== null) {
+    //         console.log('Form valid', $errors);
+    //         Object.entries(validationSchema).forEach(([key, value]) => {
+    //             setError(key, null);
+    //         })
+    //     }
+    // })
 
 
     // const altSubmit = createSubmitHandler({
@@ -58,7 +59,7 @@
 {@debug $data}
 
 <form use:form>
-    <slot {errors} {data} {setField} {setError} {handleSubmit} {validate} ></slot>
+    <slot {errors} {data} {setField} {setError} {handleSubmit} {validate} {touched}></slot>
 </form>
 
 <style>

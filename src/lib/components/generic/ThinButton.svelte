@@ -1,19 +1,29 @@
 <script lang="ts">
-    export let target: string
+    export let target: string = null
+    export let action = null
     export let fullIconName: string = ''
     export let text: string
     export let style: string = ''
 </script>
 
-<a href={target} style={style}>
+{#if target}
+<a href={target} {style}>
     {#if fullIconName}
         <span class="material-icons-round">{fullIconName}</span>
     {/if}
     <span class="text">{text}</span>
 </a>
+{:else}
+<button on:click={action} {style}>
+    {#if fullIconName}
+        <span class="material-icons-round">{fullIconName}</span>
+    {/if}
+    <span class="text">{text}</span>
+</button>
+{/if}
 
 <style>
-    a {
+    a, button {
         display: inline-flex;
         align-items: center;
         padding: 0.5rem;
@@ -27,6 +37,10 @@
     }   
 
     a:hover {
+        background: var(--bg-grey-lower);
+    }
+
+    button:hover {
         background: var(--bg-grey-lower);
     }
 

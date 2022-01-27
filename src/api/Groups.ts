@@ -80,6 +80,24 @@ export async function getGroup(id: string): Promise<Group> {
     }
 }
 
+export async function deleteGroup(id: string): Promise<Group> {
+    try {
+        const res = await fetch(route(`groups/${id}`), {
+            method: 'DELETE',
+            credentials: 'include',
+            mode: 'cors',
+        })
+
+        if (res.status != 200) {
+            throw await res.text()
+        }
+
+        return await res.json();
+    } catch (err) {
+        throw err
+    }
+}
+
 
 export async function updateGroupAvatar(values) {
     let file: File = values.file

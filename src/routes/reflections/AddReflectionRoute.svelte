@@ -18,24 +18,27 @@
     import Submit from "lib/components/forms/Submit.svelte";
     import { postReflection } from "api/Reflection";
 
-    function extraValidate(values, setTouched) {
+    function extraValidate(values, setTouched, setError) {
         const errors = {};
-        console.log(values);
         console.log(values);
         console.log("Valuestags: " + values.tags);
         console.log("Valuesfiles: " + values.files);
 
         if (typeof values.tags === "undefined" || values?.tags.length < 1) {
             errors.oneTag = "Must have at least one tag";
+        } else {
+            setError('tags', null);
         }
 
         if (typeof values.files === "undefined" || values?.files.length < 1) {
             errors.attachments = "Must have at least one attachment";
+        } else {
+            setError('attachments', null);
         }
-        if (true){
-        // if (values.categories && values?.categories.length > 1) {
-            setTouched('categories')
-        }
+        // if (true){
+        // // if (values.categories && values?.categories.length > 1) {
+        //     setTouched('categories')
+        // }
 
         return errors;
     }
@@ -53,9 +56,11 @@
                 validationSchema={addReflectionSchema}
                 let:errors
                 let:data={formData}
+                let:touched
                 let:setField
+                let:setError
                 let:validate
-                submitAction={postReflection}
+                submitAction={async values => {console.log(values); await postReflection(values)}}
             >
                 <TextField {errors} name="title" type="text" />
                 <TextArea {errors} name="text_content" />
@@ -69,14 +74,13 @@
                 >
                     <TagButton {validate} {formData} {setField} />
                 </TextField>
-                <TagsList {formData} />
+                <TagsList {setError} {formData} />
                 <div data-felte-reporter-tippy-position-for="categories" />
                 <Checkboxes
+                    {touched}
                     {errors}
                     name="categories"
                     text="Categories"
-                    initialValue={undefined}
-                    setInit={false}
                     {formData}
                     items={{
                         Creativity: "creativity",

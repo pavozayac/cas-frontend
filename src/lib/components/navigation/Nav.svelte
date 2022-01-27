@@ -205,7 +205,7 @@
                             />
                         {:else}
                             <div
-                                style="background: var(--bg-darker-grey);"
+                                style="background: var(--bg-grey-lower);"
                                 class="profile-icon"
                             />
                         {/if}
@@ -293,6 +293,10 @@
         font-size: 1rem;
         font-weight: 400;
         margin-right: 1rem;
+        width: 10rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     .logo-wrapper {

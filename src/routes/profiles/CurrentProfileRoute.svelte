@@ -42,8 +42,8 @@ import { group } from "d3";
                             />
                         {:else}
                             <div
-                            style="background: var(--bg-grey);"
-                            class="profile-icon"
+                                style="background: var(--bg-grey);"
+                                class="profile-icon"
                             />
                         {/if}
                         <span class="profile-name">

@@ -8,11 +8,13 @@
     import Submit from "lib/components/forms/Submit.svelte";
     import TextField from "lib/components/forms/TextField.svelte";
     import { passowrdResetSchema } from "lib/validationSchemas";
+import { router } from "tinro";
 
     export let meta;
 
     const submitAction = async (values) => {
         await resetPassword(meta.params.code, values);
+        router.goto('/sign-in');
     };
 </script>
 
@@ -21,7 +23,11 @@
             <CenterWrapper> -->
     <div class="wrapper">
         <h2>Reset password</h2>
-        <Form validationSchema={passowrdResetSchema} {submitAction} let:errors>
+        <Form validationSchema={passowrdResetSchema} {submitAction} let:errors onError={()=>{
+            return {
+                email: "Invalid reset code or email"
+            }
+        }}>
             <TextField
                 {errors}
                 name="email"

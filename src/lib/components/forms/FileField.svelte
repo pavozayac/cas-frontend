@@ -10,7 +10,7 @@
     <label class="label" for={name}>
         {label}
     </label>
-    <input class:error={$errors[name]} type="file" {name} id={name} />
+    <input class:error={$errors[name]} type="file" accept="image/*" {name} id={name} />
 </div>
 
 

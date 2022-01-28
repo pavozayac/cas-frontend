@@ -152,3 +152,21 @@ export async function updateProfileAvatar(values): Promise<void> {
         throw err
     }
 }
+
+export async function leaveGroup() {
+    try {
+        const res = await fetch(route(`profiles/current/leave-group`), {
+            method: 'PUT',
+            credentials: 'include',
+            mode: 'cors',
+        })
+
+        if (res.status != 200) {
+            throw await res.text();
+        }
+
+        return await res.json();
+    } catch (err) {
+        throw err
+    }
+} 

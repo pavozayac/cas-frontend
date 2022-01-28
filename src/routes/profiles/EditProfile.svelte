@@ -1,11 +1,12 @@
 <script lang="ts">
     import {
         currentProfile,
+        leaveGroup,
         updateProfile,
         updateProfileAvatar,
     } from "api/Profile";
     import { swr } from "api/swr";
-import { avatarSrc } from "api/utils";
+    import { avatarSrc, route } from "api/utils";
 
     import CenterWrapper from "lib/components/CenterWrapper.svelte";
     import Container from "lib/components/Container.svelte";
@@ -15,11 +16,14 @@ import { avatarSrc } from "api/utils";
     import Submit from "lib/components/forms/Submit.svelte";
     import TextField from "lib/components/forms/TextField.svelte";
     import Divider from "lib/components/generic/Divider.svelte";
-import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
+    import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
     import ThinButton from "lib/components/generic/ThinButton.svelte";
     import Nav from "lib/components/navigation/Nav.svelte";
     import SideMenu from "lib/components/navigation/SideMenu.svelte";
     import { profileAvatar, profileUpdateSchema } from "lib/validationSchemas";
+    import { getGroup } from "api/Groups";
+    import InformationTile from "lib/components/generic/InformationTile.svelte";
+    import { router } from "tinro";
 
     const [profileStore, reload] = swr(currentProfile, "currentProfile", []);
 </script>
@@ -33,7 +37,8 @@ import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svel
             <CenterWrapper>
                 <div class="wrapper">
                     <LeftCenterRightFlex>
-                        <ThinButton slot="left"
+                        <ThinButton
+                            slot="left"
                             target="/profiles/current"
                             fullIconName="arrow_back"
                             text="Back to profile"
@@ -46,12 +51,15 @@ import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svel
                                 initialValues={{
                                     first_name: profile.first_name,
                                     last_name: profile.last_name,
-                                    post_visibility: profile.post_visibility
+                                    post_visibility: profile.post_visibility,
                                 }}
                                 let:errors
                                 let:data={formData}
                                 validationSchema={profileUpdateSchema}
-                                submitAction={async values => {await updateProfile(values); reload()}}
+                                submitAction={async (values) => {
+                                    await updateProfile(values);
+                                    reload();
+                                }}
                             >
                                 <TextField
                                     {errors}
@@ -79,9 +87,13 @@ import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svel
                         </div>
                         <div class="form-wrapper">
                             {#if profile.avatar}
-                            <div class="avatar-wrapper">
-                                <img class="avatar-preview" src={avatarSrc(profile.avatar)} alt="Profile avatar" />
-                            </div>
+                                <div class="avatar-wrapper">
+                                    <img
+                                        class="avatar-preview"
+                                        src={avatarSrc(profile.avatar)}
+                                        alt="Profile avatar"
+                                    />
+                                </div>
                             {/if}
 
                             <Form
@@ -90,8 +102,30 @@ import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svel
                                 submitAction={updateProfileAvatar}
                             >
                                 <FileField {errors} name="file" />
-                                <Submit text={profile.avatar ? "Change avatar" : "Upload avatar"} />
+                                <Submit
+                                    text={profile.avatar
+                                        ? "Change avatar"
+                                        : "Upload avatar"}
+                                />
                             </Form>
+                            {#if profile.group_id}
+                                {#await getGroup(profile.group_id) then group}
+                                    <InformationTile
+                                        iconName="people"
+                                        label="Group"
+                                        style="margin-bottom: 1rem; margin-top: 1rem;"
+                                        >{group.name}</InformationTile
+                                    >
+                                    <Submit
+                                        on:click={async () => {
+                                            await leaveGroup();
+                                            router.goto("/profiles/current");
+                                        }}
+                                        red
+                                        text="Leave group"
+                                    />
+                                {/await}
+                            {/if}
                         </div>
                     </Divider>
                 </div>
@@ -122,8 +156,8 @@ import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svel
 
     .avatar-preview {
         object-fit: cover;
-        height: 15rem;
-        width: 15rem;
+        height: 10rem;
+        width: 10rem;
         border-radius: 9999px;
     }
 </style>

@@ -14,7 +14,8 @@
     import ProfileReflections from "lib/components/generic/ReflectionsList.svelte";
     import InformationTile from "lib/components/generic/InformationTile.svelte";
     import { router } from "tinro";
-import { getGroup } from "api/Groups";
+    import { getGroup } from "api/Groups";
+
 
     // export let profile: Profile;
     export let meta;
@@ -73,31 +74,23 @@ import { getGroup } from "api/Groups";
                                 >{profile.date_joined}</InformationTile
                             >
                             <InformationTile iconName={"create"} label={"Posts"}
-                                >23</InformationTile
+                                >{profile.reflections_count }</InformationTile
                             >
                             {#if profile.group_id}
-                            {#await getGroup(profile.group_id) then group}
-                                <a
-                                    class="card-container"
-                                    href={`/groups/${group.id}`}
-                                >
-                                    <div class="group-icon">
-                                        <img
-                                            src={groupAvatarSrc(group.avatar)}
-                                            alt="Group avatar"
-                                        />
-                                    </div>
-                                    <div class="text-container">
-                                        <h2>{group.name}</h2>
-                                        <p>
-                                            {group.description}
-                                        </p>
-                                    </div>
-                                    <div class="graduation-container">
-                                        {group.graduation_year}
-                                    </div>
-                                </a>
-                            {/await}
+                                {#await getGroup(profile.group_id) then group}
+                                    <InformationTile
+                                        hoverable
+                                        on:click={() => router.goto(`/groups/${profile.group_id}`)}
+                                        iconName="people"
+                                        label="Group"
+                                        >{group.name}</InformationTile
+                                    >
+                                    <InformationTile
+                                        iconName="school"
+                                        label="Graduation"
+                                        >{group.graduation_year}</InformationTile
+                                    >
+                                {/await}
                             {/if}
                         </div>
                     </div>

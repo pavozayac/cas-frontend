@@ -113,7 +113,7 @@ import { router, meta } from "tinro";
                             <button
                                 class="year-button"
                                 on:click={() => {
-                                    $year = $year - 1;
+                                    $year = Math.max($year - 1, new Date().getFullYear() - 3); 
                                     reload();
                                 }}
                             >
@@ -125,7 +125,7 @@ import { router, meta } from "tinro";
                             <button
                                 class="year-button"
                                 on:click={() => {
-                                    $year = $year + 1;
+                                    $year = Math.min($year + 1, new Date().getFullYear()); 
                                     reload();
                                 }}
                             >
@@ -152,7 +152,7 @@ import { router, meta } from "tinro";
                         </InformationTile>
                         <InformationTile
                             label="Joined"
-                            iconName="entrance"
+                            iconName="star"
                         >
                             {new Date(profile.date_joined).getDay()} {new Date(profile.date_joined).toLocaleString('en-us', { month: 'short' })} {new Date(profile.date_joined).getFullYear()}
                         </InformationTile>

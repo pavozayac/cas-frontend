@@ -83,7 +83,7 @@ import InformationTile from "../generic/InformationTile.svelte";
         border-radius: 0.5rem;
         overflow: hidden;
         /* margin-top: 1.25rem; */
-        /* margin-bottom: 1.25rem; */
+        margin-bottom: 1rem;
         padding: 1rem;
         box-sizing: border-box;
     }

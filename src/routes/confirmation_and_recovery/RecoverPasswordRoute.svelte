@@ -1,5 +1,5 @@
 <script lang="ts">
-import { sendRecoveryRequest } from "api/Auth";
+    import { sendRecoveryRequest } from "api/Auth";
 
     import AbsoluteCenterContainer from "lib/components/AbsoluteCenterContainer.svelte";
     import CenterWrapper from "lib/components/CenterWrapper.svelte";
@@ -7,22 +7,31 @@ import { sendRecoveryRequest } from "api/Auth";
     import Form from "lib/components/forms/Form.svelte";
     import Submit from "lib/components/forms/Submit.svelte";
     import TextField from "lib/components/forms/TextField.svelte";
-import ThinButton from "lib/components/generic/ThinButton.svelte";
+    import ThinButton from "lib/components/generic/ThinButton.svelte";
     import { passwordRecoverySchema } from "lib/validationSchemas";
+    import { router } from "tinro";
 
     const submitAction = async (values) => {
-        await sendRecoveryRequest(values.email)
-    }
-
+        await sendRecoveryRequest(values.email);
+        router.goto("/sign-in");
+    };
 </script>
 
 <AbsoluteCenterContainer>
     <!-- <Container>
         <CenterWrapper> -->
-    <ThinButton target="/sign-in" text="Back to sign-in" fullIconName="arrow_back" />
+    <ThinButton
+        target="/sign-in"
+        text="Back to sign-in"
+        fullIconName="arrow_back"
+    />
     <div class="wrapper">
         <h2>Forgot my password</h2>
-        <Form validationSchema={passwordRecoverySchema} submitAction={submitAction} let:errors>
+        <Form
+            validationSchema={passwordRecoverySchema}
+            {submitAction}
+            let:errors
+        >
             <TextField
                 {errors}
                 name="email"

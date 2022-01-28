@@ -6,6 +6,10 @@
     import Preload from "lib/Preload.svelte";
     import { writable } from "svelte/store";
     import type { Writable } from "svelte/store";
+import Submit from "../forms/Submit.svelte";
+import ProfileButton from "../generic/ProfileButton.svelte";
+import InformationTile from "../generic/InformationTile.svelte";
+import { deleteMember } from "api/Groups";
 
     export let id: number = 0;
     export let error = false;
@@ -17,37 +21,19 @@
 
 {#await $profileData then profile}
     <div class="profile-info">
-        <div class="left">
-            {#if profile.avatar}
-                <img
-                    class="picture"
-                    src={avatarSrc(profile.avatar)}
-                    alt="Profile avatar"
-                />
-                <!-- <Preload alt="Profile picture" src={avatarSrc(profile.avatar)} /> -->
-            {:else}
-                <div
-                    class="picture"
-                    style="background: var(--bg-grey-lower);"
-                />
-            {/if}
-
-            {#if !noName}
-                <span class="profile-name"
-                    >{profile.first_name} {profile.last_name}</span
-                >
-            {/if}
-        </div>
+        <ProfileButton id={profile.id} />
         <div class="right">
-            <span class="posts">
+            <!-- <span class="posts">
                 <span class="material-icons-round">description</span>
                 {profile.reflections_count} post{profile.reflections_count == 1 ? '' : 's'}
-            </span>
+            </span> -->
+            <InformationTile transparent iconName="description">{profile.reflections_count} post{profile.reflections_count == 1 ? '' : 's'}</InformationTile>
             {#if deleteButton}
-            <button class="delete">
+            <Submit on:click={async () => { await deleteMember(profile.group_id, profile.id)}} text="Delete member" red />
+            <!-- <button class="delete">
                 Delete member
                 <span class="material-icons-round">logout</span>
-            </button>
+            </button> -->
             {/if}
         </div>
     </div>
@@ -92,13 +78,8 @@
         padding: 0.3rem 1rem;
         box-sizing: border-box;
         border-radius: 1rem;
-        cursor: pointer;
         transition: all 200ms;
         margin-bottom: 1rem;
-    }
-
-    .profile-info:hover {
-        filter: brightness(.9);
     }
 
     .profile-info .picture {

@@ -90,7 +90,7 @@ import Preload from "lib/Preload.svelte";
         align-items: center;
         padding-left: 1.25rem;
         padding-right: 1.25rem;
-        color: white;
+        color: black;
         transition: all 300ms;
         cursor: pointer;
     }

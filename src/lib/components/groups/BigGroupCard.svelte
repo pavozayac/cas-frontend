@@ -31,7 +31,7 @@ import InformationTile from "../generic/InformationTile.svelte";
             <span class="profile-name">{group.name}</span>
             <div class="detail-info">
                 <InformationTile style="grid-column-end: span 2;" iconName="description" label="Description">{group.description}</InformationTile>
-                <InformationTile iconName="star" label="Date of creation">{new Date(group.date_created).getDay()} {new Date(group.date_created).toLocaleString('en-us', { month: 'short' })} {new Date(group.date_created).getFullYear()}
+                <InformationTile iconName="star" label="Date of creation">{new Date(group.date_created).getDate()} {new Date(group.date_created).toLocaleString('en-us', { month: 'short' })} {new Date(group.date_created).getFullYear()}
                 </InformationTile>
                 <InformationTile iconName="person" label="Number of members">{group.members_count}</InformationTile>
                 <InformationTile iconName="create" label="Posts">{group.reflections_count}</InformationTile>

@@ -32,7 +32,7 @@ import { remove } from 'api/utils';
     {/if}
 
     <div class="label">
-        <button on:click={changeChecked}><span class="material-icons-round">close</span></button>
+        <button type="button" on:click={changeChecked}><span class="material-icons-round">close</span></button>
     </div>
 </div>
 

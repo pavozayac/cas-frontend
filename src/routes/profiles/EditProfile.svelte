@@ -31,7 +31,7 @@
 <Nav />
 <SideMenu />
 
-{#await $profileStore then profile}
+{#await currentProfile() then profile}
     <CenterWrapper>
         <Container>
             <CenterWrapper>
@@ -51,10 +51,11 @@
                                 initialValues={{
                                     first_name: profile.first_name,
                                     last_name: profile.last_name,
-                                    post_visibility: profile.post_visibility,
+                                    post_visibility: String(profile.post_visibility),
                                 }}
                                 let:errors
                                 let:data={formData}
+                                let:setField
                                 validationSchema={profileUpdateSchema}
                                 submitAction={async (values) => {
                                     await updateProfile(values);
@@ -72,7 +73,9 @@
                                     type="text"
                                 />
                                 <RadioGroup
+                                    initialValue={String(profile.post_visibility)}
                                     {formData}
+                                    {setField}
                                     text="Post visibility"
                                     name="post_visibility"
                                     items={{

@@ -50,7 +50,7 @@ import { group } from "d3";
                             {profile.first_name} {profile.last_name}
                         </span>
                         <div class="detail-info">
-                            <InformationTile iconName={'star'} label={'Joined'}>{new Date(profile.date_joined).getDay()} {new Date(profile.date_joined).toLocaleString('en-us', { month: 'short' })} {new Date(profile.date_joined).getFullYear()}</InformationTile>
+                            <InformationTile iconName={'star'} label={'Joined'}>{new Date(profile.date_joined).getDate()} {new Date(profile.date_joined).toLocaleString('en-us', { month: 'short' })} {new Date(profile.date_joined).getFullYear()}</InformationTile>
                             <InformationTile iconName={'create'} label={'Posts'}>
                             {#await filterReflections({}, {profile: { id: profile.id } }) then reflections}
                                 {reflections.length}
@@ -68,7 +68,9 @@ import { group } from "d3";
                         date_added: 'desc'
                     }, 
                     {
-                        profile_id: profile.id
+                        profile: {
+                            id: profile.id
+                        }
                     },
                     false
                 ]} />

@@ -1,8 +1,12 @@
 <script lang="ts">
+import { afterUpdate, beforeUpdate, onMount } from "svelte";
+
+
     export let items: Record<string, any>
     export let name: string
     export let text: string
     export let formData
+    export let setField: Function
     export let initialValue = null
 </script>
 
@@ -11,9 +15,9 @@
     {#each Object.entries(items) as [key, value], index (value)}
         <div class="radio-wrapper" class:first={index == 0}>
             <label class="radio-label" for={value}>
-                {#if value == $formData[name] || (initialValue != null && initialValue == value) }
+                {#if (initialValue != null && initialValue == String(value))  || value == $formData[name]}
                     <input id={value}  type="radio" name={name} value={value} checked/>
-                {:else}
+                {:else} 
                     <input id={value}  type="radio" name={name} value={value} />
                 {/if}
                 <div class="checkmark">{key}</div>

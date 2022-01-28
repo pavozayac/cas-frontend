@@ -71,7 +71,7 @@
                         >
                         <div class="detail-info">
                             <InformationTile iconName={"star"} label={"Joined"}
-                                >{profile.date_joined}</InformationTile
+                                >{new Date(profile.date_joined).getDate()} {new Date(profile.date_joined).toLocaleString('en-us', { month: 'short' })} {new Date(profile.date_joined).getFullYear()}</InformationTile
                             >
                             <InformationTile iconName={"create"} label={"Posts"}
                                 >{profile.reflections_count }</InformationTile

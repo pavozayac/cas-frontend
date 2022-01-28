@@ -154,7 +154,7 @@ import { router, meta } from "tinro";
                             label="Joined"
                             iconName="star"
                         >
-                            {new Date(profile.date_joined).getDay()} {new Date(profile.date_joined).toLocaleString('en-us', { month: 'short' })} {new Date(profile.date_joined).getFullYear()}
+                            {new Date(profile.date_joined).getDate()} {new Date(profile.date_joined).toLocaleString('en-us', { month: 'short' })} {new Date(profile.date_joined).getFullYear()}
                         </InformationTile>
                         <InformationTile
                             label="Total reflections"

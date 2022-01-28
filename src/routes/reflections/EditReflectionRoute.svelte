@@ -125,8 +125,8 @@ import ThinButton from "lib/components/generic/ThinButton.svelte";
                     let:setError
                     let:validate
                     {extraValidate}
-                    submitAction={async (values) => {
-                            await updateReflection(values, reflection_id);
+                    submitAction={(values) => {
+                            updateReflection(values, reflection_id);
                             router.goto('/profiles/current');
                         }
                     }

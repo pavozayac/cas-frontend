@@ -31,6 +31,7 @@
 </script>
 
 <Form
+    let:data={formData}
     let:errors
     let:handleSubmit
     validationSchema={registerSchema}
@@ -44,7 +45,8 @@
     <TextField {errors} name="password" type="password" />
     <TextField {errors} name="repeat_password" type="password" />
     <RadioGroup
-        initialValue={0}
+        {formData}
+        initialValue={Number(0)}
         text="Post visibility"
         name="post_visibility"
         items={{

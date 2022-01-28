@@ -4,8 +4,5 @@ import tsconfigpaths from 'vite-tsconfig-paths'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [tsconfigpaths(), svelte()],
-  optimizeDeps: {
-    include: ['@carbon/charts']
-  }
+  plugins: [tsconfigpaths(), svelte()]
 })

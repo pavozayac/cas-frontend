@@ -3,15 +3,19 @@
     export let name: string
     export let text: string
     export let formData
-    // export let initialValue
+    export let initialValue = null
 </script>
 
 <div class="container">
     {text}
     {#each Object.entries(items) as [key, value], index (value)}
         <div class="radio-wrapper" class:first={index == 0}>
-            <label class="radio-label">
-                <input  type="radio" name={name} value={value} checked={value == $formData[name]} />
+            <label class="radio-label" for={value}>
+                {#if value == $formData[name] || (initialValue != null && initialValue == value) }
+                    <input id={value}  type="radio" name={name} value={value} checked/>
+                {:else}
+                    <input id={value}  type="radio" name={name} value={value} />
+                {/if}
                 <div class="checkmark">{key}</div>
             </label>
         </div>

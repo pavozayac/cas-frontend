@@ -17,6 +17,8 @@
     import Checkboxes from "lib/components/forms/Checkboxes.svelte";
     import Submit from "lib/components/forms/Submit.svelte";
     import { postReflection } from "api/Reflection";
+import { router } from "tinro";
+import { announce } from "lib/components/announcer/announcer";
 
     function extraValidate(values, setTouched, setError) {
         const errors = {};
@@ -60,7 +62,7 @@
                 let:setField
                 let:setError
                 let:validate
-                submitAction={async values => {console.log(values); await postReflection(values)}}
+                submitAction={async values => {await postReflection(values); router.goto('/profiles/current'); announce('Posted.') }}
             >
                 <TextField {errors} name="title" type="text" />
                 <TextArea {errors} name="text_content" />

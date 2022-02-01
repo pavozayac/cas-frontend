@@ -1,6 +1,4 @@
 <script lang="ts">
-import { some } from "d3";
-
 import { onMount } from "svelte";
 
 
@@ -43,8 +41,12 @@ import { onMount } from "svelte";
     {#each Object.entries(items) as [key, value], index (value)}
         <div class="radio-wrapper" class:first={index == 0}>
             <label class="radio-label">
-            <input type="checkbox" name={value} {value} checked={$formData[value] == true} />
-                <div class="checkmark">{key}</div>  
+                <input type="checkbox" name={value} {value} checked={$formData[value] == true} />
+                <div class="checkmark">
+                    <span class="material-icons-round">check</span>
+                    <span class="material-icons-round close">close</span>
+                    {key}
+                </div>  
             </label>
         </div>
     {/each}
@@ -103,6 +105,26 @@ import { onMount } from "svelte";
     input:checked + .checkmark {
         background: var(--accent-blue);
         color: white;
+    }
+
+    input:checked + .checkmark > .close {
+        display: none;
+    }
+
+    .checkmark {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    span {
+        margin-right: 1rem;
+        color: var(--bg-grey);
+    }
+
+    .close {
+        position: absolute;
+        color: black;
     }
 
 </style>

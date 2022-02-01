@@ -26,13 +26,14 @@ export function groupAvatarSrc(avatar){
     return `${backendUrl}groups/avatar/${avatar.id}`
 }
 
-export function remove(array, value){
-    for (let i = 0; i < array.length; i++){
-        if (array[i] == value){
-            array = array.splice(i+1, 1)
+export function remove(array: any[], value){
+    let copy = array;
+    for (let i = 0; i < copy.length; i++){
+        if (copy[i] == value){ 
+            copy.splice(copy.indexOf(value), 1);
         }
     }
-    return array
+    return copy;
 }
 
 export function hasObject(array, value){

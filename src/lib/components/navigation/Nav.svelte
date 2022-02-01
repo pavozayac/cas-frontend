@@ -2,7 +2,7 @@
     import Svg from "svelte-inline-svg";
     import Tiles from "./SideMenu.svelte";
     import { fade } from "svelte/transition";
-    import { menuVisible } from "stores/nav";
+    import { authorized, menuVisible } from "stores/nav";
     import DropDownNavMenu from "lib/components/navigation/DropDownNavMenu.svelte";
     import { onMount } from "svelte";
     import { currentProfile } from "api/Profile";
@@ -58,6 +58,7 @@
 
     async function logoutAction() {
         logout().then(()=>{
+            $authorized = false;
             router.goto("/sign-in", true);
         });
     }
@@ -529,7 +530,7 @@
 
     #searchBox {
         font-family: Rubik, sans-serif;
-        font-size: 1.125rem; /* 18px */
+        font-size: 1rem; /* 18px */
         color: #222;
     }
 

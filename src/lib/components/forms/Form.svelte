@@ -14,7 +14,11 @@
         onSubmit: async values => {
             // console.log('bruh')
             // console.log(values)
-            await submitAction(values)
+            try {
+                await submitAction(values);
+            } catch (err) {
+                console.log('Form submission failed due to: ', err);
+            }
 
         },
         onError: onError,

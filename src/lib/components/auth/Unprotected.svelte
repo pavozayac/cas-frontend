@@ -6,14 +6,14 @@ import { route } from 'api/utils';
 
     export let redirect_route = '/';
 
+    let loaded = false;
+
     onMount (async () => {
-        try {
-            const prof = await currentProfile();
-            router.goto(redirect_route)
-        } finally {};
+        const prof = await currentProfile().then(() => router.goto(redirect_route)).catch(() => loaded = true);
     });
 
 </script>
 
+{#if loaded}
 <slot></slot>
-
+{/if}

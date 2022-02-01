@@ -5,7 +5,7 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "start": "sirv dist --single"
+    "start": "sirv dist --single -B"
   },
   "devDependencies": {
     "@carbon/charts-svelte": "^0.54.7",
@@ -18,6 +18,7 @@
     "svelte-preprocess": "^4.7.4",
     "typescript": "^4.2.3",
     "vite": "^2.1.5",
+    "vite-plugin-compression": "^0.5.1",
     "vite-tsconfig-paths": "^3.3.13"
   },
   "dependencies": {
@@ -28,14 +29,12 @@
     "@types/chartjs": "^0.0.31",
     "@types/gapi": "0.0.41",
     "axios": "^0.23.0",
+    "brotli": "^1.3.2",
     "chart.js": "^3.7.0",
     "esbuild": "^0.13.14",
     "felte": "^0.7.13",
     "material-design-icons": "^3.0.1",
     "node-sass": "^6.0.1",
-    "postcss-preset-env": "^6.7.0",
-    "postcss-short": "^5.0.0",
-    "postcss-utilities": "^0.8.4",
     "sass": "^1.37.5",
     "scss": "^0.2.4",
     "sirv-cli": "^1.0.14",
@@ -43,7 +42,6 @@
     "svelte-spa-router": "^3.2.0",
     "tinro": "^0.6.6",
     "tippy.js": "^6.3.1",
-    "vest": "^4.1.0",
     "vite-plugin-svelte": "^3.0.1",
     "vite-svg-loader": "^1.5.1",
     "yup": "^0.32.9"

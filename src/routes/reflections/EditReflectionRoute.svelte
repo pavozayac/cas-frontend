@@ -27,6 +27,7 @@
     import { router } from 'tinro';
 import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
 import ThinButton from "lib/components/generic/ThinButton.svelte";
+import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
 
     export let reflection_id: number;
 
@@ -112,7 +113,11 @@ import ThinButton from "lib/components/generic/ThinButton.svelte";
         <Container>
             <div class="wrapper">
                 <LeftCenterRightFlex>
-                    <ThinButton action={()=>{ deleteReflection(reflection_id); router.goto('/');}} style="float: right;" slot="right" text="Delete reflection" fullIconName="delete" />
+                    <div slot="right">
+                    <ConfirmModal let:show text="Are you sure you want to delete this reflection?" confirmText="Delete" denyText="Cancel" >
+                        <ThinButton action={() => {show(()=>{ deleteReflection(reflection_id); router.goto('/');}) }} style="float: right;" text="Delete reflection" fullIconName="delete" />
+                    </ConfirmModal>
+                    </div>
                 </LeftCenterRightFlex>
                 <h1>Now editing: {reflection.title}</h1>
                 <Form

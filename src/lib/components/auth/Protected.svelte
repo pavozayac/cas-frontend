@@ -4,6 +4,7 @@
     import { currentProfile } from "api/Profile";
     import { beforeUpdate, onMount } from "svelte";
     import { router } from "tinro";
+    import { authorized } from 'stores/nav';
 
     export let redirect_route = "/sign-in";
 
@@ -15,6 +16,8 @@
         try {
             const prof = await currentProfile();
 
+            $authorized = true;
+
             if (coordinator == true && meta.params.id) {
                 const group = await getGroup(meta.params.id);
 
@@ -23,9 +26,12 @@
                 }
             }
         } catch (err) {
+            $authorized = false;
             router.goto(redirect_route);
         }
     });
 </script>
 
+{#if $authorized}
 <slot />
+{/if}

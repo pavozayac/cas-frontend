@@ -66,10 +66,11 @@
     }
 
     .profile-name {
-        width: 8rem;
+        max-width: 8rem;
         font-size: 1rem;
         font-weight: 400;
         margin-right: 1rem;
+        margin-left: 1rem;
         box-sizing: border-box;
         text-overflow: ellipsis;
         overflow: hidden;

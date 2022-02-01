@@ -61,7 +61,7 @@
         background: var(--bg-grey);
         resize: vertical;
         font-family: Rubik, sans-serif;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         /* min-si */
     }
 

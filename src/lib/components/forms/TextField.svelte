@@ -62,6 +62,7 @@
         background: white;
         padding: 1rem 2rem;
         background: var(--bg-grey);
+        font-family: Rubik, sans-serif;
     }
 
     input:focus {

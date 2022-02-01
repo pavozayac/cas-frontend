@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Announcer from "lib/components/announcer/Announcer.svelte";
   import { meta, Route, router } from "tinro";
   import Nav from "lib/components/navigation/Nav.svelte";
   import Index from "routes/index.svelte";
@@ -91,6 +92,8 @@
 {@debug authed} -->
 
 <!-- Unprotected -->
+
+<Announcer />
 
 <Route path="/sign-in">
   <Unprotected>

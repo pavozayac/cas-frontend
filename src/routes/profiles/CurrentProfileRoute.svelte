@@ -13,7 +13,6 @@
     import ProfileReflections from "../../lib/components/generic/ReflectionsList.svelte";
 import InformationTile from "lib/components/generic/InformationTile.svelte";
 import { getGroup } from "api/Groups";
-import { group } from "d3";
 
     const [dataStore] = swr(currentProfile, "currentProfile", []);
 </script>

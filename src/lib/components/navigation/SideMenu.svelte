@@ -1,12 +1,12 @@
 <script lang="ts">
-import { getGroup } from "api/Groups";
+    import { getGroup } from "api/Groups";
 
     import { currentProfile } from "api/Profile";
 
     import { swr } from "api/swr";
 
     import { menuElements } from "lib/constants";
-import ManageGroupButton from "./ManageGroupButton.svelte";
+    import ManageGroupButton from "./ManageGroupButton.svelte";
 
     export let nav = false;
 
@@ -45,7 +45,7 @@ import ManageGroupButton from "./ManageGroupButton.svelte";
         width: 14rem;
         position: fixed;
         top: 50%;
-        left: 5rem;
+        left: calc(50% - 40rem);
         transform: translateY(-50%);
         background: transparent;
         background: var(--bg-grey-lower);

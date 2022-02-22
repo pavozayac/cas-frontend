@@ -17,8 +17,8 @@
     import Checkboxes from "lib/components/forms/Checkboxes.svelte";
     import Submit from "lib/components/forms/Submit.svelte";
     import { postReflection } from "api/Reflection";
-import { router } from "tinro";
-import { announce } from "lib/components/announcer/announcer";
+    import { router } from "tinro";
+    import { announce } from "lib/components/announcer/announcer";
 
     function extraValidate(values, setTouched, setError) {
         const errors = {};

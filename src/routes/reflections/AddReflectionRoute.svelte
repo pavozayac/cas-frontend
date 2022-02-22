@@ -52,6 +52,7 @@ import { announce } from "lib/components/announcer/announcer";
 <CenterWrapper>
     <Container>
         <div class="wrapper">
+            <button on:click={() => announce('A random long anonouncement.')}>butt</button>
             <h1>Post a reflection</h1>
             <Form
                 {extraValidate}
@@ -62,7 +63,7 @@ import { announce } from "lib/components/announcer/announcer";
                 let:setField
                 let:setError
                 let:validate
-                submitAction={async values => {await postReflection(values); router.goto('/profiles/current'); announce('Posted.') }}
+                submitAction={async values => {await postReflection(values); router.goto('/profiles/current'); announce('Reflection posted.') }}
             >
                 <TextField {errors} name="title" type="text" />
                 <TextArea {errors} name="text_content" />

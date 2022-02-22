@@ -18,7 +18,7 @@
 </script>
 
 {#if visible}
-<div class="notification" transition:fade={{duration: 100}}>
+<div class="announcement" transition:fade={{duration: 100}}>
     {text}
     <button on:click={() => visible = false} class="close">
         <span class="material-icons-round">close</span>
@@ -27,7 +27,7 @@
 {/if}
 
 <style>
-    .notification {
+    .announcement {
         pointer-events: all;
         opacity: 0.7;
         background: #000000;
@@ -35,7 +35,8 @@
         border-radius: .5rem;
         color: white;
         padding: 1rem;
-        width: 10rem;
+        min-width: 10rem;
+        max-width: 15rem;
         margin-bottom: 1rem;
         display: flex;
         flex-direction: row;

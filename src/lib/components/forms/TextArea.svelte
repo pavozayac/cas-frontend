@@ -47,7 +47,7 @@
     } */
 
     .error {
-        box-shadow: 0 0 0 1.5px var(--accent-red);
+        box-shadow: 0 0 0 2px var(--accent-red);
     }
     textarea {
         margin-top: 0.5rem;

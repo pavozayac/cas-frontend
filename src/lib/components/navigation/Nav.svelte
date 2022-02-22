@@ -294,7 +294,8 @@
         font-size: 1rem;
         font-weight: 400;
         margin-right: 1rem;
-        width: 10rem;
+        min-width: 5rem;
+        max-width: 10rem;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;

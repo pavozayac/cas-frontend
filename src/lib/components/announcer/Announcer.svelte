@@ -1,12 +1,12 @@
 <script lang="ts">
     import { fade } from "svelte/transition";
-    import Notification from "./Notification.svelte";
+    import Announcement from "./Announcement.svelte";
     import { currentNotifications } from "./announcer";
 </script>
 
 <div on:click class="wrapper">
     {#each $currentNotifications as notification}
-        <Notification text={notification} />
+        <Announcement text={notification} />
     {/each}
 </div>
 

@@ -36,6 +36,7 @@ import Phase from "../transitions/Phase.svelte";
         padding: 1rem;
         box-sizing: border-box;
         border-radius: .5rem;
+        margin-top: .5rem;
         margin-bottom: .5rem;
         width: 100%;
         overflow: hidden;
@@ -47,7 +48,7 @@ import Phase from "../transitions/Phase.svelte";
     }
 
     .error {
-        box-shadow: 0 0 0 1.5px var(--accent-red);
+        box-shadow: 0 0 0 2px var(--accent-red);
     }
     input {
         margin-top: .5rem;

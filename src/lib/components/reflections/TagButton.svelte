@@ -23,6 +23,7 @@
         font-family: Rubik, sans-serif;
         cursor: pointer;
         padding: 1rem;
+        margin-left: 1rem;
         height: 100%;
         background: var(--accent-blue);
         color: white;

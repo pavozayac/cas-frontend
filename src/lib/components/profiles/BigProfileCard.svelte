@@ -103,7 +103,9 @@
                             date_added: "desc",
                         },
                         {
-                            profile_id: profile.id,
+                            profile: {
+                                id: profile.id
+                            },
                         },
                     ]}
                 />

@@ -16,11 +16,20 @@ import { afterUpdate, beforeUpdate, onMount } from "svelte";
         <div class="radio-wrapper" class:first={index == 0}>
             <label class="radio-label" for={value}>
                 {#if (initialValue != null && initialValue == String(value))  || value == $formData[name]}
-                    <input id={value}  type="radio" name={name} value={value} checked/>
+                    <input id={value} type="radio" name={name} value={value} checked/>
                 {:else} 
-                    <input id={value}  type="radio" name={name} value={value} />
+                    <input id={value} type="radio" name={name} value={value} />
                 {/if}
-                <div class="checkmark">{key}</div>
+                <div class:checked={value == $formData[name]} class="checkmark">
+                    <span class="material-icons-round">
+                        {#if value == $formData[name]}
+                            radio_button_checked
+                        {:else}
+                            radio_button_unchecked
+                        {/if}
+                    </span>
+                    {key}
+                </div>
             </label>
         </div>
     {/each}
@@ -59,10 +68,15 @@ import { afterUpdate, beforeUpdate, onMount } from "svelte";
 
     .checkmark {
         width: 100%;
-        padding: 1rem 2rem;
+        padding: 1rem 1rem;
         box-sizing: border-box;
         cursor: pointer;
         transition: 100ms;
+        display: flex;
+    }
+
+    .checkmark span {
+        margin-right: 1rem;
     }
 
     input {
@@ -72,7 +86,7 @@ import { afterUpdate, beforeUpdate, onMount } from "svelte";
         margin: 0;
     }
 
-    input:checked + .checkmark {
+    .checked {
         background: var(--accent-blue);
         color: white;
     }

@@ -31,8 +31,9 @@ import { router } from "tinro";
             {#if searchPhrase}
                 <h2>Searching for: {searchPhrase}</h2>
             {/if}
-            {#await $dataStore then reflectionIDs}
-                {#each reflectionIDs as reflection}
+            
+            {#await $dataStore then [items, count]}
+                {#each items as reflection}
                     <Card id={reflection.id} />
                 {/each}
             {/await}

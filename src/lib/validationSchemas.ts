@@ -13,7 +13,6 @@ export const registerSchema = yup.object({
     repeat_password: yup.string().required('Password is required').oneOf([yup.ref('password')], 'Passwords must match'),
     first_name: yup.string().required('First name is required'),
     last_name: yup.string().required('Last name is required'),
-    post_visibility: yup.number().oneOf([0, 1, 2]).required('Post visibility is required'),
 })
 
 export const profileUpdateSchema = yup.object({
@@ -53,13 +52,12 @@ yup.addMethod(yup.mixed, 'anyTrue', function anyTrue(message){
     })  
 })
 
-import * as vest from 'vest';
-
 export const addReflectionSchema = yup.object().shape({
     title: yup.string().required('Title required'),
     text_content: yup.string().required('Text content required'),
     tags: yup.array().of(yup.string()).required(),
     // categories: yup.array().transform(v => v === [] ? null : v).of(yup.string()).min(1, 'At least one category is required').required('Categories are required'),
+    post_visibility: yup.number().oneOf([0, 1, 2]).required('Post visibility is required'),
     categories_error: yup.mixed().nullable(),
     creativity: yup.boolean().required(),
     activity: yup.boolean().required(),
@@ -80,6 +78,7 @@ export const editReflectionSchema = yup.object().shape({
     title: yup.string().required('Title required'),
     text_content: yup.string().required('Text content required'),
     tags: yup.array().of(yup.string()).required(),
+    post_visibility: yup.number().oneOf([0, 1, 2]).required('Post visibility is required'),
     categories_error: yup.mixed().nullable(),
     creativity: yup.boolean().required(),
     activity: yup.boolean().required(),

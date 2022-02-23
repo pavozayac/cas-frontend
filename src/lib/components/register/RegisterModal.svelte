@@ -44,17 +44,6 @@
     <br />
     <TextField {errors} name="password" type="password" />
     <TextField {errors} name="repeat_password" type="password" />
-    <RadioGroup
-        {formData}
-        initialValue={Number(0)}
-        text="Post visibility"
-        name="post_visibility"
-        items={{
-            "Only you can see your posts": 0,
-            "Only your group can see your posts": 1,
-            "Anybody can see your posts": 2,
-        }}
-    />
     <br />
     <Submit text="Register" />
 </Form>

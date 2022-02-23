@@ -11,7 +11,7 @@
     const [reflectionsStore, reload] = swr(fetcher, kind, args);
 </script>
 
-{#await $reflectionsStore then reflections}
+{#await $reflectionsStore then [reflections, count]}
     <div class="posts-container">
         {#each reflections as reflection}
             <Card id={reflection.id} />

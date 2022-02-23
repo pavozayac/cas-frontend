@@ -19,6 +19,7 @@
     import { postReflection } from "api/Reflection";
     import { router } from "tinro";
     import { announce } from "lib/components/announcer/announcer";
+import RadioGroup from "lib/components/forms/RadioGroup.svelte";
 
     function extraValidate(values, setTouched, setError) {
         const errors = {};
@@ -89,6 +90,17 @@
                         Creativity: "creativity",
                         Activity: "activity",
                         Service: "service",
+                    }}
+                />
+                <RadioGroup
+                    {formData}
+                    initialValue={Number(0)}
+                    text="Post visibility"
+                    name="post_visibility"
+                    items={{
+                        "Only you and the coordinator can see your posts": 0,
+                        "Only your group can see your posts": 1,
+                        "Anybody can see your posts": 2,
                     }}
                 />
                 <MultipleFileField {formData} {errors} name="attachments" />

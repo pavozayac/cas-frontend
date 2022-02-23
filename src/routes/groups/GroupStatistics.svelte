@@ -26,7 +26,7 @@ import { writable } from "svelte/store";
     }
     
     async function fetcher() {
-        const all = await filterReflections({}, {
+        const [all] = await filterReflections({}, {
             profile: {
                 group_id: group_id
             },
@@ -34,7 +34,7 @@ import { writable } from "svelte/store";
             date_added_gte: formatDate(new Date($year, 11, 31)),
         }, true)
 
-        const creativity = await filterReflections({}, {
+        const [creativity] = await filterReflections({}, {
             creativity: true,
             profile: {
                 group_id: group_id
@@ -42,7 +42,7 @@ import { writable } from "svelte/store";
             date_added_lte: formatDate(new Date($year, 0, 1)),
             date_added_gte: formatDate(new Date($year, 11, 31)),            
         }, true)
-        const activity = await filterReflections({}, {
+        const [activity] = await filterReflections({}, {
             activity: true,
             profile: {
                 group_id: group_id
@@ -50,7 +50,7 @@ import { writable } from "svelte/store";
             date_added_lte: formatDate(new Date($year, 0, 1)),
             date_added_gte: formatDate(new Date($year, 11, 31)),
         }, true)
-        const service = await filterReflections({}, {
+        const [service] = await filterReflections({}, {
             service: true,
             profile: {
                 group_id: group_id

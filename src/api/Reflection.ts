@@ -15,6 +15,7 @@ export interface Reflection {
     slug: string,
     title: string
     text_content: string,
+    post_visibility: number,
     creativity: boolean,
     activity: boolean,
     service: boolean,
@@ -37,6 +38,7 @@ export interface ReflectionFilters {
     service?: boolean,
     date_added_gte?: string,
     date_added_lte?: string,
+    post_visibility?: number,
     profile?: {
         id?: number,
         group_id?: string,
@@ -60,6 +62,7 @@ export async function postReflection(values) {
     let data = {
         title: values.title,
         text_content: values.text_content,
+        post_visibility: values.post_visibility,
         creativity: values.creativity,
         activity: values.activity,
         service: values.service,
@@ -112,6 +115,7 @@ export async function updateReflection(values, reflection_id: number) {
     let data = {
         title: values.title,
         text_content: values.text_content,
+        post_visibility: values.post_visibility,
         creativity: values.creativity,
         activity: values.activity,
         service: values.service,
@@ -193,8 +197,9 @@ export async function filterReflections(sorts: ReflectionSorts, filters: Reflect
         if (res.status != 200) {
             throw await res.text()
         }
+        const body = await res.json();
 
-        return await res.json();
+        return [body.items, body.count];
     } catch (err) {
         throw err
     }

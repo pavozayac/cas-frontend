@@ -8,9 +8,7 @@
     import TextField from "lib/components/forms/TextField.svelte";
     import Nav from "lib/components/navigation/Nav.svelte";
     import SideMenu from "lib/components/navigation/SideMenu.svelte";
-    import {
-        editReflectionSchema,
-    } from "lib/validationSchemas";
+    import { editReflectionSchema } from "lib/validationSchemas";
     import { subscribe } from "svelte/internal";
     import TagButton from "lib/components/reflections/TagButton.svelte";
     import TagsList from "lib/components/reflections/TagsList.svelte";
@@ -18,16 +16,21 @@
     import FileList from "lib/components/reflections/FileList.svelte";
     import Checkboxes from "lib/components/forms/Checkboxes.svelte";
     import Submit from "lib/components/forms/Submit.svelte";
-    import { deleteReflection, getReflection, updateReflection } from "api/Reflection";
+    import {
+        deleteReflection,
+        getReflection,
+        updateReflection,
+    } from "api/Reflection";
     import type { Reflection } from "api/Reflection";
 
     import { swr } from "api/swr";
     import DeleteFileField from "lib/components/forms/DeleteFileField.svelte";
 
-    import { router } from 'tinro';
-import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
-import ThinButton from "lib/components/generic/ThinButton.svelte";
-import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
+    import { router } from "tinro";
+    import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
+    import ThinButton from "lib/components/generic/ThinButton.svelte";
+    import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
+import RadioGroup from "lib/components/forms/RadioGroup.svelte";
 
     export let reflection_id: number;
 
@@ -47,10 +50,11 @@ import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
         // }
 
         if (
-            values.delete_uuids.length == values.attachments.length && (!values.files || (values.files && values.files.length == 0))
+            values.delete_uuids.length == values.attachments.length &&
+            (!values.files || (values.files && values.files.length == 0))
         ) {
-            console.log('fileediterrors')
-            errors.oneFile = "There must be at least one file attached"
+            console.log("fileediterrors");
+            errors.oneFile = "There must be at least one file attached";
         }
 
         return errors;
@@ -81,7 +85,7 @@ import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
             creativity: reflection.creativity,
             activity: reflection.activity,
             service: reflection.service,
-        }
+        };
     }
 
     function transformInitialValues(reflection: Reflection) {
@@ -94,13 +98,14 @@ import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
             title: reflection.title,
             text_content: reflection.text_content,
             tags: newTags,
+            post_visibility: reflection.post_visibility,
             // categories: Array(...transformInitialCategories(reflection)),
             ...transformInitialCategories(reflection),
             delete_uuids: [],
             attachments: reflection.attachments,
             files: [],
             oneTag: null,
-            id: reflection.id
+            id: reflection.id,
         };
     }
 </script>
@@ -114,9 +119,24 @@ import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
             <div class="wrapper">
                 <LeftCenterRightFlex>
                     <div slot="right">
-                    <ConfirmModal let:show text="Are you sure you want to delete this reflection?" confirmText="Delete" denyText="Cancel" >
-                        <ThinButton action={() => {show(()=>{ deleteReflection(reflection_id); router.goto('/');}) }} style="float: right;" text="Delete reflection" fullIconName="delete" />
-                    </ConfirmModal>
+                        <ConfirmModal
+                            let:show
+                            text="Are you sure you want to delete this reflection?"
+                            confirmText="Delete"
+                            denyText="Cancel"
+                        >
+                            <ThinButton
+                                action={() => {
+                                    show(() => {
+                                        deleteReflection(reflection_id);
+                                        router.goto("/");
+                                    });
+                                }}
+                                style="float: right;"
+                                text="Delete reflection"
+                                fullIconName="delete"
+                            />
+                        </ConfirmModal>
                     </div>
                 </LeftCenterRightFlex>
                 <h1>Now editing: {reflection.title}</h1>
@@ -131,10 +151,9 @@ import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
                     let:validate
                     {extraValidate}
                     submitAction={(values) => {
-                            updateReflection(values, reflection_id);
-                            router.goto('/profiles/current');
-                        }
-                    }
+                        updateReflection(values, reflection_id);
+                        router.goto("/profiles/current");
+                    }}
                 >
                     <!-- {errors.subscribe(val => console.log(val))} -->
                     <TextField {errors} name="title" type="text" />
@@ -150,7 +169,9 @@ import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
                         <TagButton {validate} {formData} {setField} />
                     </TextField>
                     <TagsList {setError} {formData} />
-                    <div data-felte-reporter-tippy-position-for="categories_error" />
+                    <div
+                        data-felte-reporter-tippy-position-for="categories_error"
+                    />
                     <Checkboxes
                         {touched}
                         {errors}
@@ -162,6 +183,17 @@ import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
                             Service: "service",
                         }}
                         {formData}
+                    />
+                    <RadioGroup
+                        {formData}
+                        initialValue={Number(reflection.post_visibility)}
+                        text="Post visibility"
+                        name="post_visibility"
+                        items={{
+                            "Only you and the coordinator can see your posts": 0,
+                            "Only your group can see your posts": 1,
+                            "Anybody can see your posts": 2,
+                        }}
                     />
                     <DeleteFileField
                         {formData}

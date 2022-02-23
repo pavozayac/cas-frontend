@@ -109,13 +109,19 @@
             </div>
             <div class="categories">
                 {#if reflection.creativity}
-                    <div class="category creativity">Creativity</div>
+                    <div class="category">
+                        <span class="creativity material-icons-round">radio_button_checked</span>Creativity
+                    </div>
                 {/if}
                 {#if reflection.activity}
-                    <div class="category activity">Activity</div>
+                    <div class="category">
+                        <span class="activity material-icons-round">radio_button_checked</span>Activity
+                    </div>
                 {/if}
                 {#if reflection.service}
-                    <div class="category service">Service</div>
+                    <div class="category">
+                        <span class="service material-icons-round">radio_button_checked</span>Service
+                    </div>
                 {/if}
             </div>
             <ProfileButton id={reflection.profile_id} />
@@ -293,22 +299,26 @@
         border-radius: 9999px;
         padding: 0.3rem 0.5rem;
         background: var(--bg-grey);
+        margin-right: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
+    .category span {
+        margin-right: .5rem;
     }
 
     .creativity {
-        text-decoration: underline 2px; 
-        text-decoration-color: var(--accent-blue);
+        color: var(--accent-blue);
     }
 
     .activity {
-        text-decoration: underline 2px; 
-        text-decoration-color: var(--accent-red);
+        color: var(--accent-red);
     }
 
     .service {
-        text-decoration: underline 2px; 
-        text-decoration-color: var(--accent-green);
+        color: var(--accent-green);
     }
 
     @media screen and (min-width: 768px) {

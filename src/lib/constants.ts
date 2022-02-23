@@ -21,3 +21,5 @@ export const menuElements: MenuElement[] = [
 
 export const validImageTypes = ["image/gif", "image/jpeg", "image/png"]
 export const validImageExtensions = ["gif", "jpeg", "png", "jpg"]
+
+export const pageLimit = 2

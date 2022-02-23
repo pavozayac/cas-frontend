@@ -46,3 +46,8 @@ export function hasObject(array, value){
     }
     return result
 }
+
+export interface Pagination {
+    limit: number;
+    page: number;
+}

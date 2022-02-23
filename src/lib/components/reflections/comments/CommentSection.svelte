@@ -2,6 +2,7 @@
 import { queryComments } from "api/Comment";
 import { currentProfile } from "api/Profile";
 import { swr } from "api/swr";
+import { pageLimit } from "lib/constants";
 
     import type { Writable } from "svelte/store";
     import { slide } from "svelte/transition";
@@ -11,7 +12,15 @@ import { swr } from "api/swr";
     export let commentsVisible: Writable<boolean>;
     export let reflection_id: number
 
-    let [commentsStore, reload] = swr(queryComments, 'comments', [reflection_id]);
+    let [commentsStore, reload] = swr(queryComments, 'comments', [reflection_id, {
+        sorts: {
+            date_added: 'desc'
+        }, 
+        pagination: {
+            limit: pageLimit,
+            page: 0
+        }
+    }]);
     let [profileStore] = swr(currentProfile, 'currentProfile', []);
 
 

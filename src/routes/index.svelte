@@ -7,17 +7,45 @@
     import { filterReflections } from "api/Reflection";
     import { onMount } from "svelte";
     import { swr } from "api/swr";
-import { router } from "tinro";
+    import { router } from "tinro";
+    import Pager from "lib/components/generic/Pager.svelte";
+import { pageLimit } from "lib/constants";
+import { writable } from "svelte/store";
 
     export let query: Record<string, string>;
 
-    const [dataStore, reload] = swr(filterReflections, "indexReflections", [{date_added: 'desc'}, {full_text_con: query.q || undefined}]);
+    let args = writable({
+        sorts: {date_added: 'desc'}, 
+        filters: {full_text_con: query.q || undefined},
+        pagination: {
+            limit: pageLimit,
+            page: 0
+        }
+    });
+
+    const [dataStore, reload] = swr(filterReflections, "indexReflections", [$args]);
 
     let searchPhrase = '';
 
+    const pageStore = writable(0);
+    
+
     router.subscribe(route => {
-        reload([{date_added: 'desc'}, {full_text_con: route.query.q || undefined}]);
+        $args = {
+            sorts: {date_added: 'desc'}, 
+            filters: {full_text_con: route.query.q || undefined},
+            pagination: {
+                limit: pageLimit,
+                page: 0
+            }
+        };
+
+        reload([$args]);
         searchPhrase = route.query.q || null;
+
+        $pageStore = 0;
+
+        
     })
 
 </script>
@@ -36,6 +64,8 @@ import { router } from "tinro";
                 {#each items as reflection}
                     <Card id={reflection.id} />
                 {/each}
+                <Pager {args} {count} {reload} {pageStore} /> 
+
             {/await}
         </CenterWrapper>
     </Container>

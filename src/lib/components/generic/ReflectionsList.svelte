@@ -2,6 +2,7 @@
     import { filterReflections } from "api/Reflection";
     import { swr } from "api/swr";
     import Card from "lib/components/reflections/ReflectionCard.svelte";
+import Pager from "./Pager.svelte";
 
     // export let profile_id: number;
     export let fetcher: (...args: any[]) => Promise<any>
@@ -16,6 +17,7 @@
         {#each reflections as reflection}
             <Card id={reflection.id} />
         {/each}
+        <Pager reload={reload} args={args} count={count}/>
     </div>
 {/await}
 

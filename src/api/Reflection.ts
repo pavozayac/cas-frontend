@@ -1,6 +1,6 @@
 import { writable, Writable } from 'svelte/store'
 import type { BulkComment } from './Comment'
-import { route, hasObject } from './utils'
+import { route, hasObject, Pagination } from './utils'
 
 interface Attachment {
     filename: string,
@@ -177,18 +177,21 @@ export async function updateReflection(values, reflection_id: number) {
     }
 }
 
-export async function filterReflections(sorts: ReflectionSorts, filters: ReflectionFilters, detail: boolean = false): Promise<BulkReflection[] | Reflection[]> {
-    const filterRoute = detail ? route('reflections/query-detail') : route('reflections/query');
+export interface FilterBody {
+    sorts: ReflectionSorts;
+    filters: ReflectionFilters;
+    pagination: Pagination;
+}
+
+export async function filterReflections(request: FilterBody): Promise<[BulkReflection[], number]> {
+    const filterRoute = route('reflections/query');
 
     try {
         const res = await fetch(filterRoute, {
             method: 'POST',
             credentials: 'include',
             mode: 'cors',
-            body: JSON.stringify({
-                sorts: sorts,
-                filters: filters
-            }),
+            body: JSON.stringify(request),
             headers: {
                 'Content-Type': 'application/json'
             }

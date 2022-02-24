@@ -8,19 +8,20 @@ import { swr } from "api/swr";
 
     import ProfileButton from "lib/components/generic/ProfileButton.svelte";
 
-    export let comment: Comment;
+    // export let comment: Comment;
     export let current_profile_id: number;
-    export let reload: Function
-    // export let reflection_id;
+    export let reload: Function;
+    export let comment_id: number;
+    export let reflection_id: number;
 
-    // let [commentStore] = swr(getComment, 'comment', [reflection_id, comment_id]);
+    let [commentStore] = swr(getComment, 'comment', [reflection_id, comment_id]);
 
     
 
 </script>
-<!-- 
-{#await $commentStore}
-<div class="comment">
+
+{#await $commentStore then comment}
+<!-- <div class="comment">
     <ProfileButton noName id={null} />
     <p class="comment-text">Loading</p>
 </div>
@@ -34,7 +35,7 @@ import { swr } from "api/swr";
         </button>
     {/if}
 </div>
-<!-- {/await} -->
+{/await}
 
 <style>
     .comment {

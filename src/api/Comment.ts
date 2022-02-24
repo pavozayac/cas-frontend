@@ -22,7 +22,7 @@ export interface FilterBody {
     pagination: Pagination;
 }
 
-export async function queryComments(reflection_id, filters: FilterBody): Promise<Comment[]> {
+export async function queryComments(reflection_id, filters: FilterBody): Promise<[BulkComment[], number]> {
     try {
         const res = await fetch(route(`reflections/${reflection_id}/comments/query`), {
             method: 'POST',
@@ -37,8 +37,9 @@ export async function queryComments(reflection_id, filters: FilterBody): Promise
         if (res.status != 200) {
             throw await res.text();
         }
-
-        return await res.json();
+        
+        const resBody = await res.json();
+        return [resBody.items, resBody.count];
 
     } catch (err) {
         throw err;

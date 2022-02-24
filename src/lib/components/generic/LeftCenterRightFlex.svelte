@@ -1,4 +1,8 @@
-<div class="wrapper">
+<script lang="ts">
+    export let style: string = "";
+</script>
+
+<div class="wrapper" {style}>
     <div class="left">
         <slot name="left"></slot>
     </div>

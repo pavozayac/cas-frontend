@@ -11,8 +11,19 @@
     import { onMount } from "svelte";
     import type { Reflection } from "api/Reflection";
     import { swr } from "api/swr";
+    import { writable } from "svelte/store";
+import Pager from "lib/components/generic/Pager.svelte";
 
-    const [dataStore] = swr(filterFavouriteReflections, "bookmarks", []);
+    const args = writable({
+        filters: {},
+        sorts: {
+            date_added: "desc",
+        },
+    });
+
+    const pageStore = writable(0);
+
+    const [dataStore, reload] = swr(filterFavouriteReflections, "bookmarks", [$args]);
 </script>
 
 <Nav />
@@ -21,10 +32,11 @@
 <CenterWrapper>
     <Container>
         <CenterWrapper>
-            {#await $dataStore then reflections}
+            {#await $dataStore then [reflections, count]}
                 {#each reflections as reflection}
                     <Card id={reflection.id} />
                 {/each}
+                <Pager {args} {count} {reload} {pageStore} />
             {/await}
         </CenterWrapper>
     </Container>

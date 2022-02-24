@@ -2,11 +2,13 @@
     import { pageLimit } from "lib/constants";
 
     import type { Writable } from "svelte/store";
+import LeftCenterRightFlex from "./LeftCenterRightFlex.svelte";
 
     export let args: Writable<Record<any, any>>;
     export let count: number;
     export let pageStore: Writable<number>;
     export let reload: Function;
+    export let extraArguments = [];
 
     // currentPage.subscribe(value => {
     //     reload([...args, {
@@ -23,6 +25,7 @@
             $pageStore = $pageStore + 1;
 
             reload([
+                ...extraArguments,
                 {
                     ...$args,
                     pagination: {
@@ -41,6 +44,7 @@
             $pageStore = $pageStore - 1;
 
             reload([
+                ...extraArguments,
                 {
                     ...$args,
                     pagination: {
@@ -53,33 +57,49 @@
     }
 </script>
 
-<div class="container">
-    {#if $pageStore > 0}
-    <button on:click={previous}>
-        <span class="material-icons-round">chevron_left</span>
-    </button>
-    {/if}
+<LeftCenterRightFlex style="margin-bottom: 1rem;">
+    <div slot="left" class="button-container left">
+        {#if $pageStore > 0}
+            <button on:click={previous}>
+                <span class="material-icons-round">chevron_left</span>
+            </button>
+        {/if}
+    </div>
 
-    <div class="indicator">
-        {$pageStore + 1}
-    </div> 
-    <div class="of">of {count / pageLimit}</div>
+    <div slot="center" class="indicator-wrapper">
+        <div class="indicator">
+            {$pageStore + 1}
+        </div> 
+        <div class="of">of {Math.ceil(count / pageLimit)}</div>
+    </div>
 
-    {#if $pageStore < (count / pageLimit) - 1}
-    <button on:click={next}>
-        <span class="material-icons-round">chevron_right</span>
-    </button>
-    {/if}
-</div>
-
+    <div slot="right" class="button-container right">
+        {#if $pageStore < (count / pageLimit) - 1}
+        <button on:click={next}>
+            <span class="material-icons-round">chevron_right</span>
+        </button>
+        {/if}
+    </div>
+</LeftCenterRightFlex>
 <style>
-    .container {
+    .button-container {
         display: flex;
         flex-direction: row;
-        justify-content: center;
         align-items: center;
         font-family: Rubik, sans-serif;
-        margin-bottom: 2rem;
+    }
+    .left {
+        justify-content: flex-end;
+    }
+
+    .right {
+        justify-content: flex-start;
+    }
+
+    .indicator-wrapper {
+        display: flex;
+        align-items: center;
+        font-family: Rubik, sans-serif;
     }
 
     .indicator {

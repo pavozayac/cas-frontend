@@ -280,17 +280,12 @@ export async function unfavouriteReflection(reflection_id: number) {
     }
 }
 
-export async function filterFavouriteReflections(): Promise<Reflection[]> {
+export async function filterFavouriteReflections(reqBody): Promise<[Reflection[], number]> {
     try {
         const res = await fetch(route('reflections/favourites'), {
             method: 'POST',
             credentials: 'include',
-            body: JSON.stringify({
-                filters: {},
-                sorts: {
-                    "date_added": 'desc'
-                }
-            }),
+            body: JSON.stringify(reqBody),
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -300,8 +295,9 @@ export async function filterFavouriteReflections(): Promise<Reflection[]> {
         if (res.status != 200) {
             throw 'Current profile unavailable'
         }
-
-        return res.json()
+        
+        const resBody = await res.json();
+        return [resBody.items, resBody.count];
     } catch (err) {
         throw err
     }

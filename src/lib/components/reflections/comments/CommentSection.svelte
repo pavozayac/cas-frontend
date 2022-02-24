@@ -1,9 +1,11 @@
 <script lang="ts">
-import { queryComments } from "api/Comment";
-import { currentProfile } from "api/Profile";
-import { swr } from "api/swr";
-import { pageLimit } from "lib/constants";
+    import { queryComments } from "api/Comment";
+    import { currentProfile } from "api/Profile";
+    import { swr } from "api/swr";
+    import Pager from "lib/components/generic/Pager.svelte";
+    import { pageLimit } from "lib/constants";
 
+    import { writable } from "svelte/store";
     import type { Writable } from "svelte/store";
     import { slide } from "svelte/transition";
     import AddCommentBox from "./AddCommentBox.svelte";
@@ -12,21 +14,26 @@ import { pageLimit } from "lib/constants";
     export let commentsVisible: Writable<boolean>;
     export let reflection_id: number
 
-    let [commentsStore, reload] = swr(queryComments, 'comments', [reflection_id, {
+    const pageStore = writable(0);
+
+    const args = writable({
         sorts: {
             date_added: 'desc'
         }, 
         pagination: {
             limit: pageLimit,
-            page: 0
+            page: $pageStore
         }
-    }]);
-    let [profileStore] = swr(currentProfile, 'currentProfile', []);
+    });
 
+
+    let [commentsStore, reload] = swr(queryComments, 'comments', [reflection_id, $args]);
+
+    let [profileStore] = swr(currentProfile, 'currentProfile', []);
 
 </script>
 {#await $profileStore then profile}
-{#await $commentsStore then comments}
+{#await $commentsStore then [comments, count]}
 {#if $commentsVisible}
 
 <div class="comment-section" transition:slide|local>
@@ -35,7 +42,7 @@ import { pageLimit } from "lib/constants";
     <div class="comments-wrapper">
         {#if comments.length > 0}
             {#each comments as comment}
-                <Comment {reload} {comment} current_profile_id={profile.id} />
+                <Comment {reload} comment_id={comment.id} current_profile_id={profile.id} {reflection_id} />
             {/each}
         {:else}
             <div class="no-comments">
@@ -43,6 +50,8 @@ import { pageLimit } from "lib/constants";
             </div>
         {/if}
     </div>
+
+    <Pager extraArguments={[reflection_id]} {args} {count} {reload} {pageStore} />
 
     <button
         class="close-button"

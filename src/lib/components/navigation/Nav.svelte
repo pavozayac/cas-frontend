@@ -57,7 +57,7 @@
     }*/
 
     async function logoutAction() {
-        logout().then(()=>{
+        logout().then(() => {
             $authorized = false;
             router.goto("/sign-in", true);
         });
@@ -68,7 +68,7 @@
 
     function searchRedirect() {
         router.goto(`/?q=${searchQuery}`);
-        searchQuery = '';
+        searchQuery = "";
     }
 </script>
 
@@ -169,9 +169,17 @@
                 on:click={() => ($menuVisible = !$menuVisible)}
                 ><span class="material-icons-round">menu</span></button
             >
-            <input id="searchBox" class="searchbox" placeholder="Search" bind:value={searchQuery} />
+            <input
+                id="searchBox"
+                class="searchbox"
+                placeholder="Search"
+                bind:value={searchQuery}
+            />
             <div class="search-button-wrapper">
-                <button id="searchButton" class="search-button" on:click={searchRedirect}
+                <button
+                    id="searchButton"
+                    class="search-button"
+                    on:click={searchRedirect}
                     ><span
                         id="searchIcon"
                         class="search-icon material-icons-round">search</span
@@ -205,9 +213,10 @@
                                 src={avatarSrc(profile.avatar)}
                             />
                         {:else}
-                            <div
-                                style="background: var(--bg-grey-lower);"
+                            <img
+                                alt="Profile picture"
                                 class="profile-icon"
+                                src="/graphics/user.svg"
                             />
                         {/if}
                     </div>
@@ -287,6 +296,7 @@
         width: 3rem;
         height: 3rem;
         object-fit: cover;
+        outline: var(--bg-grey-lower) 2px solid;
     }
 
     .profile-name {

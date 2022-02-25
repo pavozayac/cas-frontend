@@ -97,89 +97,97 @@
 
 <!-- {@debug bookmarked} -->
 
-{#await refPromise then reflection}
+{#await refPromise}
+
+<div class="placeholder">
+    <span class="material-icons-round">hourglass_empty</span>
+</div>
+    
+{:then reflection}
     <!-- <Container>
         <Loading />
     </Container> -->
 <!-- {:then reflection} -->
     <div class="card-container" in:fade={{duration: 150 }}>
-        <div class="top-widgets">
-            <div class="date">
-                {new Date(reflection.date_added).getDay()} {new Date(reflection.date_added).toLocaleString('en-us', { month: 'short' })} {new Date(reflection.date_added).getFullYear()}
-            </div>
-            <div class="categories">
-                {#if reflection.creativity}
-                    <div class="category">
-                        <span class="creativity material-icons-round">radio_button_checked</span>Creativity
-                    </div>
-                {/if}
-                {#if reflection.activity}
-                    <div class="category">
-                        <span class="activity material-icons-round">radio_button_checked</span>Activity
-                    </div>
-                {/if}
-                {#if reflection.service}
-                    <div class="category">
-                        <span class="service material-icons-round">radio_button_checked</span>Service
-                    </div>
-                {/if}
-            </div>
-            <ProfileButton id={reflection.profile_id} />
-        </div>
-
-        <div class="carousel-wrapper">
-            <Carousel
-                urls={reflection.attachments.map((attachment) =>
-                    attachmentSrc(reflection, attachment)
-                )}
-            />
-        </div>
-        <div class="text-section-wrapper">
-            <h2>
-                {reflection.title}
-            </h2>
-            <p>
-                {reflection.text_content}
-            </p>
-            <div class="tags">
-                {#each reflection.tags.slice(0, 5) as tag}
-                    <div class="tag">#{tag.name}</div>
-                {/each}
-            </div>
-            <div class="actions-buttons">
-                {#await $dataStore then bookmarkData}
-                <button
-                    class:bookmarked={bookmarkData.is_favourite}
-                    on:click={() => {
-                        toggleReflection(bookmarkData);
-                    }}
-                >
-                    <span class="material-icons-outlined"
-                        >{bookmarkData.is_favourite
-                            ? "done"
-                            : "bookmark_border"}</span
-                    >
-                    {bookmarkData.is_favourite ? "Bookmarked" : "Bookmark"}
-                </button>
-                {/await}
-                <button
-                    on:click={() => {
-                        $commentsVisible = !$commentsVisible;
-                        console.log($commentsVisible);
-                    }}
-                >
-                    <span class="material-icons-outlined">comment</span> Comments
-                </button>
-                {#await $profileStore then profile}
-                    {#if profile.id == reflection.profile_id}
-                        <a
-                            class="edit-button"
-                            href={`/reflection/${reflection.id}/edit`}
-                        >
-                            <span class="material-icons-outlined">edit</span> Edit
-                        </a>
+        <div class="reflection">
+            
+            <div class="top-widgets">
+                <div class="date">
+                    {new Date(reflection.date_added).getDay()} {new Date(reflection.date_added).toLocaleString('en-us', { month: 'short' })} {new Date(reflection.date_added).getFullYear()}
+                </div>
+                <div class="categories">
+                    {#if reflection.creativity}
+                        <div class="category">
+                            <span class="creativity material-icons-round">radio_button_checked</span>Creativity
+                        </div>
                     {/if}
-                {/await}
+                    {#if reflection.activity}
+                        <div class="category">
+                            <span class="activity material-icons-round">radio_button_checked</span>Activity
+                        </div>
+                    {/if}
+                    {#if reflection.service}
+                        <div class="category">
+                            <span class="service material-icons-round">radio_button_checked</span>Service
+                        </div>
+                    {/if}
+                </div>
+                <ProfileButton id={reflection.profile_id} />
+            </div>
+            <div class="carousel-wrapper">
+                <Carousel
+                    urls={reflection.attachments.map((attachment) =>
+                        attachmentSrc(reflection, attachment)
+                    )}
+                />
+            </div>
+            <div class="text-section-wrapper">
+                <h2>
+                    {reflection.title}
+                </h2>
+                <p>
+                    {reflection.text_content}
+                </p>
+                <div class="tags">
+                    {#each reflection.tags.slice(0, 5) as tag}
+                        <div class="tag">#{tag.name}</div>
+                    {/each}
+                </div>
+                <div class="actions-buttons">
+                    {#await $dataStore then bookmarkData}
+                    <button
+                        class:bookmarked={bookmarkData.is_favourite}
+                        on:click={() => {
+                            toggleReflection(bookmarkData);
+                        }}
+                    >
+                        <span class="material-icons-outlined"
+                            >{bookmarkData.is_favourite
+                                ? "done"
+                                : "bookmark_border"}</span
+                        >
+                        {bookmarkData.is_favourite ? "Bookmarked" : "Bookmark"}
+                    </button>
+                    {/await}
+                    <button
+                        on:click={() => {
+                            $commentsVisible = !$commentsVisible;
+                            console.log($commentsVisible);
+                        }}
+                    >
+                        <span class="material-icons-outlined">comment</span> Comments
+                    </button>
+                    {#await $profileStore then profile}
+                        {#if profile.id == reflection.profile_id}
+                            <a
+                                class="edit-button"
+                                href={`/reflection/${reflection.id}/edit`}
+                            >
+                                <span class="material-icons-outlined">edit</span> Edit
+                            </a>
+                        {/if}
+                    {/await}
+                </div>
             </div>
         </div>
         <CommentSection {commentsVisible} reflection_id={reflection.id} />
@@ -187,6 +195,20 @@
 {/await}
 
 <style>
+
+    .reflection {
+        height: 47rem;
+    }
+
+    .placeholder {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 47rem;
+        width: 100%;
+        margin-bottom: 1.25rem;
+    }
+
     .tags {
         width: 100%;
         display: flex;

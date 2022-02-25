@@ -178,9 +178,9 @@ export async function updateReflection(values, reflection_id: number) {
 }
 
 export interface FilterBody {
-    sorts: ReflectionSorts;
-    filters: ReflectionFilters;
-    pagination: Pagination;
+    sorts?: ReflectionSorts;
+    filters?: ReflectionFilters;
+    pagination?: Pagination;
 }
 
 export async function filterReflections(request: FilterBody): Promise<[BulkReflection[], number]> {

@@ -1,5 +1,7 @@
 <script lang="ts">
     import { pageLimit } from "lib/constants";
+import { scrollStore } from "stores/nav";
+import { onMount } from "svelte";
 
     import type { Writable } from "svelte/store";
 import LeftCenterRightFlex from "./LeftCenterRightFlex.svelte";
@@ -18,10 +20,7 @@ import LeftCenterRightFlex from "./LeftCenterRightFlex.svelte";
     // })
 
     function next() {
-        console.log($pageStore)
-        console.log('count', count, (count / pageLimit) - 1)
         if ($pageStore < ((count / pageLimit) - 1)) {
-            console.log('pass   ')
             $pageStore = $pageStore + 1;
 
             reload([
@@ -38,10 +37,10 @@ import LeftCenterRightFlex from "./LeftCenterRightFlex.svelte";
     }
 
     function previous() {
-        console.log($pageStore)
-
         if ($pageStore > 0) {
             $pageStore = $pageStore - 1;
+
+            $scrollStore = window.scrollY;
 
             reload([
                 ...extraArguments,
@@ -53,6 +52,8 @@ import LeftCenterRightFlex from "./LeftCenterRightFlex.svelte";
                     },
                 }
             ]);
+
+            window.scrollBy(0, $scrollStore);
         }
     }
 </script>

@@ -15,10 +15,12 @@
     import InformationTile from "lib/components/generic/InformationTile.svelte";
     import { router } from "tinro";
     import { getGroup } from "api/Groups";
-
+    import { writable } from "svelte/store";
+    import { pageLimit } from "lib/constants";
 
     // export let profile: Profile;
     export let meta;
+    // export let profile_id;
 
     if (meta.params.id) {
         console.log("bruhbruh");
@@ -26,14 +28,29 @@
 
     const [dataStore] = swr(getProfile, "getProfile", [Number(meta.params.id)]);
 
-    beforeUpdate(async () => {
-        try {
-            let prof = await $dataStore;
-        } catch (err) {
-            console.log("bruhbruh");
-            router.goto("/");
-        }
+    const args = writable({
+        sorts: {
+            date_added: "desc",
+        },
+        filters: {
+            profile: {
+                id: meta.params.id,
+            },
+        },
+        pagination: {
+            page: 0,
+            limit: pageLimit,
+        },
     });
+
+    // beforeUpdate(async () => {
+    //     try {
+    //         let prof = await $dataStore;
+    //     } catch (err) {
+    //         console.log("bruhbruh");
+    //         router.goto("/");
+    //     }
+    // });
 
     // onMount(async () => {
     //     try {
@@ -71,16 +88,26 @@
                         >
                         <div class="detail-info">
                             <InformationTile iconName={"star"} label={"Joined"}
-                                >{new Date(profile.date_joined).getDate()} {new Date(profile.date_joined).toLocaleString('en-us', { month: 'short' })} {new Date(profile.date_joined).getFullYear()}</InformationTile
+                                >{new Date(profile.date_joined).getDate()}
+                                {new Date(profile.date_joined).toLocaleString(
+                                    "en-us",
+                                    { month: "short" }
+                                )}
+                                {new Date(
+                                    profile.date_joined
+                                ).getFullYear()}</InformationTile
                             >
                             <InformationTile iconName={"create"} label={"Posts"}
-                                >{profile.reflections_count }</InformationTile
+                                >{profile.reflections_count}</InformationTile
                             >
                             {#if profile.group_id}
                                 {#await getGroup(profile.group_id) then group}
                                     <InformationTile
                                         hoverable
-                                        on:click={() => router.goto(`/groups/${profile.group_id}`)}
+                                        on:click={() =>
+                                            router.goto(
+                                                `/groups/${profile.group_id}`
+                                            )}
                                         iconName="people"
                                         label="Group"
                                         >{group.name}</InformationTile
@@ -98,16 +125,7 @@
                 <ProfileReflections
                     fetcher={filterReflections}
                     kind={"currentProfileReflections"}
-                    args={[
-                        {
-                            date_added: "desc",
-                        },
-                        {
-                            profile: {
-                                id: profile.id
-                            },
-                        },
-                    ]}
+                    {args}
                 />
             {/await}
         </CenterWrapper>

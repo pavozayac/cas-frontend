@@ -40,6 +40,9 @@
   Chart.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale, BarController, BarElement, DoughnutController, ArcElement, Legend, Tooltip);
   Chart.defaults.plugins.legend.display = true;
 
+  // const [profileStore] = swr(currentProfile, "currentProfile", []);
+
+
   // onMount(()=>{
   //   (async function (){
   //     $profileStore = await currentProfile()
@@ -151,7 +154,9 @@
   </Route>
   <Route fallback path="/current">
     <Protected>
-      <CurrentProfileRoute />
+      {#await $profileStore then profile}
+        <CurrentProfileRoute {profile} />
+      {/await}
     </Protected>
   </Route>
 </Route>

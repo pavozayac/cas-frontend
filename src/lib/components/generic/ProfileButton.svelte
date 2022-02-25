@@ -33,7 +33,7 @@
             <img class="picture" src={avatarSrc(profile.avatar)} alt="Profile avatar"/>
             <!-- <Preload alt="Profile picture" src={avatarSrc(profile.avatar)} /> -->
         {:else}
-            <div class="picture" style="background: var(--bg-grey-lower);" />
+            <img class="picture" src="/graphics/user.svg" alt="Profile avatar"/>
         {/if}
     </a>
 {:catch err}
@@ -63,6 +63,7 @@
         height: 2.5rem;
         width: 2.5rem;
         object-fit: cover;
+        outline: var(--bg-grey-lower) 2px solid;
     }
 
     .profile-name {

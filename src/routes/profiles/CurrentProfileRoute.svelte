@@ -2,6 +2,7 @@
     import Container from "lib/components/Container.svelte";
     import { onMount } from "svelte";
     import { currentProfile } from "api/Profile";
+    import type { Profile } from 'api/Profile';
     import Card from "lib/components/reflections/ReflectionCard.svelte";
     import ThinButton from "lib/components/generic/ThinButton.svelte";
     import CenterWrapper from "lib/components/CenterWrapper.svelte";
@@ -11,10 +12,27 @@
     import { swr } from "api/swr";
     import { filterReflections } from "api/Reflection";
     import ProfileReflections from "../../lib/components/generic/ReflectionsList.svelte";
-import InformationTile from "lib/components/generic/InformationTile.svelte";
-import { getGroup } from "api/Groups";
+    import InformationTile from "lib/components/generic/InformationTile.svelte";
+    import { getGroup } from "api/Groups";
+    import { writable } from "svelte/store";
+import { pageLimit } from "lib/constants";
 
-    const [dataStore] = swr(currentProfile, "currentProfile", []);
+    export let profile: Profile;
+
+    const args = writable({
+        sorts: {
+            date_added: "desc",
+        },
+        filters: {
+            profile: {
+                id: profile.id,
+            },
+        },
+        pagination: {
+            page: 0,
+            limit: pageLimit
+        }
+    });
 </script>
 
 <Nav />
@@ -23,7 +41,6 @@ import { getGroup } from "api/Groups";
 <CenterWrapper>
     <Container>
         <CenterWrapper>
-            {#await $dataStore then profile}
                 <div class="upper-data">
                     <div class="edit-wrapper">
                         <ThinButton
@@ -46,34 +63,46 @@ import { getGroup } from "api/Groups";
                             />
                         {/if}
                         <span class="profile-name">
-                            {profile.first_name} {profile.last_name}
+                            {profile.first_name}
+                            {profile.last_name}
                         </span>
                         <div class="detail-info">
-                            <InformationTile iconName={'star'} label={'Joined'}>{new Date(profile.date_joined).getDate()} {new Date(profile.date_joined).toLocaleString('en-us', { month: 'short' })} {new Date(profile.date_joined).getFullYear()}</InformationTile>
-                            <InformationTile iconName={'create'} label={'Posts'}>
-                            {#await filterReflections({}, {profile: { id: profile.id } }) then reflections}
-                                {reflections.length}
-                            {/await}
+                            <InformationTile iconName={"star"} label={"Joined"}
+                                >{new Date(profile.date_joined).getDate()}
+                                {new Date(profile.date_joined).toLocaleString(
+                                    "en-us",
+                                    { month: "short" }
+                                )}
+                                {new Date(
+                                    profile.date_joined
+                                ).getFullYear()}</InformationTile
+                            >
+                            <InformationTile
+                                iconName={"create"}
+                                label={"Posts"}
+                            >
+                                {#await filterReflections( { sorts: {}, filters: { profile: { id: profile.id } } } ) then [reflections, count]}
+                                    {count}
+                                {/await}
                             </InformationTile>
                             {#await getGroup(profile.group_id) then group}
-                            <InformationTile iconName="people" label="Group">{group.name}</InformationTile>
-                            <InformationTile iconName="school" label="Graduation">{group.graduation_year}</InformationTile>
+                                <InformationTile iconName="people" label="Group"
+                                    >{group.name}</InformationTile
+                                >
+                                <InformationTile
+                                    iconName="school"
+                                    label="Graduation"
+                                    >{group.graduation_year}</InformationTile
+                                >
                             {/await}
                         </div>
                     </div>
                 </div>
-                <ProfileReflections fetcher={filterReflections} kind={'currentProfileReflectionsNew'} args={[
-                    {
-                        date_added: 'desc'
-                    }, 
-                    {
-                        profile: {
-                            id: profile.id
-                        }
-                    },
-                    false
-                ]} />
-            {/await}
+                <ProfileReflections
+                    fetcher={filterReflections}
+                    kind={"currentProfileReflectionsNew"}
+                    {args}
+                />
         </CenterWrapper>
     </Container>
 </CenterWrapper>

@@ -11,6 +11,7 @@
     import Pager from "lib/components/generic/Pager.svelte";
 import { pageLimit } from "lib/constants";
 import { writable } from "svelte/store";
+import Select from "lib/components/generic/Select.svelte";
 
     export let query: Record<string, string>;
 
@@ -56,6 +57,35 @@ import { writable } from "svelte/store";
 <CenterWrapper>
     <Container>
         <CenterWrapper>
+            <div class="filters">
+                <Select label="Sorting" options={[
+                    {
+                        value: {
+                            date_added: 'asc'
+                        },
+                        text: 'Most recent'
+                    },
+                    {
+                        value: {
+                            date_added: 'desc'
+                        },
+                        text: 'Least recent'
+                    },
+                    {
+                        value: {
+                            title: 'asc'
+                        },
+                        text: 'Title A-Z'
+                    },
+                    {
+                        value: {
+                            title: 'desc'
+                        },
+                        text: 'Title Z-A'
+                    }
+                ]}/>
+            </div>
+
             {#if searchPhrase}
                 <h2>Searching for: {searchPhrase}</h2>
             {/if}

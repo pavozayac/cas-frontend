@@ -45,92 +45,73 @@
                         />
                         <h2 slot="center">Edit profile</h2>
                     </LeftCenterRightFlex>
-                    <Divider>
-                        <div class="form-wrapper">
-                            <Form
-                                initialValues={{
-                                    first_name: profile.first_name,
-                                    last_name: profile.last_name,
-                                    post_visibility: String(profile.post_visibility),
-                                }}
-                                let:errors
-                                let:data={formData}
-                                let:setField
-                                validationSchema={profileUpdateSchema}
-                                submitAction={async (values) => {
-                                    await updateProfile(values);
-                                    reload();
-                                }}
-                            >
-                                <TextField
-                                    {errors}
-                                    name="first_name"
-                                    type="text"
-                                />
-                                <TextField
-                                    {errors}
-                                    name="last_name"
-                                    type="text"
-                                />
-                                <RadioGroup
-                                    initialValue={String(profile.post_visibility)}
-                                    {formData}
-                                    {setField}
-                                    text="Post visibility"
-                                    name="post_visibility"
-                                    items={{
-                                        "Only you can see your posts": 0,
-                                        "Only your group can see your posts": 1,
-                                        "Anybody can see your posts": 2,
-                                    }}
-                                />
-                                <br />
-                                <Submit text="Update profile" />
-                            </Form>
-                        </div>
-                        <div class="form-wrapper">
-                            {#if profile.avatar}
-                                <div class="avatar-wrapper">
-                                    <img
-                                        class="avatar-preview"
-                                        src={avatarSrc(profile.avatar)}
-                                        alt="Profile avatar"
-                                    />
-                                </div>
-                            {/if}
+                    <div class="form-wrapper">
+                        <Form
+                            initialValues={{
+                                first_name: profile.first_name,
+                                last_name: profile.last_name,
+                                post_visibility: String(
+                                    profile.post_visibility
+                                ),
+                            }}
+                            let:errors
+                            let:data={formData}
+                            let:setField
+                            validationSchema={profileUpdateSchema}
+                            submitAction={async (values) => {
+                                await updateProfile(values);
+                                reload();
+                            }}
+                        >
+                            <TextField {errors} name="first_name" type="text" />
+                            <TextField {errors} name="last_name" type="text" />
 
-                            <Form
-                                let:errors
-                                validationSchema={profileAvatar}
-                                submitAction={updateProfileAvatar}
-                            >
-                                <FileField {errors} name="file" />
-                                <Submit
-                                    text={profile.avatar
-                                        ? "Change avatar"
-                                        : "Upload avatar"}
+                            <br />
+                            <Submit text="Update profile" />
+                        </Form>
+                    </div>
+                    <div class="form-wrapper">
+                        {#if profile.avatar}
+                            <div class="avatar-wrapper">
+                                <img
+                                    class="avatar-preview"
+                                    src={avatarSrc(profile.avatar)}
+                                    alt="Profile avatar"
                                 />
-                            </Form>
-                            {#if profile.group_id}
-                                {#await getGroup(profile.group_id) then group}
-                                    <InformationTile
-                                        iconName="people"
-                                        label="Group"
-                                        style="margin-bottom: 1rem; margin-top: 1rem;"
-                                        >{group.name}</InformationTile
-                                    >
-                                    <Submit
-                                        on:click={async () => {
-                                            await leaveGroup();
-                                            router.goto("/profiles/current");
-                                        }}
-                                        red
-                                        text="Leave group"
-                                    />
-                                {/await}
-                            {/if}
-                        </div>
-                    </Divider>
+                            </div>
+                        {/if}
+
+                        <Form
+                            let:errors
+                            validationSchema={profileAvatar}
+                            submitAction={updateProfileAvatar}
+                        >
+                            <FileField {errors} name="file" />
+                            <Submit
+                                text={profile.avatar
+                                    ? "Change avatar"
+                                    : "Upload avatar"}
+                            />
+                        </Form>
+                        {#if profile.group_id}
+                            {#await getGroup(profile.group_id) then group}
+                                <InformationTile
+                                    iconName="people"
+                                    label="Group"
+                                    style="margin-bottom: 1rem; margin-top: 1rem;"
+                                    >{group.name}</InformationTile
+                                >
+                                <Submit
+                                    on:click={async () => {
+                                        await leaveGroup();
+                                        router.goto("/profiles/current");
+                                    }}
+                                    red
+                                    text="Leave group"
+                                />
+                            {/await}
+                        {/if}
+                    </div>
                 </div>
             </CenterWrapper>
         </Container>
@@ -139,6 +120,7 @@
 
 <style>
     .wrapper {
+        width: 40rem;
         padding: 2rem;
         margin-top: 1rem;
         background: white;

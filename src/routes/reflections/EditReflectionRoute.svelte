@@ -116,106 +116,109 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
 {#await $reflectionStore then reflection}
     <CenterWrapper>
         <Container>
-            <div class="wrapper">
-                <LeftCenterRightFlex>
-                    <div slot="right">
-                        <ConfirmModal
-                            let:show
-                            text="Are you sure you want to delete this reflection?"
-                            confirmText="Delete"
-                            denyText="Cancel"
-                        >
-                            <ThinButton
-                                action={() => {
-                                    show(() => {
-                                        deleteReflection(reflection_id);
-                                        router.goto("/");
-                                    });
-                                }}
-                                style="float: right;"
-                                text="Delete reflection"
-                                fullIconName="delete"
-                            />
-                        </ConfirmModal>
-                    </div>
-                </LeftCenterRightFlex>
-                <h1>Now editing: {reflection.title}</h1>
-                <Form
-                    initialValues={transformInitialValues(reflection)}
-                    validationSchema={editReflectionSchema}
-                    let:errors
-                    let:data={formData}
-                    let:touched
-                    let:setField
-                    let:setError
-                    let:validate
-                    {extraValidate}
-                    submitAction={(values) => {
-                        updateReflection(values, reflection_id);
-                        router.goto("/profiles/current");
-                    }}
-                >
-                    <!-- {errors.subscribe(val => console.log(val))} -->
-                    <TextField {errors} name="title" type="text" />
-                    <TextArea {errors} name="text_content" />
-                    <TextField
-                        let:value
-                        {errors}
-                        name="oneTag"
-                        label="Tag"
-                        placeholder="Tag"
-                        type="text"
+            <CenterWrapper>
+                <div class="wrapper">
+                    <LeftCenterRightFlex>
+                        <div slot="right">
+                            <ConfirmModal
+                                let:show
+                                text="Are you sure you want to delete this reflection?"
+                                confirmText="Delete"
+                                denyText="Cancel"
+                            >
+                                <ThinButton
+                                    action={() => {
+                                        show(() => {
+                                            deleteReflection(reflection_id);
+                                            router.goto("/");
+                                        });
+                                    }}
+                                    style="float: right;"
+                                    text="Delete reflection"
+                                    fullIconName="delete"
+                                />
+                            </ConfirmModal>
+                        </div>
+                    </LeftCenterRightFlex>
+                    <h1>Now editing: {reflection.title}</h1>
+                    <Form
+                        initialValues={transformInitialValues(reflection)}
+                        validationSchema={editReflectionSchema}
+                        let:errors
+                        let:data={formData}
+                        let:touched
+                        let:setField
+                        let:setError
+                        let:validate
+                        {extraValidate}
+                        submitAction={(values) => {
+                            updateReflection(values, reflection_id);
+                            router.goto("/profiles/current");
+                        }}
                     >
-                        <TagButton {validate} {formData} {setField} />
-                    </TextField>
-                    <TagsList {setError} {formData} />
-                    <div
-                        data-felte-reporter-tippy-position-for="categories_error"
-                    />
-                    <Checkboxes
-                        {touched}
-                        {errors}
-                        name="categories"
-                        text="Categories"
-                        items={{
-                            Creativity: "creativity",
-                            Activity: "activity",
-                            Service: "service",
-                        }}
-                        {formData}
-                    />
-                    <RadioGroup
-                        {formData}
-                        initialValue={Number(reflection.post_visibility)}
-                        text="Post visibility"
-                        name="post_visibility"
-                        items={{
-                            "Only you and the coordinator can see your posts": 0,
-                            "Only your group can see your posts": 1,
-                            "Anybody can see your posts": 2,
-                        }}
-                    />
-                    <DeleteFileField
-                        {formData}
-                        {errors}
-                        reflection={transformInitialValues(reflection)}
-                    />
-                    <MultipleFileField
-                        {formData}
-                        {errors}
-                        name="oneFile"
-                        text="New attachments"
-                    />
-                    <FileList {formData} />
-                    <Submit text="Update" />
-                </Form>
-            </div>
+                        <!-- {errors.subscribe(val => console.log(val))} -->
+                        <TextField {errors} name="title" type="text" />
+                        <TextArea {errors} name="text_content" />
+                        <TextField
+                            let:value
+                            {errors}
+                            name="oneTag"
+                            label="Tag"
+                            placeholder="Tag"
+                            type="text"
+                        >
+                            <TagButton {validate} {formData} {setField} />
+                        </TextField>
+                        <TagsList {setError} {formData} />
+                        <div
+                            data-felte-reporter-tippy-position-for="categories_error"
+                        />
+                        <Checkboxes
+                            {touched}
+                            {errors}
+                            name="categories"
+                            text="Categories"
+                            items={{
+                                Creativity: "creativity",
+                                Activity: "activity",
+                                Service: "service",
+                            }}
+                            {formData}
+                        />
+                        <RadioGroup
+                            {formData}
+                            initialValue={Number(reflection.post_visibility)}
+                            text="Post visibility"
+                            name="post_visibility"
+                            items={{
+                                "Only you and the coordinator can see your posts": 0,
+                                "Only your group can see your posts": 1,
+                                "Anybody can see your posts": 2,
+                            }}
+                        />
+                        <DeleteFileField
+                            {formData}
+                            {errors}
+                            reflection={transformInitialValues(reflection)}
+                        />
+                        <MultipleFileField
+                            {formData}
+                            {errors}
+                            name="oneFile"
+                            text="New attachments"
+                        />
+                        <FileList {formData} />
+                        <Submit text="Update" />
+                    </Form>
+                </div>
+            </CenterWrapper>
         </Container>
     </CenterWrapper>
 {/await}
 
 <style>
     .wrapper {
+        width: 40rem;
         background: white;
         display: flex;
         flex-direction: column;

@@ -78,9 +78,10 @@
                                 src={avatarSrc(profile.avatar)}
                             />
                         {:else}
-                            <div
-                                style="background: var(--bg-grey);"
+                            <img
+                                alt="Profile picture"
                                 class="profile-icon"
+                                src="/graphics/user.svg"
                             />
                         {/if}
                         <span class="profile-name"

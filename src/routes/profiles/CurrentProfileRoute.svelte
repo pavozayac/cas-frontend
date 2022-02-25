@@ -2,7 +2,7 @@
     import Container from "lib/components/Container.svelte";
     import { onMount } from "svelte";
     import { currentProfile } from "api/Profile";
-    import type { Profile } from 'api/Profile';
+    import type { Profile } from "api/Profile";
     import Card from "lib/components/reflections/ReflectionCard.svelte";
     import ThinButton from "lib/components/generic/ThinButton.svelte";
     import CenterWrapper from "lib/components/CenterWrapper.svelte";
@@ -15,7 +15,7 @@
     import InformationTile from "lib/components/generic/InformationTile.svelte";
     import { getGroup } from "api/Groups";
     import { writable } from "svelte/store";
-import { pageLimit } from "lib/constants";
+    import { pageLimit } from "lib/constants";
 
     export let profile: Profile;
 
@@ -30,8 +30,8 @@ import { pageLimit } from "lib/constants";
         },
         pagination: {
             page: 0,
-            limit: pageLimit
-        }
+            limit: pageLimit,
+        },
     });
 </script>
 
@@ -41,68 +41,66 @@ import { pageLimit } from "lib/constants";
 <CenterWrapper>
     <Container>
         <CenterWrapper>
-                <div class="upper-data">
-                    <div class="edit-wrapper">
-                        <ThinButton
-                            text="Edit profile"
-                            target="/profiles/current/edit"
-                            fullIconName="edit"
+            <div class="upper-data">
+                <div class="edit-wrapper">
+                    <ThinButton
+                        text="Edit profile"
+                        target="/profiles/current/edit"
+                        fullIconName="edit"
+                    />
+                </div>
+                <div class="profile-info">
+                    {#if profile.avatar}
+                        <img
+                            alt="Profile picture"
+                            class="profile-icon"
+                            src={avatarSrc(profile.avatar)}
                         />
-                    </div>
-                    <div class="profile-info">
-                        {#if profile.avatar}
-                            <img
-                                alt="Profile picture"
-                                class="profile-icon"
-                                src={avatarSrc(profile.avatar)}
-                            />
-                        {:else}
-                            <div
-                                style="background: var(--bg-grey);"
-                                class="profile-icon"
-                            />
-                        {/if}
-                        <span class="profile-name">
-                            {profile.first_name}
-                            {profile.last_name}
-                        </span>
-                        <div class="detail-info">
-                            <InformationTile iconName={"star"} label={"Joined"}
-                                >{new Date(profile.date_joined).getDate()}
-                                {new Date(profile.date_joined).toLocaleString(
-                                    "en-us",
-                                    { month: "short" }
-                                )}
-                                {new Date(
-                                    profile.date_joined
-                                ).getFullYear()}</InformationTile
+                    {:else}
+                        <img
+                            alt="Profile picture"
+                            class="profile-icon"
+                            src="/graphics/user.svg"
+                        />
+                    {/if}
+                    <span class="profile-name">
+                        {profile.first_name}
+                        {profile.last_name}
+                    </span>
+                    <div class="detail-info">
+                        <InformationTile iconName={"star"} label={"Joined"}
+                            >{new Date(profile.date_joined).getDate()}
+                            {new Date(profile.date_joined).toLocaleString(
+                                "en-us",
+                                { month: "short" }
+                            )}
+                            {new Date(
+                                profile.date_joined
+                            ).getFullYear()}</InformationTile
+                        >
+                        <InformationTile iconName={"create"} label={"Posts"}>
+                            {#await filterReflections( { sorts: {}, filters: { profile: { id: profile.id } } } ) then [reflections, count]}
+                                {count}
+                            {/await}
+                        </InformationTile>
+                        {#await getGroup(profile.group_id) then group}
+                            <InformationTile iconName="people" label="Group"
+                                >{group.name}</InformationTile
                             >
                             <InformationTile
-                                iconName={"create"}
-                                label={"Posts"}
+                                iconName="school"
+                                label="Graduation"
+                                >{group.graduation_year}</InformationTile
                             >
-                                {#await filterReflections( { sorts: {}, filters: { profile: { id: profile.id } } } ) then [reflections, count]}
-                                    {count}
-                                {/await}
-                            </InformationTile>
-                            {#await getGroup(profile.group_id) then group}
-                                <InformationTile iconName="people" label="Group"
-                                    >{group.name}</InformationTile
-                                >
-                                <InformationTile
-                                    iconName="school"
-                                    label="Graduation"
-                                    >{group.graduation_year}</InformationTile
-                                >
-                            {/await}
-                        </div>
+                        {/await}
                     </div>
                 </div>
-                <ProfileReflections
-                    fetcher={filterReflections}
-                    kind={"currentProfileReflectionsNew"}
-                    {args}
-                />
+            </div>
+            <ProfileReflections
+                fetcher={filterReflections}
+                kind={"currentProfileReflectionsNew"}
+                {args}
+            />
         </CenterWrapper>
     </Container>
 </CenterWrapper>

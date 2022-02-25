@@ -9,6 +9,7 @@
     export let initialValues: Record<string, any> = null
     export let extraValidate: (any: any, any1: any, any2?: any) => {} = () => {return {}}
     export let onError: (errors: any) => any = (errors) => errors
+    export let style = '';
 
     const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit, setField, setError, setTouched, validate, reset, touched } = createForm({
         onSubmit: async values => {
@@ -62,7 +63,7 @@
 {@debug $errors}
 {@debug $data}
 
-<form use:form>
+<form {style} use:form>
     <slot {errors} {data} {setField} {setError} {handleSubmit} {validate} {touched}></slot>
 </form>
 

@@ -12,6 +12,8 @@
 import { pageLimit } from "lib/constants";
 import { writable } from "svelte/store";
 import Select from "lib/components/generic/Select.svelte";
+import FilterCheckboxes from "lib/components/generic/FilterCheckboxes.svelte";
+import Divider from "lib/components/generic/Divider.svelte";
 
     export let query: Record<string, string>;
 
@@ -57,7 +59,19 @@ import Select from "lib/components/generic/Select.svelte";
 <CenterWrapper>
     <Container>
         <CenterWrapper>
-            <div class="filters">
+            <Divider>
+                <FilterCheckboxes name="categories" text="Categories" items={{
+                    'Creativity': {
+                        creativity: true
+                    },
+                    'Activity': {
+                        activity: true
+                    },
+                    'Service': {
+                        service: true
+                    }
+                }}/>
+
                 <Select label="Sorting" options={[
                     {
                         value: {
@@ -84,8 +98,8 @@ import Select from "lib/components/generic/Select.svelte";
                         text: 'Title Z-A'
                     }
                 ]}/>
-            </div>
-
+            </Divider>
+            
             {#if searchPhrase}
                 <h2>Searching for: {searchPhrase}</h2>
             {/if}

@@ -40,8 +40,6 @@ import LeftCenterRightFlex from "./LeftCenterRightFlex.svelte";
         if ($pageStore > 0) {
             $pageStore = $pageStore - 1;
 
-            $scrollStore = window.scrollY;
-
             reload([
                 ...extraArguments,
                 {
@@ -52,8 +50,6 @@ import LeftCenterRightFlex from "./LeftCenterRightFlex.svelte";
                     },
                 }
             ]);
-
-            window.scrollBy(0, $scrollStore);
         }
     }
 </script>

@@ -1,0 +1,128 @@
+<script lang="ts">
+import { onMount } from "svelte";
+
+
+    export let items: Record<string, any>
+    export let name: string
+    export let text: string
+    // export let initialValue
+    // console.log('inVal', initialValue)
+
+    // onMount(() => {
+    //     if (setInit) {
+    //         $formData[name] = initialValue
+    //         $errors = {
+    //             ...$errors,
+    //             categories: null
+    //         }
+    //     }
+    // })
+
+    // $: if ($errors[name] && $errors[name][0] && typeof $errors[name][0] == "object") {
+    //     console.log("bruh", $errors[name])
+    //     $errors = {
+    //         ...$errors,
+    //         categories: null
+    //     }
+    // }    
+</script>
+
+<div class="container">
+    {text}
+    
+    <div class="checks">
+        {#each Object.entries(items) as [key, value], index (value)}
+            <div class="radio-wrapper" class:first={index == 0}>
+                <label class="radio-label">
+                    <input type="checkbox" name={value} {value} checked={false} />
+                    <div class="checkmark">
+                        <span class="material-icons-round">check</span>
+                        <span class="material-icons-round close">close</span>
+                        {key}
+                    </div>
+                </label>
+            </div>
+        {/each}
+    </div>
+</div>
+
+<style>
+    .container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        background: var(--bg-light);
+        padding: .5rem 1rem;
+        box-sizing: border-box;
+        border-radius: .5rem;
+        font-family: Rubik, sans-serif;
+    }
+
+    .checks {
+        margin-top: .5rem;
+        display: flex;
+        flex-direction: row;
+
+    }
+
+    .radio-wrapper {
+        /* width: 100%; */
+        background: var(--bg-grey);
+        border-radius: 9999px;
+        box-sizing: border-box;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .radio-label {
+        /* width: 100%; */
+    }
+
+    .checkmark {
+        user-select: none;
+        box-sizing: border-box;
+        /* width: 100%; */
+        padding: .5rem 1rem;
+        box-sizing: border-box;
+        cursor: pointer;
+        transition: 100ms;
+        font-size: 0.9rem;
+        font-family: Rubik, sans-serif;
+    }
+
+    input {
+        display: none;
+        appearance: none;
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input:checked + .checkmark {
+        background: var(--accent-blue);
+        color: white;
+    }
+
+    input:checked + .checkmark > .close {
+        display: none;
+    }
+
+    .checkmark {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    span {
+        margin-right: .5rem;
+        font-size: 1.2rem;
+        color: var(--bg-grey);
+    }
+
+    .close {
+        position: absolute;
+        color: var(--bg-darker-grey);
+    }
+
+</style>

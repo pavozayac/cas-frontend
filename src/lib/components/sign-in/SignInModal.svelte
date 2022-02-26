@@ -147,6 +147,7 @@
     input {
         width: 80%;
         margin-top: 1rem;
+        font-family: Rubik, sans-serif;
     }
 
     input::placeholder {

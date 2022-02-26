@@ -10,6 +10,7 @@
     import { slide } from "svelte/transition";
     import AddCommentBox from "./AddCommentBox.svelte";
     import Comment from "./Comment.svelte";
+    import Select from "lib/components/generic/Select.svelte";
 
     export let commentsVisible: Writable<boolean>;
     export let reflection_id: number
@@ -30,15 +31,42 @@
     let [commentsStore, reload] = swr(queryComments, 'comments', [reflection_id, $args]);
 
     let [profileStore] = swr(currentProfile, 'currentProfile', []);
+    
+    function sortChange (value) {
+        $args = {
+            ...$args,
+            sorts: value
+        }
+
+        reload([reflection_id, $args]);
+    }
 
 </script>
-{#await $profileStore then profile}
-{#await $commentsStore then [comments, count]}
+
 {#if $commentsVisible}
 
 <div class="comment-section" transition:slide|local>
     <AddCommentBox {reflection_id} {reload} />
 
+    <div class="sort-wrapper">
+        <Select box={false} change={sortChange} label="Sort by" options={[
+            {
+                value: {
+                    date_added: 'desc'
+                },
+                text: 'Most recent'
+            },
+            {
+                value: {
+                    date_added: 'asc'
+                },
+                text: 'Least recent'
+            }
+        ]}/>
+    </div>
+
+{#await $profileStore then profile}
+{#await $commentsStore then [comments, count]}
     <div class="comments-wrapper">
         {#if comments.length > 0}
             {#each comments as comment}
@@ -53,6 +81,9 @@
 
     <Pager extraArguments={[reflection_id]} {args} {count} {reload} {pageStore} />
 
+    
+{/await}
+{/await}
     <button
         class="close-button"
         on:click={() => {
@@ -62,12 +93,19 @@
         <span class="material-icons-outlined">close</span> Close
     </button>
 </div>
+
+
 {/if}
 
-{/await}
-{/await}
 
 <style>
+    .sort-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
     button {
         background: var(--accent-blue);
         color: white;

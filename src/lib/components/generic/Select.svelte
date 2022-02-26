@@ -6,12 +6,16 @@
 
     export let options: Option[];
     export let label: string;
+    export let change: (value: any) => void;
+    export let box: boolean = true;
+
+    let selected;
 </script>
 
-<div class="wrapper">
+<div class:box class:side-by-side={!box} class="wrapper">
     <label for="mySelect">{label}</label>
     <div class="select">
-        <select id="mySelect">
+        <select bind:value={selected} on:change={() => change(selected)}  id="mySelect">
             {#each options as option}
                 <option value={option.value}>{option.text}</option>
             {/each}
@@ -28,9 +32,8 @@
     }
 
     .wrapper {
-        width: 100%;
+        /* width: 100%; */
         display: flex;
-        flex-direction: column;
         align-items: flex-start;
         justify-content: center;
         background: var(--bg-light);
@@ -40,8 +43,24 @@
         font-family: Rubik, sans-serif;
     }
 
+    .box {
+        flex-direction: column;
+    }
+
+    .side-by-side {
+        flex-direction: row;
+        align-items: center;
+        gap: .5rem;
+        margin-bottom: 1rem;
+    }
+
+    .side-by-side .select {
+        margin-top: 0;
+    }
+
     label {
         font-family: Rubik, sans-serif;
+        display: flex;
     }
 
     select {

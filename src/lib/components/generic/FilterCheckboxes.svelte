@@ -1,10 +1,10 @@
 <script lang="ts">
-import { onMount } from "svelte";
+    import { onMount } from "svelte";
 
-
-    export let items: Record<string, any>
-    export let name: string
-    export let text: string
+    export let items: Record<string, any>;
+    export let name: string;
+    export let text: string;
+    export let change: (e: Event, value: any) => void;
     // export let initialValue
     // console.log('inVal', initialValue)
 
@@ -24,17 +24,25 @@ import { onMount } from "svelte";
     //         ...$errors,
     //         categories: null
     //     }
-    // }    
+    // }
 </script>
 
 <div class="container">
     {text}
-    
+
     <div class="checks">
         {#each Object.entries(items) as [key, value], index (value)}
             <div class="radio-wrapper" class:first={index == 0}>
                 <label class="radio-label">
-                    <input type="checkbox" name={value} {value} checked={false} />
+                    <input
+                        type="checkbox"
+                        name={value}
+                        {value}
+                        checked={false}
+                        on:change={
+                            (e) => change(e, value)
+                        }
+                    />
                     <div class="checkmark">
                         <span class="material-icons-round">check</span>
                         <span class="material-icons-round close">close</span>
@@ -54,17 +62,17 @@ import { onMount } from "svelte";
         align-items: flex-start;
         justify-content: center;
         background: var(--bg-light);
-        padding: .5rem 1rem;
+        padding: 0.5rem 1rem;
         box-sizing: border-box;
-        border-radius: .5rem;
+        border-radius: 0.5rem;
         font-family: Rubik, sans-serif;
     }
 
     .checks {
-        margin-top: .5rem;
+        margin-top: 0.5rem;
         display: flex;
         flex-direction: row;
-
+        gap: 0.5rem;
     }
 
     .radio-wrapper {
@@ -84,7 +92,7 @@ import { onMount } from "svelte";
         user-select: none;
         box-sizing: border-box;
         /* width: 100%; */
-        padding: .5rem 1rem;
+        padding: 0.5rem 1rem;
         box-sizing: border-box;
         cursor: pointer;
         transition: 100ms;
@@ -115,7 +123,7 @@ import { onMount } from "svelte";
     }
 
     span {
-        margin-right: .5rem;
+        margin-right: 0.5rem;
         font-size: 1.2rem;
         color: var(--bg-grey);
     }
@@ -124,5 +132,4 @@ import { onMount } from "svelte";
         position: absolute;
         color: var(--bg-darker-grey);
     }
-
 </style>

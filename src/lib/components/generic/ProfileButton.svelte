@@ -63,7 +63,7 @@
         height: 2.5rem;
         width: 2.5rem;
         object-fit: cover;
-        outline: var(--bg-grey-lower) 2px solid;
+        background: var(--bg-grey-lower);
     }
 
     .profile-name {

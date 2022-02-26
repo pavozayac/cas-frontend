@@ -17,7 +17,7 @@ import Divider from "lib/components/generic/Divider.svelte";
 
     export let query: Record<string, string>;
 
-    let args = writable({
+    const args = writable({
         sorts: {date_added: 'desc'}, 
         filters: {full_text_con: query.q || undefined},
         pagination: {
@@ -47,9 +47,42 @@ import Divider from "lib/components/generic/Divider.svelte";
         searchPhrase = route.query.q || null;
 
         $pageStore = 0;
-
-        
     })
+
+    function categoryFilterChange (e: Event, value) {
+        if (e.target.checked) {
+            let filters = $args.filters;
+            $args = { 
+                ...$args,
+                filters: {
+                    ...filters,
+                    ...value
+                }
+            }
+        } else {
+            let filters = $args.filters;
+            let key = Object.keys(value)[0];
+            console.log('key', key)
+            delete filters[key];
+
+            $args = { 
+                ...$args,
+                filters: {
+                    ...filters,
+                }
+            }
+        }
+        reload([$args]);
+    }
+
+    function sortChange (value) {
+        $args = {
+            ...$args,
+            sorts: value
+        }
+
+        reload([$args]);
+    }
 
 </script>
 
@@ -59,46 +92,47 @@ import Divider from "lib/components/generic/Divider.svelte";
 <CenterWrapper>
     <Container>
         <CenterWrapper>
-            <Divider>
-                <FilterCheckboxes name="categories" text="Categories" items={{
-                    'Creativity': {
-                        creativity: true
-                    },
-                    'Activity': {
-                        activity: true
-                    },
-                    'Service': {
-                        service: true
-                    }
-                }}/>
-
-                <Select label="Sorting" options={[
-                    {
-                        value: {
-                            date_added: 'asc'
+            <div class="filters-wrapper">
+                <Divider>
+                    <FilterCheckboxes change={categoryFilterChange} name="categories" text="Filter categories" items={{
+                        'Creativity': {
+                            creativity: true
                         },
-                        text: 'Most recent'
-                    },
-                    {
-                        value: {
-                            date_added: 'desc'
+                        'Activity': {
+                            activity: true
                         },
-                        text: 'Least recent'
-                    },
-                    {
-                        value: {
-                            title: 'asc'
+                        'Service': {
+                            service: true
+                        }
+                    }}/>
+                    <Select change={sortChange} label="Sort by" options={[
+                        {
+                            value: {
+                                date_added: 'desc'
+                            },
+                            text: 'Most recent'
                         },
-                        text: 'Title A-Z'
-                    },
-                    {
-                        value: {
-                            title: 'desc'
+                        {
+                            value: {
+                                date_added: 'asc'
+                            },
+                            text: 'Least recent'
                         },
-                        text: 'Title Z-A'
-                    }
-                ]}/>
-            </Divider>
+                        {
+                            value: {
+                                title: 'asc'
+                            },
+                            text: 'Title A-Z'
+                        },
+                        {
+                            value: {
+                                title: 'desc'
+                            },
+                            text: 'Title Z-A'
+                        }
+                    ]}/>
+                </Divider>
+            </div>
             
             {#if searchPhrase}
                 <h2>Searching for: {searchPhrase}</h2>
@@ -127,5 +161,9 @@ import Divider from "lib/components/generic/Divider.svelte";
     :global(button) {
         outline: none;
         border: 0;
+    }
+
+    .filters-wrapper {
+        margin-bottom: 1rem;
     }
 </style>

@@ -140,3 +140,8 @@ export const groupUpdateSchema = yup.object().shape({
 export const joinGroupSchema = yup.object().shape({
     code: yup.string().required('Code is required')
 })
+
+export const notificationSchema = yup.object().shape({
+    content: yup.string().required(),
+    recipients: yup.array().of(yup.number()).required()
+})

@@ -2,15 +2,16 @@
     export let navMargin = true
     export let padding = false
     export let thin = false
+    export let style: string = '';
 </script>
 
-<div class="container" class:thin class:navMargin class:padding>
+<div {style} class="container" class:thin class:navMargin class:padding>
     <slot></slot>
 </div>
 
 <style>
     .container {
-        width: 80%;
+        width: 40rem;
         height: auto;
         /* display: flex; */
         /* overflow: visible; */

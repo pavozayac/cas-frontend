@@ -10,14 +10,29 @@ import { currentProfile } from "api/Profile";
     import GroupCard from "lib/components/groups/GroupCard.svelte";
     import Nav from "lib/components/navigation/Nav.svelte";
     import SideMenu from "lib/components/navigation/SideMenu.svelte";
+import { pageLimit } from "lib/constants";
+import { writable } from "svelte/store";
 
-    let [groupList, reload] = swr(filterGroups, "filterGroups", [{}, {}]);
+    const filters = writable({
+        sorts: {
+            name: 'asc'
+        }, 
+        filters: {
+
+        },
+        pagination: {
+            limit: pageLimit,
+            page: 0
+        }
+    });
+
+    let [groupList, reload] = swr(filterGroups, "filterGroups", [$filters]);
 </script>
 
 <Nav />
 <SideMenu />
 
-{#await $groupList then groups}
+{#await $groupList then [groups, count]}
     <CenterWrapper>
         <Container>
             <CenterWrapper>

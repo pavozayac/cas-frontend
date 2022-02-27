@@ -1,4 +1,5 @@
 <script lang="ts">
+  import NotificationsRoute from "routes/notifications/NotificationsRoute.svelte";
   import Announcer from "lib/components/announcer/Announcer.svelte";
   import Notifications from "lib/components/notifications/Notifications.svelte";
   import { meta, Route, router } from "tinro";
@@ -138,6 +139,12 @@
 <Route path="/bookmarks">
   <Protected>
     <BookmarksRoute />
+  </Protected>
+</Route>
+
+<Route path="/notifications">
+  <Protected>
+    <NotificationsRoute />
   </Protected>
 </Route>
 

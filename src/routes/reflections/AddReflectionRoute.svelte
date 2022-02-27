@@ -53,7 +53,6 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
 <CenterWrapper>
     <Container>
         <div class="wrapper">
-            <button on:click={() => announce('A random long anonouncement.')}>butt</button>
             <h1>Post a reflection</h1>
             <Form
                 {extraValidate}

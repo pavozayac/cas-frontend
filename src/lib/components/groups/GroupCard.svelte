@@ -24,8 +24,6 @@ import InformationTile from "../generic/InformationTile.svelte";
             {group.description}
         </p>
     </div>
-    <InformationTile style="margin-right: 1rem;" hoverable on:click={copyCode} iconName="content_paste" label="Copy code">{group_id}</InformationTile>
-
     <!-- <code on:click|preventDefault|stopPropagation class="code-container">
         {group_id}
     </code> -->

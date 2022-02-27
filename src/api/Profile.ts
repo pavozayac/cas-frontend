@@ -1,4 +1,4 @@
-import { route } from './utils'
+import { Pagination, route } from './utils'
 import { profileStore } from 'stores/profile'
 
 interface Avatar {
@@ -32,12 +32,19 @@ interface ProfileSorts {
 
 interface ProfileFilters {
     id?: number;
-    group_id: string;
+    group_id?: string;
     post_visibility?: number;
     last_online_gte?: Date;
     last_online_lte?: Date;
     date_joined_gte?: Date;
     date_joined_lte?: Date;
+    full_text_con?: string;
+}
+
+interface FilterBody {
+    sorts: ProfileSorts;
+    filters: ProfileFilters;
+    pagination: Pagination;
 }
 
 export async function currentProfile(): Promise<Profile> {
@@ -64,16 +71,13 @@ export async function currentProfile(): Promise<Profile> {
 }
 
 
-export async function filterProfiles(filters: ProfileFilters, sorts: ProfileSorts): Promise<BulkProfile[]> {
+export async function filterProfiles(body: FilterBody): Promise<[BulkProfile[], number]> {
     try {
         const res = await fetch(route(`profiles/query`), {
             method: 'POST',
             credentials: 'include',
             mode: 'cors',
-            body: JSON.stringify({
-                filters,
-                sorts
-            }),
+            body: JSON.stringify(body),
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -82,8 +86,9 @@ export async function filterProfiles(filters: ProfileFilters, sorts: ProfileSort
         if (res.status != 200) {
             throw await res.text()
         }
-
-        return res.json()
+        const { items, count } = await res.json();
+        return [items, count];
+        
     } catch (err) {
         throw err
     }

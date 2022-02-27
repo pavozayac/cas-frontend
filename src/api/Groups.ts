@@ -1,5 +1,5 @@
 import type { Profile } from "./Profile";
-import { route } from "./utils";
+import { Pagination, route } from "./utils";
 
 export interface Group {
     id: string;
@@ -29,6 +29,7 @@ export interface GroupFilters {
     name?: string;
     date_created_gte?: Date;
     date_created_lte?: Date;
+    full_text_con?: string;
 }
 
 export interface GroupSorts {
@@ -36,16 +37,19 @@ export interface GroupSorts {
     name?: 'asc' | 'desc';
 }
 
-export async function filterGroups(sorts: GroupSorts, filters: GroupFilters): Promise<Group[]> {
+export interface FilterBody {
+    sorts: GroupSorts;
+    filters: GroupFilters;
+    pagination: Pagination;
+}
+
+export async function filterGroups(body: FilterBody): Promise<[BulkGroup[], number]> {
     try {
         const res = await fetch(route('groups/query'), {
             method: 'POST',
             credentials: 'include',
             mode: 'cors',
-            body: JSON.stringify({
-                filters: filters,
-                sorts: sorts
-            }),
+            body: JSON.stringify(body),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -54,8 +58,9 @@ export async function filterGroups(sorts: GroupSorts, filters: GroupFilters): Pr
         if (res.status != 200) {
             throw await res.text()
         }
-
-        return await res.json();
+        
+        const { items, count } = await res.json();
+        return [items, count];
     } catch (err) {
         throw err
     }

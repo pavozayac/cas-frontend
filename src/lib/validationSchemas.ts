@@ -143,5 +143,6 @@ export const joinGroupSchema = yup.object().shape({
 
 export const notificationSchema = yup.object().shape({
     content: yup.string().required(),
+    searchBox: yup.string().nullable(),
     recipients: yup.array().of(yup.number()).required()
 })

@@ -7,11 +7,13 @@
     import { writable } from "svelte/store";
     import type { Writable } from 'svelte/store';
     import { getGroup } from "api/Groups";
+    import { fade } from 'svelte/transition';
 
     export let id: string;
     export let error = false;
     export let noName = false;
     export let action = () => {};
+    export let icon = '';
 
     // let profileData: Writable<Promise<Profile>> = writable(new Promise(() => {}));
 
@@ -24,17 +26,21 @@
 
 {#await $groupData then group}
     <button on:click|preventDefault={action} type="button" class="group-info">
+        {#if group.avatar}
+            <img class="picture" src={groupAvatarSrc(group.avatar)} alt="Profile avatar"/>
+            <!-- <Preload alt="Profile picture" src={avatarSrc(profile.avatar)} /> -->
+        {:else}
+            <img class="picture" src="/graphics/user.svg" alt="Profile avatar"/>
+        {/if}
+
         {#if !noName}
             <span class="group-name"
                 >{group.name}</span
             >
         {/if}
 
-        {#if group.avatar}
-            <img class="picture" src={groupAvatarSrc(group.avatar)} alt="Profile avatar"/>
-            <!-- <Preload alt="Profile picture" src={avatarSrc(profile.avatar)} /> -->
-        {:else}
-            <img class="picture" src="/graphics/user.svg" alt="Profile avatar"/>
+        {#if icon}
+            <span class="material-icons-round">{icon}</span>
         {/if}
     </button>
 {:catch err}

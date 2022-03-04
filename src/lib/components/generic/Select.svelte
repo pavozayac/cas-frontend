@@ -12,7 +12,10 @@
     let selected;
 </script>
 
-<div class:box class:side-by-side={!box} class="wrapper">
+<div on:click={() => { 
+    let select = document.getElementById('mySelect');
+    select.click()
+    }} class:box class:side-by-side={!box} class="wrapper">
     <label for="mySelect">{label}</label>
     <div class="select">
         <select bind:value={selected} on:change={() => change(selected)}  id="mySelect">
@@ -76,10 +79,11 @@
         cursor: inherit;
         line-height: inherit;
         grid-area: select;
+        padding: 0.5rem 1rem;
     }
 
     select:focus + .focus {
-        position: absolute;
+        position: absolute; 
         top: -1px;
         left: -1px;
         right: -1px;
@@ -99,7 +103,6 @@
         max-width: 20rem;
         font-size: 0.9rem;
         display: grid;
-        padding: 0.5rem 1rem;
         grid-template-areas: "select";
         align-items: center;
         margin-top: .5rem;
@@ -108,6 +111,7 @@
     .select::after {
         content: "";
         width: 1em;
+        margin-right: .5rem;
         height: 0.7em;
         background-color: var(--bg-darker-grey);
         clip-path: polygon(100% 0%, 0 0%, 50% 100%);

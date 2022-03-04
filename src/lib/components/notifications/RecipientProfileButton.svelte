@@ -6,13 +6,13 @@
     import Preload from "lib/Preload.svelte";
     import { writable } from "svelte/store";
     import type { Writable } from 'svelte/store';
+    import { fade } from 'svelte/transition';
 
     export let id: number = 0;
     export let error = false;
     export let noName = false;
     export let action = () => {};
-
-    // let profileData: Writable<Promise<Profile>> = writable(new Promise(() => {}));
+    export let icon = '';
 
     let [profileData] = swr(
         getProfile,
@@ -23,17 +23,21 @@
 
 {#await $profileData then profile}
     <button on:click|preventDefault={action} type="button" class="profile-info">
+        {#if profile.avatar}
+            <img class="picture" src={avatarSrc(profile.avatar)} alt="Profile avatar"/>
+            <!-- <Preload alt="Profile picture" src={avatarSrc(profile.avatar)} /> -->
+        {:else}
+            <img class="picture" src="/graphics/user.svg" alt="Profile avatar"/>
+        {/if}
+
         {#if !noName}
             <span class="profile-name"
                 >{profile.first_name} {profile.last_name}</span
             >
         {/if}
 
-        {#if profile.avatar}
-            <img class="picture" src={avatarSrc(profile.avatar)} alt="Profile avatar"/>
-            <!-- <Preload alt="Profile picture" src={avatarSrc(profile.avatar)} /> -->
-        {:else}
-            <img class="picture" src="/graphics/user.svg" alt="Profile avatar"/>
+        {#if icon}
+            <span class="material-icons-round">{icon}</span>
         {/if}
     </button>
 {:catch err}

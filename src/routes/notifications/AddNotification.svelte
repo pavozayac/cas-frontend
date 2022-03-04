@@ -11,12 +11,15 @@
     import RecipientProfileButton from "lib/components/notifications/RecipientProfileButton.svelte";
     import { filterGroups } from "api/Groups";
     import RecipientGroupButton from "lib/components/notifications/RecipientGroupButton.svelte";
+    import { postNotification } from "api/Notifications";
 
     const { form, errors, setField, data } = createForm({
         onSubmit: async (values) => {
-            // const jwt = await login(values.email, values.password);
-            // console.log("bruh");
-            // router.goto("/", true);
+            try {
+                await postNotification(values);
+            } catch(err) {
+                console.log(err)
+            }
         },
         onError: (err) => {
             // return {
@@ -132,7 +135,7 @@
             label="Notification content"
             placeholder="Content"
         />
-        <button class="post" type="submit">
+        <button class="post">
             <span class="material-icons-round">edit</span>Post
         </button>
     </div>
@@ -149,7 +152,7 @@
                     }));
 
                     $added = theSet;
-                }} id={recipient.id} />
+                }} id={recipient.id} icon="close" />
             {:else}
                 <RecipientGroupButton action={() => {
                     let theSet = $added;
@@ -159,7 +162,7 @@
                     }));
 
                     $added = theSet;
-                }} id={recipient.id} />
+                }} id={recipient.id} icon="close" />
             {/if}
         {/each}
     {/if}
@@ -171,6 +174,8 @@
             placeholder="Search recipients and groups"
             bind:value={searchValue}
             on:input={onSearchChange}
+            type="text"
+            name="searchBox"
         />
         <div class="search-button-wrapper">
             <button
@@ -199,6 +204,7 @@
                         }));
                     }}
                     id={profile.id}
+                    icon="add"
                 />
             {/each}
         {/await}
@@ -212,6 +218,7 @@
                         }));
                     }}
                     id={group.id}
+                    icon="add"
                 />
             {/each}
         {/await}
@@ -219,6 +226,10 @@
 </form>
 
 <style>
+    h2 {
+        text-align: center;
+    }
+
     form {
         width: 100%;
     }

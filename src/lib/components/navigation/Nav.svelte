@@ -172,7 +172,7 @@
             <input
                 id="searchBox"
                 class="searchbox"
-                placeholder="Search"
+                placeholder="Search all reflections"
                 bind:value={searchQuery}
             />
             <div class="search-button-wrapper">

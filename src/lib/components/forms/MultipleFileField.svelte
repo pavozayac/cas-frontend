@@ -40,6 +40,7 @@ import Phase from "../transitions/Phase.svelte";
         margin-bottom: .5rem;
         width: 100%;
         overflow: hidden;
+        font-family: Rubik, sans-serif;
     }
 
 

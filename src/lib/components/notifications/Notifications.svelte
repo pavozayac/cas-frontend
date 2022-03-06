@@ -1,28 +1,40 @@
 <script lang="ts">
+import { filterNotifications, getNotification } from "api/Notifications";
 
-    let notes = [
-        "Something something.",
-        "A lot of notifications incoming.",
-        "Do a barrel roll!",
-    ]
+import { swr } from "api/swr";
+
+    const [notificationsStore, reload] = swr(filterNotifications, 'notifications', [{
+        sorts: {},
+        filters: {
+            read: false
+        },
+        pagination: {
+            limit: 4,
+            page: 0
+        }
+    }]);
 
 </script>
 
+{#await $notificationsStore then [notifications, count, read_count]}
 <div class="notifications-container">
     <h1 style="font-size: 1.5rem;">Recent notifications</h1>
 
-    {#each notes as note, index}
+    {#each notifications as note, index}
+        {#await getNotification(note.id) then notification}
         <div class:first={index == 0} class="notification">
             <div class="dismiss">
                 Click to dismiss
             </div>
             <div class="text">
-                {note}
+                {notification.content}
             </div>
         </div>
+        {/await}
     {/each}
 
 </div>
+{/await}
 
 <style>
     h1 {

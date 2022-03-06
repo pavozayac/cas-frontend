@@ -38,12 +38,13 @@
         padding: 1rem;
         box-sizing: border-box;
         border-radius: 0.5rem;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.5rem;        
+        font-family: Rubik, sans-serif;
+
     }
 
     /* textarea::placeholder {
-        font-family: Rubik, sans-serif;
-        font-size: .9rem;
+x        font-size: .9rem;
     } */
 
     .error {

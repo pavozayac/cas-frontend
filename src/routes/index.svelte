@@ -14,6 +14,8 @@ import { writable } from "svelte/store";
 import Select from "lib/components/generic/Select.svelte";
 import FilterCheckboxes from "lib/components/generic/FilterCheckboxes.svelte";
 import Divider from "lib/components/generic/Divider.svelte";
+import PlaceHolderCard from "lib/components/generic/PlaceHolderCard.svelte";
+import { sortChange, filterChange } from 'api/utils';
 
     export let query: Record<string, string>;
 
@@ -49,40 +51,6 @@ import Divider from "lib/components/generic/Divider.svelte";
         $pageStore = 0;
     })
 
-    function categoryFilterChange (e: Event, value) {
-        if (e.target.checked) {
-            let filters = $args.filters;
-            $args = { 
-                ...$args,
-                filters: {
-                    ...filters,
-                    ...value
-                }
-            }
-        } else {
-            let filters = $args.filters;
-            let key = Object.keys(value)[0];
-            console.log('key', key)
-            delete filters[key];
-
-            $args = { 
-                ...$args,
-                filters: {
-                    ...filters,
-                }
-            }
-        }
-        reload([$args]);
-    }
-
-    function sortChange (value) {
-        $args = {
-            ...$args,
-            sorts: value
-        }
-
-        reload([$args]);
-    }
 
 </script>
 
@@ -94,7 +62,7 @@ import Divider from "lib/components/generic/Divider.svelte";
         <CenterWrapper>
             <div class="filters-wrapper">
                 <Divider>
-                    <FilterCheckboxes change={categoryFilterChange} name="categories" text="Filter categories" items={{
+                    <FilterCheckboxes change={(e, value) => filterChange(e, value, args, pageStore, reload)} name="categories" text="Filter categories" items={{
                         'Creativity': {
                             creativity: true
                         },
@@ -105,7 +73,7 @@ import Divider from "lib/components/generic/Divider.svelte";
                             service: true
                         }
                     }}/>
-                    <Select change={sortChange} label="Sort by" options={[
+                    <Select change={(value) => sortChange(value, args, pageStore, reload)} label="Sort by" options={[
                         {
                             value: {
                                 date_added: 'desc'
@@ -139,9 +107,14 @@ import Divider from "lib/components/generic/Divider.svelte";
             {/if}
             
             {#await $dataStore then [items, count]}
+                {#if count > 0}
                 {#each items as reflection}
                     <Card id={reflection.id} />
                 {/each}
+                {:else}
+                    <PlaceHolderCard heightRem={47} style="margin-bottom: 1.25rem;" kindPlural="reflections" />
+                {/if}
+
                 <Pager {args} {count} {reload} {pageStore} /> 
 
             {/await}

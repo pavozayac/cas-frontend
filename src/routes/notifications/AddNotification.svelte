@@ -12,13 +12,17 @@
     import { filterGroups } from "api/Groups";
     import RecipientGroupButton from "lib/components/notifications/RecipientGroupButton.svelte";
     import { postNotification } from "api/Notifications";
+    import { announce } from "lib/components/announcer/announcer";
 
     const { form, errors, setField, data } = createForm({
         onSubmit: async (values) => {
             try {
                 await postNotification(values);
-            } catch(err) {
-                console.log(err)
+                $added = new Set();
+                searchValue = "";
+                announce("Successfully posted notification.");
+            } catch (err) {
+                console.log(err);
             }
         },
         onError: (err) => {
@@ -93,38 +97,41 @@
     let searchValue: string = "";
 
     interface RecipientObject {
-        type: 'group' | 'profile';
+        type: "group" | "profile";
         id: string | number;
     }
 
     let added: Writable<Set<string>> = writable(new Set());
 
-    added.subscribe(value => {
+    added.subscribe((value) => {
         let ids: Set<number> = new Set();
-        [...value.values()].map(v => JSON.parse(v)).forEach(recObj => {
-            if (recObj.type == 'profile'){
-                ids.add(recObj.id);
-            } else {
-                filterProfiles({
-                    sorts: {},
-                    filters: {
-                        group_id: recObj.id
-                    },
-                    pagination: {
-                        limit: 0,
-                        page: 0
-                    }
-                }).then(([profiles, count]) => {
-                    profiles.forEach(profile => ids.add(profile.id))
-                })
-            }
-        })
+        [...value.values()]
+            .map((v) => JSON.parse(v))
+            .forEach((recObj) => {
+                if (recObj.type == "profile") {
+                    ids.add(recObj.id);
+                } else {
+                    filterProfiles({
+                        sorts: {},
+                        filters: {
+                            group_id: recObj.id,
+                        },
+                        pagination: {
+                            limit: 0,
+                            page: 0,
+                        },
+                    }).then(([profiles, count]) => {
+                        profiles.forEach((profile) => ids.add(profile.id));
+                    });
+                }
+            });
 
-        setField('recipients', [...ids.values()]);
-        console.log($data)
-    })
+        setField("recipients", [...ids.values()]);
+        console.log($data);
+    });
 </script>
 
+<h1>Create notifications</h1>
 <form use:form>
     <div class="post-wrapper">
         <TextField
@@ -139,30 +146,42 @@
             <span class="material-icons-round">edit</span>Post
         </button>
     </div>
-    
+
     {#if $added.size > 0}
         <h2>Added recipients</h2>
-        {#each [...$added.values()].map(v => JSON.parse(v)) as recipient}
+        {#each [...$added.values()].map((v) => JSON.parse(v)) as recipient}
             {#if recipient.type == "profile"}
-                <RecipientProfileButton action={() => {
-                    let theSet = $added;
-                    theSet.delete(JSON.stringify({
-                        type: "profile",
-                        id: recipient.id,
-                    }));
+                <RecipientProfileButton
+                    action={() => {
+                        let theSet = $added;
+                        theSet.delete(
+                            JSON.stringify({
+                                type: "profile",
+                                id: recipient.id,
+                            })
+                        );
 
-                    $added = theSet;
-                }} id={recipient.id} icon="close" />
+                        $added = theSet;
+                    }}
+                    id={recipient.id}
+                    icon="close"
+                />
             {:else}
-                <RecipientGroupButton action={() => {
-                    let theSet = $added;
-                    theSet.delete(JSON.stringify({
-                        type: "group",
-                        id: recipient.id,
-                    }));
+                <RecipientGroupButton
+                    action={() => {
+                        let theSet = $added;
+                        theSet.delete(
+                            JSON.stringify({
+                                type: "group",
+                                id: recipient.id,
+                            })
+                        );
 
-                    $added = theSet;
-                }} id={recipient.id} icon="close" />
+                        $added = theSet;
+                    }}
+                    id={recipient.id}
+                    icon="close"
+                />
             {/if}
         {/each}
     {/if}
@@ -192,16 +211,17 @@
         </div>
     </div>
 
-
     {#if searchValue.length > 1}
         {#await $profileStore then [profiles, count]}
             {#each profiles as profile}
                 <RecipientProfileButton
                     action={() => {
-                        $added = $added.add(JSON.stringify({
-                            type: "profile",
-                            id: profile.id,
-                        }));
+                        $added = $added.add(
+                            JSON.stringify({
+                                type: "profile",
+                                id: profile.id,
+                            })
+                        );
                     }}
                     id={profile.id}
                     icon="add"
@@ -212,10 +232,12 @@
             {#each groups as group}
                 <RecipientGroupButton
                     action={() => {
-                        $added = $added.add(JSON.stringify({
-                            type: "group",
-                            id: group.id,
-                        }));
+                        $added = $added.add(
+                            JSON.stringify({
+                                type: "group",
+                                id: group.id,
+                            })
+                        );
                     }}
                     id={group.id}
                     icon="add"

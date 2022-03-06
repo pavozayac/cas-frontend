@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ManageNotificationsRoute from "routes/notifications/ManageNotificationsRoute.svelte";
   import NotificationsRoute from "routes/notifications/NotificationsRoute.svelte";
   import Announcer from "lib/components/announcer/Announcer.svelte";
   import Notifications from "lib/components/notifications/Notifications.svelte";
@@ -145,6 +146,12 @@
 <Route path="/notifications">
   <Protected>
     <NotificationsRoute />
+  </Protected>
+</Route>
+
+<Route path="/notifications/manage">
+  <Protected>
+    <ManageNotificationsRoute />
   </Protected>
 </Route>
 

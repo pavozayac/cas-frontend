@@ -45,7 +45,7 @@
 
 {#if $commentsVisible}
 
-<div class="comment-section" transition:slide|local>
+<div class="comment-section" transition:slide={{duration: 200}}>
     <AddCommentBox {reflection_id} {reload} />
 
     <div class="sort-wrapper">

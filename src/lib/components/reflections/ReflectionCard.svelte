@@ -20,7 +20,9 @@
     import Carousel from "lib/components/reflections/Carousel.svelte";
     import { attachmentSrc } from "api/utils";
     import { currentProfile } from "api/Profile";
-    import { fade } from 'svelte/transition';
+    import { fade } from "svelte/transition";
+    import Pager from "../generic/Pager.svelte";
+    import PlaceHolderCard from "lib/components/generic/PlaceHolderCard.svelte";
 
     export let id;
 
@@ -98,37 +100,42 @@
 <!-- {@debug bookmarked} -->
 
 {#await refPromise}
-
-<div class="placeholder">
-    <span class="material-icons-round">hourglass_empty</span>
-</div>
-    
+    <PlaceHolderCard loading heightRem={47} style="margin-bottom: 1.25rem;" />
 {:then reflection}
     <!-- <Container>
         <Loading />
     </Container> -->
-<!-- {:then reflection} -->
-    <div class="card-container" in:fade={{duration: 150 }}>
+    <!-- {:then reflection} -->
+    <div class="card-container" in:fade={{ duration: 150 }}>
         <div class="reflection">
-            
             <div class="top-widgets">
                 <div class="date">
-                    {new Date(reflection.date_added).getDay()} {new Date(reflection.date_added).toLocaleString('en-us', { month: 'short' })} {new Date(reflection.date_added).getFullYear()}
+                    {new Date(reflection.date_added).getDay()}
+                    {new Date(reflection.date_added).toLocaleString("en-us", {
+                        month: "short",
+                    })}
+                    {new Date(reflection.date_added).getFullYear()}
                 </div>
                 <div class="categories">
                     {#if reflection.creativity}
                         <div class="category">
-                            <span class="creativity material-icons-round">radio_button_checked</span>Creativity
+                            <span class="creativity material-icons-round"
+                                >radio_button_checked</span
+                            >Creativity
                         </div>
                     {/if}
                     {#if reflection.activity}
                         <div class="category">
-                            <span class="activity material-icons-round">radio_button_checked</span>Activity
+                            <span class="activity material-icons-round"
+                                >radio_button_checked</span
+                            >Activity
                         </div>
                     {/if}
                     {#if reflection.service}
                         <div class="category">
-                            <span class="service material-icons-round">radio_button_checked</span>Service
+                            <span class="service material-icons-round"
+                                >radio_button_checked</span
+                            >Service
                         </div>
                     {/if}
                 </div>
@@ -155,19 +162,21 @@
                 </div>
                 <div class="actions-buttons">
                     {#await $dataStore then bookmarkData}
-                    <button
-                        class:bookmarked={bookmarkData.is_favourite}
-                        on:click={() => {
-                            toggleReflection(bookmarkData);
-                        }}
-                    >
-                        <span class="material-icons-outlined"
-                            >{bookmarkData.is_favourite
-                                ? "done"
-                                : "bookmark_border"}</span
+                        <button
+                            class:bookmarked={bookmarkData.is_favourite}
+                            on:click={() => {
+                                toggleReflection(bookmarkData);
+                            }}
                         >
-                        {bookmarkData.is_favourite ? "Bookmarked" : "Bookmark"}
-                    </button>
+                            <span class="material-icons-outlined"
+                                >{bookmarkData.is_favourite
+                                    ? "done"
+                                    : "bookmark_border"}</span
+                            >
+                            {bookmarkData.is_favourite
+                                ? "Bookmarked"
+                                : "Bookmark"}
+                        </button>
                     {/await}
                     <button
                         on:click={() => {
@@ -183,7 +192,8 @@
                                 class="edit-button"
                                 href={`/reflection/${reflection.id}/edit`}
                             >
-                                <span class="material-icons-outlined">edit</span> Edit
+                                <span class="material-icons-outlined">edit</span
+                                > Edit
                             </a>
                         {/if}
                     {/await}
@@ -195,18 +205,8 @@
 {/await}
 
 <style>
-
     .reflection {
         height: 47rem;
-    }
-
-    .placeholder {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 47rem;
-        width: 100%;
-        margin-bottom: 1.25rem;
     }
 
     .tags {
@@ -328,7 +328,7 @@
     }
 
     .category span {
-        margin-right: .5rem;
+        margin-right: 0.5rem;
     }
 
     .creativity {

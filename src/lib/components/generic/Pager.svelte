@@ -54,7 +54,9 @@ import LeftCenterRightFlex from "./LeftCenterRightFlex.svelte";
     }
 </script>
 
-<LeftCenterRightFlex style="margin-bottom: 1rem;">
+{#if count != 0}
+
+<LeftCenterRightFlex style="margin-bottom: 1rem; margin-top: 1rem;">
     <div slot="left" class="button-container left">
         {#if $pageStore > 0}
             <button on:click={previous}>
@@ -78,6 +80,9 @@ import LeftCenterRightFlex from "./LeftCenterRightFlex.svelte";
         {/if}
     </div>
 </LeftCenterRightFlex>
+
+{/if}
+
 <style>
     .button-container {
         display: flex;

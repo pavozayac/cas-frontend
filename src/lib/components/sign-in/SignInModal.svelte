@@ -4,7 +4,6 @@
     import { validator } from "@felte/validator-yup";
     import reporter from "@felte/reporter-tippy";
     import GoogleButton from "./GoogleSignInButton.svelte";
-    import FacebookButton from "./FacebookSignInButton.svelte";
     import Form from "lib/components/forms/Form.svelte";
     import TextField from "lib/components/forms/TextField.svelte";
     import Submit from "lib/components/forms/Submit.svelte";

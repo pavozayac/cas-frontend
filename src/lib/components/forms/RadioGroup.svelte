@@ -45,6 +45,7 @@ import { afterUpdate, beforeUpdate, onMount } from "svelte";
         padding: 1rem;
         box-sizing: border-box;
         border-radius: .5rem;
+        font-family: Rubik, sans-serif;
     }
 
     .radio-wrapper {

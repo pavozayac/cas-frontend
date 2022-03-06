@@ -10,6 +10,10 @@
     --bg-dark: #0a1128;
 }
 
+* {
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
 html {
     height: 100%;
     width: 100%;

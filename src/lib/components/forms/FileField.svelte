@@ -23,6 +23,7 @@
         margin-bottom: .5rem;
         width: 100%;
         overflow: hidden;
+        font-family: Rubik, sans-serif;
     }
 
 

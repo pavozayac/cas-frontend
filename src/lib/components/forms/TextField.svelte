@@ -40,6 +40,7 @@
         box-sizing: border-box;
         border-radius: 0.5rem;
         width: 100%;
+        font-family: Rubik, sans-serif;
     }
 
     .margin {

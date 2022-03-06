@@ -34,6 +34,7 @@ import { attachmentSrc } from "api/utils";
         margin-bottom: .5rem;
         width: 100%;
         overflow: hidden;
+        font-family: Rubik, sans-serif;
     }
 
     input::placeholder {

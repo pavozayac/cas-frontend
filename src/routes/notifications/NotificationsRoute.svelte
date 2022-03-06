@@ -4,6 +4,7 @@
     import Nav from "lib/components/navigation/Nav.svelte";
     import SideMenu from "lib/components/navigation/SideMenu.svelte";
     import AddNotification from "./AddNotification.svelte";
+import NotificationList from "./NotificationList.svelte";
 </script>
 
 <Nav />
@@ -12,7 +13,7 @@
 <CenterWrapper>
         <Container style="background: white; padding: 1rem; border-radius: .5rem; box-sizing: border-box;">
             <CenterWrapper>
-                <AddNotification />
+                <NotificationList />
             </CenterWrapper>
         </Container>
 </CenterWrapper>

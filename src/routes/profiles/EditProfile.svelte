@@ -33,9 +33,9 @@
 
 {#await currentProfile() then profile}
     <CenterWrapper>
-        <Container>
+        <Container style="background: white; padding: 1rem; border-radius: .5rem; box-sizing: border-box;">
             <CenterWrapper>
-                <div class="wrapper">
+                <!-- <div class="wrapper"> -->
                     <LeftCenterRightFlex>
                         <ThinButton
                             slot="left"
@@ -43,7 +43,7 @@
                             fullIconName="arrow_back"
                             text="Back to profile"
                         />
-                        <h2 slot="center">Edit profile</h2>
+                        <h1 slot="center">Edit profile</h1>
                     </LeftCenterRightFlex>
                     <div class="form-wrapper">
                         <Form
@@ -63,11 +63,14 @@
                                 reload();
                             }}
                         >
-                            <TextField {errors} name="first_name" type="text" />
-                            <TextField {errors} name="last_name" type="text" />
+                            
+                            <Divider>
+                                <TextField {errors} name="first_name" type="text" />
+                                <TextField {errors} name="last_name" type="text" />
+                            </Divider>
 
                             <br />
-                            <Submit text="Update profile" />
+                            <Submit text="Update data" />
                         </Form>
                     </div>
                     <div class="form-wrapper">
@@ -112,7 +115,7 @@
                             {/await}
                         {/if}
                     </div>
-                </div>
+                <!-- </div> -->
             </CenterWrapper>
         </Container>
     </CenterWrapper>

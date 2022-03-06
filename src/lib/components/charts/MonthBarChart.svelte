@@ -1,5 +1,6 @@
 <script lang="ts">
-import type { Reflection } from 'api/Reflection';
+import { getReflection } from 'api/Reflection';
+import type { BulkReflection } from 'api/Reflection';
 
     import { Chart } from  'chart.js';
     import { onMount } from 'svelte';
@@ -7,7 +8,7 @@ import type { Reflection } from 'api/Reflection';
     export let height = 400;
     export let width = 500;
 
-    export let allData: Reflection[];
+    export let allData: BulkReflection[];
 
     const MONTHS = [
         'January',
@@ -30,7 +31,8 @@ import type { Reflection } from 'api/Reflection';
     };
 
     
-    allData.forEach(ref => {
+    allData.forEach(async bulk => {
+        const ref = await getReflection(bulk.id);
         const month = new Date(ref.date_added).getMonth();
         console.log('month', month);
         allTemp[month] += 1;

@@ -24,46 +24,77 @@ import { writable } from "svelte/store";
     function formatDate(date: Date) {
         return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
     }
+
+    const onePage = {
+        page: 0,
+        limit: 0
+    }
     
     async function fetcher() {
-        const [all] = await filterReflections({}, {
-            profile: {
-                group_id: group_id
+        const [all] = await filterReflections({
+            filters: {
+                profile: {
+                    group_id: group_id
+                },
+                date_added_lte: formatDate(new Date($year, 0, 1)),
+                date_added_gte: formatDate(new Date($year, 11, 31)),
             },
-            date_added_lte: formatDate(new Date($year, 0, 1)),
-            date_added_gte: formatDate(new Date($year, 11, 31)),
-        }, true)
+            sorts: {},
+            pagination: onePage
+        })
 
-        const [creativity] = await filterReflections({}, {
-            creativity: true,
-            profile: {
-                group_id: group_id
+        const [creativity] = await filterReflections({
+            filters: {
+                creativity: true,
+                profile: {
+                    group_id: group_id
+                },
+                date_added_lte: formatDate(new Date($year, 0, 1)),
+                date_added_gte: formatDate(new Date($year, 11, 31)),            
             },
-            date_added_lte: formatDate(new Date($year, 0, 1)),
-            date_added_gte: formatDate(new Date($year, 11, 31)),            
-        }, true)
-        const [activity] = await filterReflections({}, {
-            activity: true,
-            profile: {
-                group_id: group_id
+            sorts: {},
+            pagination: onePage
+        })
+
+        const [activity] = await filterReflections({
+            filters: {
+                activity: true,
+                profile: {
+                    group_id: group_id
+                },
+                date_added_lte: formatDate(new Date($year, 0, 1)),
+                date_added_gte: formatDate(new Date($year, 11, 31)),
             },
-            date_added_lte: formatDate(new Date($year, 0, 1)),
-            date_added_gte: formatDate(new Date($year, 11, 31)),
-        }, true)
-        const [service] = await filterReflections({}, {
-            service: true,
-            profile: {
-                group_id: group_id
+            sorts: {},
+            pagination: onePage
+        })
+
+        const [service] = await filterReflections({
+            filters: {
+                service: true,
+                profile: {
+                    group_id: group_id
+                },
+                date_added_lte: formatDate(new Date($year, 0, 1)),
+                date_added_gte: formatDate(new Date($year, 11, 31)),
             },
-            date_added_lte: formatDate(new Date($year, 0, 1)),
-            date_added_gte: formatDate(new Date($year, 11, 31)),
-        }, true)
+            sorts: {},
+            pagination: onePage
+        })
 
         return [all, creativity, activity, service]
     }
 
     const [allStore, reload] = swr(fetcher, "allData", []);
-    const [profilesStore] = swr(filterProfiles, "profiles", [{group_id: group_id}, {first_name: 'asc'}])
+    const [profilesStore] = swr(filterProfiles, "profiles", [{
+        filters: {
+            group_id: group_id
+        }, 
+        sorts: {
+            first_name: 'asc'
+        },
+        pagination: onePage
+    }])
 </script>
 
 <Nav />
@@ -71,10 +102,10 @@ import { writable } from "svelte/store";
 
 {#await $allStore then [allData, creativityData, activityData, serviceData]}
 <CenterWrapper>
-    <Container>
+    <Container style="background: white; padding: 1.5rem; border-radius: .5rem; box-sizing: border-box;">
         <CenterWrapper>
             <LeftCenterRightFlex>
-                <ThinButton slot="left" text="Back to management" fullIconName="arrow_back" target={`/groups/${group_id}/manage-group`} />
+                <ThinButton slot="left" text="Go back" fullIconName="arrow_back" target={`/groups/${group_id}/manage-group`} />
 
                 <h1 slot="center">Group statistics</h1>
                 
@@ -145,7 +176,7 @@ import { writable } from "svelte/store";
     .detail-info {
         margin-top: 1rem;
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr / 1fr;
         gap: 1rem;
     }
 </style>

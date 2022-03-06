@@ -55,13 +55,6 @@
             navBorder && navBorder.classList.add("bHidden");
         }
     }*/
-
-    async function logoutAction() {
-        logout().then(() => {
-            $authorized = false;
-            router.goto("/sign-in", true);
-        });
-    }
     let [dataStore] = swr(currentProfile, "currentProfile", []);
 
     let searchQuery;
@@ -198,9 +191,6 @@
             {#await $dataStore}
                 <Loading />
             {:then profile}
-                <button class="logout-button" on:click={logoutAction}>
-                    <span class="material-icons-round">power_settings_new</span>
-                </button>
                 <a href="/profiles/current" class="profile-link">
                     <div class="profile-info">
                         <span class="profile-name"

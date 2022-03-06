@@ -1,4 +1,8 @@
 <script lang="ts">
+import { logout } from "api/Auth";
+import { authorized } from "stores/nav";
+import { router } from "tinro";
+
     import { getGroup } from "api/Groups";
 
     import { currentProfile } from "api/Profile";
@@ -11,6 +15,13 @@
     export let nav = false;
 
     let [profileStore, reload] = swr(currentProfile, "currentProfile", []);
+
+    async function logoutAction() {
+        logout().then(() => {
+            $authorized = false;
+            router.goto("/sign-in", true);
+        });
+    }
 </script>
 
 {#await $profileStore then profile}
@@ -33,11 +44,18 @@
         </a>
         {/if}
         <ManageGroupButton group_id={profile.group_id} profile_id={profile.id} />
-
+        <button class="tile" on:click={logoutAction}>
+            <i class="material-icons-round logout">power_settings_new</i>
+            <span class="tile-text">Log out</span>
+        </button>
     </div>
 {/await}
 
 <style>
+    .logout {
+        color: var(--accent-red);
+    }
+
     .tiles-container {
         overflow: hidden;
         display: none;
@@ -53,7 +71,7 @@
         border-radius: 1rem;
     }
 
-    .tiles-container a {
+    .tiles-container a, .tiles-container button {
         font-family: Rubik, sans-serif;
         font-display: swap;
         color: #444;

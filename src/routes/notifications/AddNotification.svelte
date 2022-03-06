@@ -131,7 +131,10 @@
     });
 </script>
 
-<h1>Create notifications</h1>
+<h1>
+    <span class="material-icons-round">notification_add</span>
+    Create notifications
+</h1>
 <form use:form>
     <div class="post-wrapper">
         <TextField

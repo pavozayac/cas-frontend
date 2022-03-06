@@ -14,10 +14,11 @@
     import { writable } from "svelte/store";
     import Select from "lib/components/generic/Select.svelte";
     import { sortChange } from "api/utils";
+    import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
 
     const args = writable({
         sorts: {
-            date_sent: 'desc'
+            date_sent: "desc",
         },
         pagination: {
             limit: pageLimit,
@@ -33,8 +34,14 @@
     );
 </script>
 
-<h1>Posted notifications</h1>
-<Select
+<h1>
+    <span class="material-icons-round">edit_notifications</span>
+    Posted notifications
+</h1>
+
+<LeftCenterRightFlex>
+    <Select
+        slot="right"
         box={false}
         change={(value) => sortChange(value, args, pageStore, reload)}
         label="Sort by"
@@ -53,6 +60,8 @@
             },
         ]}
     />
+</LeftCenterRightFlex>
+
 {#await $notificationsStore then [notifications, count, readCount]}
     <div class="notifications-container">
         {#if count > 0}

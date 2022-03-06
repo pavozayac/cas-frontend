@@ -112,7 +112,7 @@ import { sortChange, filterChange } from 'api/utils';
                     <Card id={reflection.id} />
                 {/each}
                 {:else}
-                    <PlaceHolderCard heightRem={47} style="margin-bottom: 1.25rem;" kindPlural="reflections" />
+                    <PlaceHolderCard heightRem={10} style="margin-bottom: 1.25rem;" kindPlural="reflections" />
                 {/if}
 
                 <Pager {args} {count} {reload} {pageStore} /> 
@@ -138,5 +138,10 @@ import { sortChange, filterChange } from 'api/utils';
 
     .filters-wrapper {
         margin-bottom: 1rem;
+        background: white;
+        width: 100%;
+        padding: .5rem;
+        box-sizing: border-box;
+        border-radius: .5rem;
     }
 </style>

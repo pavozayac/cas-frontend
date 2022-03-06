@@ -1,9 +1,12 @@
 <script lang="ts">
-import { filterNotifications, getNotification } from "api/Notifications";
+import { filterNotifications, getNotification, toggleRead } from "api/Notifications";
 
 import { swr } from "api/swr";
+import { transformDate } from "api/utils";
+import { writable } from "svelte/store";
+import PlaceHolderCard from "../generic/PlaceHolderCard.svelte";
 
-    const [notificationsStore, reload] = swr(filterNotifications, 'notifications', [{
+    const args = writable({
         sorts: {},
         filters: {
             read: false
@@ -12,46 +15,54 @@ import { swr } from "api/swr";
             limit: 4,
             page: 0
         }
-    }]);
+    });
+
+    const [notificationsStore, reload] = swr(filterNotifications, 'notifications', [$args]);
 
 </script>
 
 {#await $notificationsStore then [notifications, count, read_count]}
 <div class="notifications-container">
-    <h1 style="font-size: 1.5rem;">Recent notifications</h1>
+    <h1 style="font-size: 1.5rem;">
+        <span class="material-icons-round">notifications</span>
+        Recent notifications
+    </h1>
 
+    {#if count > 0}
     {#each notifications as note, index}
         {#await getNotification(note.id) then notification}
-        <div class:first={index == 0} class="notification">
-            <div class="dismiss">
+        <div class="notification">
+            <div on:click={() => {
+                toggleRead(note.id);
+                reload([$args]);
+            }} class="dismiss">
                 Click to dismiss
             </div>
             <div class="text">
-                {notification.content}
+                <span class="date">{String(transformDate(notification.date_sent).split(' ').slice(0, 2)).replaceAll(',', ' ')}</span> {notification.content}
             </div>
         </div>
         {/await}
     {/each}
+    {:else}
+        <PlaceHolderCard kindPlural="new notifications" heightRem={4} />
+    {/if}
 
 </div>
 {/await}
 
 <style>
-    h1 {
-        padding: 1rem;
-    }
-
-    .first {
-        border-top: none;
+    .date {
+        font-weight: bold;
     }
 
     .notifications-container {
-        background: var(--bg-grey-lower);
+        background: white;
         top: 50%;
         transform: translateY(-50%);
         left: calc(50% + 22rem);
         position: fixed;
-        /* padding: 1rem; */
+        padding: 1rem;
         border-radius: 1rem;
         font-family: Rubik, sans-serif;
         overflow: hidden;
@@ -63,9 +74,10 @@ import { swr } from "api/swr";
     }
 
     .notification {
+        background: var(--bg-grey);
         position: relative;
         overflow: hidden;
-        /* border-radius: 1rem; */
+        border-radius: .5rem;
     }
 
     .notification::before {
@@ -74,7 +86,6 @@ import { swr } from "api/swr";
         width: 90%;
         margin-left: 5%;
         height: 100%;
-        border-top: 1px solid black;
     }
 
     .dismiss {
@@ -86,6 +97,7 @@ import { swr } from "api/swr";
         height: 100%;
         opacity: 0;
         color: white;
+        cursor: pointer;
     }
 
     .dismiss:hover {

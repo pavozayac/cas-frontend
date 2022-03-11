@@ -5,6 +5,7 @@
     export let name: string;
     export let text: string;
     export let change: (e: Event, value: any) => void;
+    export let icon = 'filter_alt';
     // export let initialValue
     // console.log('inVal', initialValue)
 
@@ -28,7 +29,10 @@
 </script>
 
 <div class="container">
-    {text}
+    <div class="text-container">
+        <span class="material-icons-round text-icon">{icon}</span>
+        {text}
+    </div>
 
     <div class="checks">
         {#each Object.entries(items) as [key, value], index (value)}
@@ -44,8 +48,8 @@
                         }
                     />
                     <div class="checkmark">
-                        <span class="material-icons-round">check</span>
-                        <span class="material-icons-round close">close</span>
+                        <span class="material-icons-round">check_circle</span>
+                        <span class="material-icons-round close">radio_button_unchecked</span>
                         {key}
                     </div>
                 </label>
@@ -55,6 +59,17 @@
 </div>
 
 <style>
+    .text-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .text-icon {
+        color: black;
+        margin-right: .5rem;
+        font-size: 1rem;
+    }
+
     .container {
         width: 100%;
         display: flex;

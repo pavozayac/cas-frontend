@@ -197,6 +197,17 @@
                             </a>
                         {/if}
                     {/await}
+                    {#await $profileStore then profile}
+                        {#if profile.is_admin && !(profile.id == reflection.profile_id)}
+                            <a
+                                class="edit-button"
+                                href={`/reflection/${reflection.id}/edit`}
+                            >
+                                <span class="material-icons-outlined">edit</span
+                                > Edit
+                            </a>
+                        {/if}
+                    {/await}
                 </div>
             </div>
         </div>
@@ -205,9 +216,9 @@
 {/await}
 
 <style>
-    .reflection {
+    /* .reflection {
         height: 47rem;
-    }
+    } */
 
     .tags {
         width: 100%;

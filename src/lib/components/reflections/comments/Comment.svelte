@@ -1,46 +1,74 @@
 <script lang="ts">
-import { deleteComment, getComment } from "api/Comment";
-import type { Comment } from 'api/Comment'
+    import { deleteComment, getComment } from "api/Comment";
+    import type { Comment } from "api/Comment";
 
-import { swr } from "api/swr";
+    import { swr } from "api/swr";
 
-    import { fade, scale, slide } from 'svelte/transition'
+    import { fade, scale, slide } from "svelte/transition";
 
     import ProfileButton from "lib/components/generic/ProfileButton.svelte";
+    import { currentProfile } from "api/Profile";
+    import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
+    import { announce } from "lib/components/announcer/announcer";
 
     // export let comment: Comment;
-    export let current_profile_id: number;
+    // export let current_profile_id: number;
     export let reload: Function;
     export let comment_id: number;
     export let reflection_id: number;
 
-    let [commentStore] = swr(getComment, 'comment', [reflection_id, comment_id]);
-
-    
-
+    let [commentStore] = swr(getComment, "comment", [
+        reflection_id,
+        comment_id,
+    ]);
+    let [currentProfileStore] = swr(currentProfile, "current", []);
 </script>
 
 {#await $commentStore then comment}
-<!-- <div class="comment">
+    <!-- <div class="comment">
     <ProfileButton noName id={null} />
     <p class="comment-text">Loading</p>
 </div>
 {:then comment} -->
-<div class="comment">
-    <ProfileButton noName id={comment.profile_id} />
-    <p class="comment-text">{comment.content}</p>
-    {#if current_profile_id == comment.profile_id}
-        <button class="delete" on:click={async () => {await deleteComment(comment.id, comment.reflection_id); await reload()}}>
-            <span class="material-icons-round">delete_outline</span>
-        </button>
-    {/if}
-</div>
+    <div class="comment">
+        <ProfileButton noName id={comment.profile_id} />
+        <p class="comment-text">{comment.content}</p>
+        {#await $currentProfileStore then profile}
+            {#if profile.id == comment.profile_id || profile.is_admin}
+                <ConfirmModal
+                    confirmText="Delete"
+                    denyText="Cancel"
+                    text="Do you want to delete this comment?"
+                    let:show
+                >
+                    <button
+                        class="delete"
+                        on:click={() =>
+                            show(async () => {
+                                try {
+                                    await deleteComment(
+                                        comment.id,
+                                        comment.reflection_id
+                                    );
+                                    announce('Successfully deleted comment.')
+                                    await reload();
+                                } catch (err) {
+                                    announce('Error: could not delete comment.')
+                                }
+                            })}
+                    >
+                        <span class="material-icons-round">delete_outline</span>
+                    </button>
+                </ConfirmModal>
+            {/if}
+        {/await}
+    </div>
 {/await}
 
 <style>
     .comment {
         background: var(--bg-grey-lower);
-        padding: .5rem 1rem;
+        padding: 0.5rem 1rem;
         box-sizing: border-box;
         border-radius: 1rem;
         margin-bottom: 1rem;

@@ -31,7 +31,7 @@
                 {:else}
                     <div style="background: red;" class="profile-icon" />
                 {/if}
-                <span class="profile-name">{group.name}</span>
+                <h1>{group.name}</h1>
                 <div class="detail-info">
                     <InformationTile
                         style="grid-column-end: span 2;"

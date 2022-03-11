@@ -11,7 +11,7 @@
 
 <style>
     .container {
-        width: 40rem;
+        width: 95%;
         height: auto;
         /* display: flex; */
         /* overflow: visible; */
@@ -34,7 +34,9 @@
 
     @media screen and (min-width: 768px) {
         .container {
-            max-width: 50%;
+            width: 40rem;
+            padding: 1rem 0;
+            box-sizing: border-box;
         }
 
         .thin {

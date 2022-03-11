@@ -6,9 +6,12 @@
     import AddNotification from "./AddNotification.svelte";
     import NotificationList from "./NotificationList.svelte";
     import PostedNotifications from "./PostedNotifications.svelte";
+    import Notifications from "lib/components/notifications/Notifications.svelte"
+
 </script>
 
 <Nav />
+<Notifications />
 <SideMenu />
 
 <CenterWrapper>

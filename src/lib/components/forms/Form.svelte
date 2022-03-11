@@ -10,8 +10,9 @@
     export let extraValidate: (any: any, any1: any, any2?: any) => {} = () => {return {}}
     export let onError: (errors: any) => any = (errors) => errors
     export let style = '';
+    export let transform: (values) => Record<any, any> = (v) => v;
 
-    const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit, setField, setError, setTouched, validate, reset, touched } = createForm({
+    const { form, errors, data, createSubmitHandler, isSubmitting, isValid, handleSubmit, setFields, setErrors, setTouched, validate, reset, touched } = createForm({
         onSubmit: async values => {
             // console.log('bruh')
             // console.log(values)
@@ -30,8 +31,10 @@
             }
         })],
         validateSchema: validationSchema,
-        validate: (values) => extraValidate(values, setTouched, setError),
-        initialValues: initialValues
+
+        validate: (values) => extraValidate(values, setTouched, setErrors),
+        initialValues: initialValues,
+        transform: transform
     })
     // const key = 'formKey'
     // setContext(key, data)
@@ -64,7 +67,7 @@
 {@debug $data}
 
 <form {style} use:form>
-    <slot {errors} {data} {setField} {setError} {handleSubmit} {validate} {touched}></slot>
+    <slot {errors} {data} {setFields} {setErrors} {handleSubmit} {validate} {touched}></slot>
 </form>
 
 <style>

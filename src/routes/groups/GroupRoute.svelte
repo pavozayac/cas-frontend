@@ -8,6 +8,8 @@
     import Nav from "lib/components/navigation/Nav.svelte";
     import SideMenu from "lib/components/navigation/SideMenu.svelte";
     import { writable } from "svelte/store";
+    import Notifications from "lib/components/notifications/Notifications.svelte"
+import { pageLimit } from "lib/constants";
 
     export let meta;
 
@@ -20,10 +22,15 @@
                 group_id: meta.params.id,
             },
         },
+        pagination: {
+            page: 0,
+            limit: pageLimit
+        }
     });
 </script>
 
 <Nav />
+<Notifications />
 <SideMenu />
 
 <CenterWrapper>

@@ -4,6 +4,7 @@ import { postComment } from "api/Comment";
 import Form from "lib/components/forms/Form.svelte";
 import { commentSchema } from "lib/validationSchemas";
 import CommentTextField from "./CommentTextField.svelte";
+import { announce } from "lib/components/announcer/announcer";
 
 export let reflection_id: number
 export let reload: Function
@@ -13,8 +14,13 @@ export let reload: Function
 
 <div class="add-comment">
     <Form let:errors validationSchema={commentSchema} submitAction={async (values) => {
-        await postComment(values, reflection_id)
-        reload()
+        try {
+            await postComment(values, reflection_id);
+            announce('Successfully posted comment.')
+            reload();
+        } catch (err) {
+            announce('Error: could not post comment.')
+        }
     }}>
         <CommentTextField {errors} />
         <input

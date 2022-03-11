@@ -26,14 +26,6 @@ import LeftCenterRightFlex from "../generic/LeftCenterRightFlex.svelte";
 {#await $profileStore then profile}
 {#if profile.group_id == null}
     <div class="wrapper">
-        <Form {onError} validationSchema={joinGroupSchema} submitAction={createGroupJoinRequest} let:errors>
-            <div class="join-wrapper">
-                <TextField type="text" {errors} noMargin name="code" label="Join Group" placeholder="Code"/>
-                <button class="join" type="submit">
-                    <span class="material-icons-round joinicon">star</span>Join
-                </button>
-            </div>
-        </Form>
         <a class="create-group-button" href="/create-group">
             <span class="material-icons-round create-icon">add</span>
             Create a group
@@ -48,25 +40,6 @@ import LeftCenterRightFlex from "../generic/LeftCenterRightFlex.svelte";
         display: flex;
         flex-direction: row;
         box-sizing: border-box;
-    }
-
-    button {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-family: Rubik, sans-serif;
-        box-sizing: border-box;
-        padding: .5rem 2rem;
-        margin-left: .5rem;
-        border-radius: .5rem;
-        background: var(--accent-blue);
-        color: white;
-        cursor: pointer;
-    }
-
-    button:hover {
-        filter: brightness(.9);
     }
     
     .wrapper {

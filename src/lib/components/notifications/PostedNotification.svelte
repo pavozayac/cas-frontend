@@ -9,6 +9,7 @@
     import type { BulkNotification } from "api/Notifications";
     import RecipientProfileButton from "./RecipientProfileButton.svelte";
 import PlaceHolderCard from "../generic/PlaceHolderCard.svelte";
+import ConfirmModal from "../generic/ConfirmModal.svelte";
 
     export let note: BulkNotification;
     export let reload: Function;
@@ -39,8 +40,9 @@ import PlaceHolderCard from "../generic/PlaceHolderCard.svelte";
                 >
                     <span class="material-icons-round">group</span>
                 </button>
+                <ConfirmModal let:show text="Do you want to delete this notification?" confirmText="Delete" denyText="Cancel">
                 <button
-                    on:click={async () => {
+                    on:click={() => show(async () => {
                         try {
                             await deleteNotification(note.id);
                             reload();
@@ -49,12 +51,13 @@ import PlaceHolderCard from "../generic/PlaceHolderCard.svelte";
                             announce("Error: Failed to delete notification");
                         }
                         reload();
-                    }}
+                    })}
                     title="Delete notification"
                     class="notification-action"
                 >
                     <span class="material-icons-round">delete</span>
                 </button>
+                </ConfirmModal>
             </div>
         </div>
 

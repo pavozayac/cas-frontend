@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { BulkReflection } from "api/Reflection";
+    import type { Reflection } from "api/Reflection";
 
     import { Chart } from "chart.js";
     import { onMount } from "svelte";
@@ -7,9 +7,9 @@
     export let height = 400;
     export let width = 500;
 
-    export let creativityData: BulkReflection[];
-    export let activityData: BulkReflection[];
-    export let serviceData: BulkReflection[];
+    export let creativityData: Reflection[];
+    export let activityData: Reflection[];
+    export let serviceData: Reflection[];
 
     console.log('crlen', creativityData);
 

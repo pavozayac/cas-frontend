@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ManageProfilesRoute from "routes/profiles/ManageProfilesRoute.svelte";
   import ManageNotificationsRoute from "routes/notifications/ManageNotificationsRoute.svelte";
   import NotificationsRoute from "routes/notifications/NotificationsRoute.svelte";
   import Announcer from "lib/components/announcer/Announcer.svelte";
@@ -40,7 +41,7 @@
   import { Chart, LineController, LineElement, PointElement, LinearScale, Title, CategoryScale, BarController, BarElement, DoughnutController, ArcElement, Legend, Tooltip } from 'chart.js';
 
   Chart.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale, BarController, BarElement, DoughnutController, ArcElement, Legend, Tooltip);
-  Chart.defaults.plugins.legend.display = true;
+  // Chart.defaults.plugins.legend.display = true;
 
   // const [profileStore] = swr(currentProfile, "currentProfile", []);
 
@@ -100,7 +101,6 @@
 <!-- Unprotected -->
 
 <Announcer />
-<Notifications />
 
 <Route path="/sign-in">
   <Unprotected>
@@ -150,7 +150,7 @@
 </Route>
 
 <Route path="/notifications/manage">
-  <Protected>
+  <Protected admin>
     <ManageNotificationsRoute />
   </Protected>
 </Route>
@@ -200,32 +200,32 @@
       </Protected>
     </Route>
     <Route path="/edit">
-      <Protected>
+      <Protected admin>
         <EditGroupRoute {meta} />
       </Protected>
     </Route>
     <Route path="/manage-group">
-      <Protected coordinator {meta} redirect_route="/">
+      <Protected admin redirect_route="/">
         <ManageGroupRoute profile_id={$profileStore.id} {meta} />
       </Protected>
     </Route>
     <Route path="/members">
-      <Protected coordinator {meta} redirect_route="/">
+      <Protected admin redirect_route="/">
         <MembersRoute group_id={meta.params.id} />
       </Protected>
     </Route>
     <Route path="/join-requests">
-      <Protected coordinator {meta} redirect_route="/">
+      <Protected admin redirect_route="/">
         <GroupJoinRequests group_id={meta.params.id} />
       </Protected>
     </Route>
     <Route path="/statistics">
-      <Protected coordinator {meta} redirect_route="/">
+      <Protected admin redirect_route="/">
         <GroupStatistics group_id={meta.params.id} />
       </Protected>
     </Route>
     <Route path="/statistics/:profile_id" let:meta={profile_stat_meta}>
-      <Protected coordinator {meta} redirect_route="/">
+      <Protected admin redirect_route="/">
         <MemberStatistics group_id={meta.params.id} profile_id={profile_stat_meta.params.profile_id} />
       </Protected>
     </Route>
@@ -233,8 +233,14 @@
 </Route>
 
 <Route path="/create-group">
-  <Protected>
+  <Protected admin>
     <CreateGroupRoute />
+  </Protected>
+</Route>
+
+<Route path="/manage-users">
+  <Protected admin>
+    <ManageProfilesRoute />
   </Protected>
 </Route>
 <!-- {/await} -->

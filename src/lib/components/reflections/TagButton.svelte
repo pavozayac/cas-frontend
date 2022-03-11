@@ -1,6 +1,6 @@
 <script lang="ts">
     export let formData
-    export let setField
+    export let setFields;
     // export let validate
     // export let value
 </script>
@@ -9,9 +9,9 @@
     let saved
     if ($formData.oneTag != '' && $formData.oneTag.length > 2){
         if (typeof $formData.tags === 'undefined'){
-            setField('tags', [$formData.oneTag])
+            setFields('tags', [$formData.oneTag])
         } else {
-            setField('tags', [...new Set([...$formData.tags, $formData.oneTag])])
+            setFields('tags', [...new Set([...$formData.tags, $formData.oneTag])])
         }
     }
     

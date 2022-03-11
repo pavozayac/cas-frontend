@@ -44,7 +44,7 @@
 
 <style>
     .backdrop {
-        background: #000000a0;
+        background: #00000080;
         left: 0;
         top: 0;
         width: 100%;

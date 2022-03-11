@@ -16,6 +16,7 @@
     import { getGroup } from "api/Groups";
     import { writable } from "svelte/store";
     import { pageLimit } from "lib/constants";
+    import Notifications from "lib/components/notifications/Notifications.svelte"
 
     export let profile: Profile;
 
@@ -36,6 +37,7 @@
 </script>
 
 <Nav />
+<Notifications />
 <SideMenu />
 
 <CenterWrapper>
@@ -63,10 +65,10 @@
                             src="/graphics/user.svg"
                         />
                     {/if}
-                    <span class="profile-name">
+                    <h1>
                         {profile.first_name}
                         {profile.last_name}
-                    </span>
+                    </h1>
                     <div class="detail-info">
                         <InformationTile iconName={"star"} label={"Joined"}
                             >{new Date(profile.date_joined).getDate()}
@@ -112,7 +114,7 @@
 
     .upper-data {
         background: white;
-        width: 40rem;
+        width: 100%;
         border-radius: 0.5rem;
         padding: 3rem;
         display: flex;
@@ -135,6 +137,10 @@
         justify-content: flex-start;
         padding: 0.4rem 1rem;
         border-radius: 9999px;
+    }
+
+    .profile-info img {
+        background: var(--bg-grey-lower);
     }
 
     .profile-icon {

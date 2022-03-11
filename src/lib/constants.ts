@@ -16,7 +16,7 @@ export const menuElements: MenuElement[] = [
     {icon: 'bookmark_added', iconType: IconType.round, name: 'Bookmarks', target: '/bookmarks'},
     {icon: 'groups', iconType: IconType.round, name: 'Groups', target: '/groups'},
     {icon: 'notifications', iconType: IconType.round, name: 'Notifications', target: '/notifications'},
-    {icon: 'edit_notifications', iconType: IconType.round, name: 'Manage notifications', target: '/notifications/manage'},
+    // {icon: 'edit_notifications', iconType: IconType.round, name: 'Manage notifications', target: '/notifications/manage'},
     // {icon: 'group', iconType: IconType.round, name: 'Groups'},
     // {icon: 'feedback', iconType: IconType.round, name: 'Feedback'},
 ]

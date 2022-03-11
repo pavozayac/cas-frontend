@@ -52,6 +52,7 @@ import Phase from "../transitions/Phase.svelte";
         box-shadow: 0 0 0 2px var(--accent-red);
     }
     input {
+        appearance: none;
         margin-top: .5rem;
         box-sizing: border-box;
         border-radius: 9999px;

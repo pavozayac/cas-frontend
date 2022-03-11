@@ -13,6 +13,7 @@
     import { writable } from "svelte/store";
     import Select from "lib/components/generic/Select.svelte";
     import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
+    export let reloadRecent: Function;
 
     const args = writable({
         sorts: {
@@ -99,6 +100,7 @@
                                     on:click={() => {
                                         toggleRead(note.id);
                                         reload([$args]);
+                                        reloadRecent()
                                     }}
                                     title="Mark as unread"
                                     class="toggle-read"
@@ -112,6 +114,7 @@
                                     on:click={() => {
                                         toggleRead(note.id);
                                         reload([$args]);
+                                        reloadRecent()
                                     }}
                                     title="Mark as read"
                                     class="toggle-read"

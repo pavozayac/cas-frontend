@@ -9,8 +9,7 @@
     export let redirect_route = "/sign-in";
 
     // Always include meta when these options are true
-    export let coordinator = false;
-    export let meta = null;
+    export let admin = false;
 
     onMount(async () => {
         try {
@@ -18,10 +17,9 @@
 
             $authorized = true;
 
-            if (coordinator == true && meta.params.id) {
-                const group = await getGroup(meta.params.id);
-
-                if (prof.id != group.coordinator_id) {
+            if (admin == true) {
+                if (!prof.is_admin) {
+                    // console.log('not admin')
                     throw "Unauthorized access";
                 }
             }

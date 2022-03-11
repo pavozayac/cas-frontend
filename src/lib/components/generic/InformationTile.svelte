@@ -5,10 +5,10 @@
     export let hoverable = false;
     export let noLabel = false;
     export let transparent = false;
-
+    export let compact = false;
 </script>
 
-<div class:transparent class:non-transparent={!transparent} class:hoverable class:nonhoverable={!hoverable} on:click|preventDefault|stopPropagation class="tile" {style}>
+<div class:compact class:transparent class:non-transparent={!transparent} class:hoverable class:nonhoverable={!hoverable} class="tile" {style}>
     <div class="icon-section">
         <span class="material-icons-round icon">{iconName}</span>
     </div>
@@ -21,6 +21,19 @@
 </div>
 
 <style>
+    div.compact {
+        padding: .5rem 1rem;
+    }
+
+    div.compact .info-section {
+        font-size: 1rem;
+    }
+    
+    div.compact .icon {
+        font-size: 1.5rem;
+        width: 2rem;
+    }
+
     .transparent {
         background: transparent;
     }

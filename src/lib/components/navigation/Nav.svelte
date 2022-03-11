@@ -59,8 +59,9 @@
 
     let searchQuery;
 
+
     function searchRedirect() {
-        router.goto(`/?q=${searchQuery}`);
+        router.goto(`/?q=${encodeURIComponent(searchQuery)}`);
         searchQuery = "";
     }
 </script>
@@ -275,6 +276,10 @@
         border-radius: 9999px;
         cursor: pointer;
         transition: all 200ms;
+    }
+
+    .profile-info img {
+        background: var(--bg-grey-lower);
     }
 
     .profile-info:hover {

@@ -1,6 +1,8 @@
 <script lang="ts">
     import { createGroup } from "api/Groups";
     import { groupSchema } from "lib/validationSchemas";
+import { router } from "tinro";
+import { announce } from "../announcer/announcer";
 import FileField from "../forms/FileField.svelte";
     import Form from "../forms/Form.svelte";
 import Submit from "../forms/Submit.svelte";
@@ -8,9 +10,17 @@ import TextArea from "../forms/TextArea.svelte";
     import TextField from "../forms/TextField.svelte";
 </script>
 
-<Form validationSchema={groupSchema} let:errors submitAction={createGroup}>
+<Form validationSchema={groupSchema} let:errors submitAction={async (values) => { 
+        try {
+            createGroup(values);
+            router.goto('/groups');
+            announce('Successfully created group.')
+        } catch (err) {
+            announce('Error: could not create group.')
+        }
+    }}>
     <div class="horizontal">
-        <div style="flex: 3; margin-right: 1rem;">
+        <div style="flex: 2; margin-right: 1rem;">
             <TextField label="Group name" type="text" name="name" {errors} />
         </div>
         <div style="flex: 1;">

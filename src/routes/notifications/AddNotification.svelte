@@ -14,7 +14,7 @@
     import { postNotification } from "api/Notifications";
     import { announce } from "lib/components/announcer/announcer";
 
-    const { form, errors, setFields, data } = createForm({
+    const { form, errors, setFields, setErrors, data, setTouched } = createForm({
         onSubmit: async (values) => {
             try {
                 await postNotification(values);
@@ -42,10 +42,12 @@
         validate: (values) => {
             let errors = {};
 
-            if (values.recipients && values.recipients.length < 1) {
+            if ((values.recipients && values.recipients.length < 1) || typeof values.recipients == 'undefined') {
                 errors = {
                     searchBox: "At least one recipient must be chosen.",
                 };
+                setTouched('searchBox');
+                setErrors('searchBox', 'At least one recipient must be chosen.')
             }
 
             return errors;
@@ -156,7 +158,7 @@
             label="Notification content"
             placeholder="Content"
         />
-        <button class="post">
+        <button type="submit" class="post">
             <span class="material-icons-round">edit</span>Post
         </button>
     </div>

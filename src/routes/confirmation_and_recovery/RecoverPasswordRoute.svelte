@@ -2,6 +2,7 @@
     import { sendRecoveryRequest } from "api/Auth";
 
     import AbsoluteCenterContainer from "lib/components/AbsoluteCenterContainer.svelte";
+import { announce } from "lib/components/announcer/announcer";
     import CenterWrapper from "lib/components/CenterWrapper.svelte";
     import Container from "lib/components/Container.svelte";
     import Form from "lib/components/forms/Form.svelte";
@@ -12,8 +13,13 @@
     import { router } from "tinro";
 
     const submitAction = async (values) => {
-        await sendRecoveryRequest(values.email);
-        router.goto("/sign-in");
+        try {
+            await sendRecoveryRequest(values.email);
+            router.goto("/sign-in");
+            announce('A recovery email has been sent to your email address.')
+        } catch(err) {
+            announce('Error: Could not send recover email.')
+        }
     };
 </script>
 

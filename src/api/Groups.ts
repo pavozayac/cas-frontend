@@ -184,7 +184,7 @@ export async function updateGroup(group, group_id) {
         const detail = await res.json();
 
         if (file){
-            await updateGroupAvatar(group)
+            await updateGroupAvatar(group, group.id)
         }
 
         return detail;

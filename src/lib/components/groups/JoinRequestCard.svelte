@@ -66,10 +66,10 @@ import { announce } from "../announcer/announcer";
                 on:click={() => {
                     try {
                         denyJoinRequest(joinRequest.group_id, joinRequest.profile.id);
-                        announce('Successfully confirmed join request.')
+                        announce('Successfully denied join request.')
                         reload();
                     } catch (err) {
-                        announce('Error: could not confirm join request.');
+                        announce('Error: could not deny join request.');
                     }
                 }}
             >

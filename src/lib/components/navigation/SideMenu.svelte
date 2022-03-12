@@ -17,10 +17,8 @@
     let [profileStore, reload] = swr(currentProfile, "currentProfile", []);
 
     async function logoutAction() {
-        logout().then(() => {
-            $authorized = false;
-            router.goto("/sign-in", true);
-        });
+            await logout();
+            router.goto('/sign-in');
     }
 </script>
 

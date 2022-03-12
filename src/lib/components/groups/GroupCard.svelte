@@ -54,7 +54,7 @@ import LeftCenterRightFlex from "../generic/LeftCenterRightFlex.svelte";
                 </InformationTile>
             </div>
         </div>
-        {#if manage && profile.is_admin}
+        {#if manage}
         <div class="bottom">
             {#if profile.group_id == null && !profile.is_admin}
             <button on:click|preventDefault|stopPropagation={async () => {
@@ -73,12 +73,14 @@ import LeftCenterRightFlex from "../generic/LeftCenterRightFlex.svelte";
                 </LeftCenterRightFlex>
             </button>
             {/if}
+            {#if profile.is_admin}
             <a class="manage-group-button" href={`/groups/${group.id}/manage-group`}>
                 <LeftCenterRightFlex>
                     <span slot="left" class="material-icons-round manage-icon">edit</span>
                     <span slot="center">Manage the group</span>
                 </LeftCenterRightFlex>
             </a>
+            {/if}
         </div>
         {/if}
 

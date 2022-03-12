@@ -107,13 +107,13 @@
                 />
                 <RadioGroup
                     {formData}
-                    initialValue={0}
+                    initialValue={'0'}
                     text="Post visibility"
                     name="post_visibility"
                     items={{
-                        "Only you and the coordinator can see your posts": 0,
-                        "Only your group can see your posts": 1,
-                        "Anybody can see your posts": 2,
+                        "Only you and the coordinator can see your posts": '0',
+                        "Only your group can see your posts": '1',
+                        "Anybody can see your posts": '2',
                     }}
                 />
                 <MultipleFileField {formData} {errors} name="attachments" />

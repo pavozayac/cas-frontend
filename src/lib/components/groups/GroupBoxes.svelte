@@ -24,7 +24,7 @@ import LeftCenterRightFlex from "../generic/LeftCenterRightFlex.svelte";
 </script>
 
 {#await $profileStore then profile}
-{#if profile.group_id == null}
+{#if profile.is_admin}
     <div class="wrapper">
         <a class="create-group-button" href="/create-group">
             <span class="material-icons-round create-icon">add</span>

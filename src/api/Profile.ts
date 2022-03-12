@@ -16,7 +16,6 @@ export interface BulkProfile {
 export interface Profile {
     first_name: string,
     last_name: string,
-    post_visibility: number,
     is_admin: boolean,
     id: number,
     group_id: string,
@@ -36,7 +35,6 @@ interface ProfileSorts {
 interface ProfileFilters {
     id?: number;
     group_id?: string;
-    post_visibility?: number;
     last_online_gte?: Date;
     last_online_lte?: Date;
     date_joined_gte?: Date;

@@ -80,7 +80,7 @@
     <div bind:this={div} class="posts-container">
         {#if count > 0}
             {#each reflections as reflection}
-                <Card id={reflection.id} />
+                <Card id={reflection.id} reflections_reload={reload} />
             {/each}
         {:else}
             <PlaceHolderCard heightRem={10} kindPlural="reflections" />

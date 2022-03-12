@@ -100,7 +100,7 @@
             title: reflection.title,
             text_content: reflection.text_content,
             tags: newTags,
-            post_visibility: reflection.post_visibility,
+            post_visibility: JSON.stringify(reflection.post_visibility),
             // categories: Array(...transformInitialCategories(reflection)),
             ...transformInitialCategories(reflection),
             delete_uuids: [],
@@ -200,13 +200,13 @@
                         />
                         <RadioGroup
                             {formData}
-                            initialValue={Number(reflection.post_visibility)}
+                            initialValue={JSON.stringify(reflection.post_visibility)}
                             text="Post visibility"
                             name="post_visibility"
                             items={{
-                                "Only you and the coordinator can see your posts": 0,
-                                "Only your group can see your posts": 1,
-                                "Anybody can see your posts": 2,
+                                "Only you and the coordinator can see your posts": '0',
+                                "Only your group can see your posts": '1',
+                                "Anybody can see your posts": '2',
                             }}
                         />
                         <DeleteFileField

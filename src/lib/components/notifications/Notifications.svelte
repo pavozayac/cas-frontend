@@ -110,6 +110,7 @@
         font-family: Rubik, sans-serif;
         overflow: hidden;
         user-select: none;
+        width: 20rem;
     }
 
     .text {

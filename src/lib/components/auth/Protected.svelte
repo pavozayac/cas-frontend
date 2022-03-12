@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { getGroup } from "api/Groups";
-
     import { currentProfile } from "api/Profile";
     import { beforeUpdate, onMount } from "svelte";
     import { router } from "tinro";
@@ -15,13 +13,14 @@
         try {
             const prof = await currentProfile();
 
-            $authorized = true;
-
             if (admin == true) {
                 if (!prof.is_admin) {
                     // console.log('not admin')
                     throw "Unauthorized access";
                 }
+                $authorized = true;
+            } else {
+                $authorized = true;
             }
         } catch (err) {
             $authorized = false;

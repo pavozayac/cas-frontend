@@ -126,7 +126,7 @@
             {#await $dataStore then [items, count]}
                 {#if count > 0}
                     {#each items as reflection}
-                        <Card id={reflection.id} />
+                        <Card id={reflection.id} reflections_reload={reload} />
                     {/each}
                 {:else}
                     <PlaceHolderCard

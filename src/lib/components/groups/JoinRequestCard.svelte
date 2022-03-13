@@ -11,6 +11,7 @@
         denyJoinRequest,
     } from "api/Groups";
     import type { GroupJoinRequest } from "api/Groups";
+import { announce } from "../announcer/announcer";
 
     // export let id: number = 0;
     // export let error = false;
@@ -47,19 +48,29 @@
 
         <div class="right">
             Requested {joinRequest.date_added}
-
+            
             <button
                 on:click={() => {
-                    acceptJoinRequest(joinRequest.group_id, joinRequest.profile.id);
-                    reload();
+                    try {
+                        acceptJoinRequest(joinRequest.group_id, joinRequest.profile.id);
+                        announce('Successfully confirmed join request.')
+                        reload();
+                    } catch (err) {
+                        announce('Error: could not confirm join request.');
+                    }
                 }}
             >
                 <span class="material-icons-round">done</span>
             </button>
             <button
                 on:click={() => {
-                    denyJoinRequest(joinRequest.group_id, joinRequest.profile.id);
-                    reload();
+                    try {
+                        denyJoinRequest(joinRequest.group_id, joinRequest.profile.id);
+                        announce('Successfully denied join request.')
+                        reload();
+                    } catch (err) {
+                        announce('Error: could not deny join request.');
+                    }
                 }}
             >
                 <span class="material-icons-round">close</span>

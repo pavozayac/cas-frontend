@@ -1,6 +1,6 @@
 import type { Writable } from "svelte/store";
 
-export const backendUrl = 'http://localhost:8000/'
+export const backendUrl = 'https://api.ibcas.pl/'
 
 export function readStore<T>(store: Writable<T>): T {
     let value;

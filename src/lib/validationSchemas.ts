@@ -1,32 +1,35 @@
 import * as yup from 'yup'
 
+const onlyLetters = /^[\p{L}\s]*$/gu;
+
+
 export const signInFormSchema = yup.object({
-    email: yup.string().email('The email must have format example@examplemail.com').required('Email address is required'),
-    password: yup.string().required('Password is required')
+    email: yup.string().email('The email must have format example@examplemail.com').required('Email address is required.'),
+    password: yup.string().required('Password is required.')
 })
 
 export const registerSchema = yup.object({
-    email: yup.string().email('Must be a valid email').required('Email address is required'),
-    password: yup.string().min(8, 'Password must have at least 8 characters').test('Safety test', 'Password must contain at least 1 uppercase character, at least 1 lowercase character and at least 1 digit', value => {
+    email: yup.string().email('The email must have format example@examplemail.com').required('Email address is required.'),
+    password: yup.string().min(8, 'Password must have at least 8 characters.').test('Safety test', 'Password must contain at least 1 uppercase character, at least 1 lowercase character and at least 1 digit.', value => {
         return value.toUpperCase() != value && value.toLowerCase() != value && /\d/.test(value)
-    }).required('Password is required'),
-    repeat_password: yup.string().required('Password is required').oneOf([yup.ref('password')], 'Passwords must match'),
-    first_name: yup.string().required('First name is required'),
-    last_name: yup.string().required('Last name is required'),
+    }).required('Password is required.'),
+    repeat_password: yup.string().required('Password is required.').oneOf([yup.ref('password')], 'Passwords must match.'),
+    first_name: yup.string().required('First name is required.').matches(onlyLetters, 'Must only contain letters.'),
+    last_name: yup.string().required('Last name is required.').matches(onlyLetters, 'Must only contain letters.'),
 })
 
 export const profileUpdateSchema = yup.object({
-    first_name: yup.string().required('First name is required'),
-    last_name: yup.string().required('Last name is required'),
+    first_name: yup.string().required('First name is required.').matches(onlyLetters, 'Must only contain letters.'),
+    last_name: yup.string().required('Last name is required.').matches(onlyLetters, 'Must only contain letters.'),
 })
 
 export const editProfileSchema = yup.object({
-    fist_name: yup.string().required('First name required'),
-    last_name: yup.string().required('Last name required'),
+    fist_name: yup.string().required('First name is required.').matches(onlyLetters, 'Must only contain letters.'),
+    last_name: yup.string().required('Last name is required.').matches(onlyLetters, 'Must only contain letters.'),
 })
 
 export const profileAvatar = yup.object({
-    file: yup.mixed().required('File required').test('Size test', 'File too large', value => value.size <= 5000000),
+    file: yup.mixed().required('File required.').test('Size test', 'File is too large.', value => value.size <= 5000000),
 })
 
 yup.addMethod(yup.mixed, 'anyTrue', function anyTrue(message){
@@ -45,7 +48,7 @@ yup.addMethod(yup.mixed, 'anyTrue', function anyTrue(message){
             }
         )){
             console.log('error created')
-            return createError({ path, message: message ?? 'At least one must be chosen'});
+            return createError({ path, message: message ?? 'At least one must be chosen.'});
         }
 
         return true;
@@ -53,11 +56,11 @@ yup.addMethod(yup.mixed, 'anyTrue', function anyTrue(message){
 })
 
 export const addReflectionSchema = yup.object().shape({
-    title: yup.string().required('Title required'),
-    text_content: yup.string().required('Text content required'),
+    title: yup.string().required('Title is required.'),
+    text_content: yup.string().required('Text content is required.'),
     tags: yup.array().of(yup.string()).required(),
     // categories: yup.array().transform(v => v === [] ? null : v).of(yup.string()).min(1, 'At least one category is required').required('Categories are required'),
-    post_visibility: yup.number().oneOf([0, 1, 2]).required('Post visibility is required'),
+    post_visibility: yup.string().oneOf(["0", "1", "2"]).required('Post visibility is required.'),
     categories_error: yup.mixed().nullable(),
     creativity: yup.boolean().required(),
     activity: yup.boolean().required(),
@@ -70,15 +73,15 @@ export const addReflectionSchema = yup.object().shape({
     if (valid) return true;
     return this.createError({
         path: 'categories_error',
-        message: 'At least one category must be chosen'
+        message: 'At least one category must be chosen.'
     })
 })
 
 export const editReflectionSchema = yup.object().shape({
-    title: yup.string().required('Title required'),
-    text_content: yup.string().required('Text content required'),
+    title: yup.string().required('Title is required.'),
+    text_content: yup.string().required('Text content is required.'),
     tags: yup.array().of(yup.string()).required(),
-    post_visibility: yup.number().oneOf([0, 1, 2]).required('Post visibility is required'),
+    post_visibility: yup.string().oneOf(["0", "1", "2"]).required('Post visibility is required.'),
     categories_error: yup.mixed().nullable(),
     creativity: yup.boolean().required(),
     activity: yup.boolean().required(),
@@ -103,38 +106,38 @@ export const editReflectionSchema = yup.object().shape({
     if (valid) return true;
     return this.createError({
         path: 'categories_error',
-        message: 'At least one category must be chosen'
+        message: 'At least one category must be chosen.'
     })
 })
 
 export const passwordRecoverySchema = yup.object().shape({
-    email: yup.string().email('The email must have format example@examplemail.com').required('The email address is required'),
+    email: yup.string().email('The email must have format example@examplemail.com').required('The email address is required.'),
 })
 
 export const passowrdResetSchema = yup.object().shape({
-    email: yup.string().email('The email must have format example@examplemail.com').required('The email address is required'),
-    password: yup.string().min(8, 'Password must have at least 8 characters').test('Safety test', 'Password must contain at least 1 uppercase character, at least 1 lowercase character and at least one digit.', value => {
+    email: yup.string().email('The email must have format example@examplemail.com').required('The email address is required.'),
+    password: yup.string().min(8, 'Password must have at least 8 characters.').test('Safety test', 'Password must contain at least 1 uppercase character, at least 1 lowercase character and at least one digit..', value => {
         return value.toUpperCase() != value && value.toLowerCase() != value && /\d/.test(value)
-    }).required('Password is required'),
-    repeat_password: yup.string().required('Password is required').oneOf([yup.ref('password')], 'Passwords must match'),
+    }).required('Password is required.'),
+    repeat_password: yup.string().required('Password is required').oneOf([yup.ref('password')], 'Passwords must match.'),
 })
 
 export const commentSchema = yup.object().shape({
-    content: yup.string().max(200, 'Comment too long').required('Cannot post empty comment')
+    content: yup.string().max(200, 'Comment is too long. (Maximum 200 characters.)').required('Cannot post an empty comment.')
 })
 
 export const groupSchema = yup.object().shape({
-    name: yup.string().required('Group name required'),
-    description: yup.string().required('Description required'),
-    graduation_year: yup.number().min(new Date().getFullYear()).max(new Date().getFullYear() + 2).required('Graduation year required'),
-    file: yup.mixed().test('Size test', 'File too large', value => value ? value.size <= 5000000 : false).required('File required'),
+    name: yup.string().required('Group name is required.'),
+    description: yup.string().required('Description is required.'),
+    graduation_year: yup.number().min(new Date().getFullYear()).max(new Date().getFullYear() + 2).required('Graduation year is required.'),
+    file: yup.mixed().test('Size test', 'File is too large.', value => value ? value.size <= 5000000 : false).required('File is required.'),
 })
 
 export const groupUpdateSchema = yup.object().shape({
-    name: yup.string().required('Group name required'),
-    description: yup.string().required('Description required'),
-    graduation_year: yup.number().min(new Date().getFullYear()).max(new Date().getFullYear() + 2).required('Graduation year required'),
-    file: yup.mixed().test('Size test', 'File too large', value => value ? value.size <= 5000000 : true),
+    name: yup.string().required('Group name required.'),
+    description: yup.string().required('Description required.'),
+    graduation_year: yup.number().min(new Date().getFullYear()).max(new Date().getFullYear() + 2).required('Graduation year required.'),
+    file: yup.mixed().test('Size test', 'File is too large.', value => value ? value.size <= 5000000 : true),
 })
 
 export const joinGroupSchema = yup.object().shape({
@@ -142,7 +145,7 @@ export const joinGroupSchema = yup.object().shape({
 })
 
 export const notificationSchema = yup.object().shape({
-    content: yup.string().required(),
+    content: yup.string().required('Content is required.'),
     searchBox: yup.string().nullable(),
     recipients: yup.array().of(yup.number()).required()
 })

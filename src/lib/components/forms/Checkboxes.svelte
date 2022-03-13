@@ -8,7 +8,7 @@ import { onMount } from "svelte";
     // export let initialValue
     export let errors
     export let touched
-    export let setError
+    export let setErrors;
     export let formData
     export let setInit = true;
 

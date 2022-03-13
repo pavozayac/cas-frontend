@@ -10,6 +10,7 @@ import Container from 'lib/components/Container.svelte';
 <svelte:head>
     <title>CAS Portal | Login</title>
 </svelte:head>
+
 <AbsoluteCenterContainer>
     <SignInModal />
 </AbsoluteCenterContainer>

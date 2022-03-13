@@ -1,5 +1,6 @@
 import { Pagination, route } from './utils'
 import { profileStore } from 'stores/profile'
+import type { GroupSorts } from './Groups';
 
 interface Avatar {
     filename: string,
@@ -15,7 +16,7 @@ export interface BulkProfile {
 export interface Profile {
     first_name: string,
     last_name: string,
-    post_visibility: number,
+    is_admin: boolean,
     id: number,
     group_id: string,
     date_joined: Date,
@@ -28,12 +29,12 @@ interface ProfileSorts {
     post_visibility?: 'asc' | 'desc';
     last_online?: 'asc' | 'desc';
     first_name?: 'asc' | 'desc';
+    group?: GroupSorts;
 }
 
 interface ProfileFilters {
     id?: number;
     group_id?: string;
-    post_visibility?: number;
     last_online_gte?: Date;
     last_online_lte?: Date;
     date_joined_gte?: Date;
@@ -86,8 +87,8 @@ export async function filterProfiles(body: FilterBody): Promise<[BulkProfile[], 
         if (res.status != 200) {
             throw await res.text()
         }
-        const { items, count } = await res.json();
-        return [items, count];
+        const resBody = await res.json();
+        return [resBody.items, resBody.count];
         
     } catch (err) {
         throw err
@@ -97,7 +98,7 @@ export async function filterProfiles(body: FilterBody): Promise<[BulkProfile[], 
 
 export async function getProfile(profile_id: number): Promise<Profile> {
     try {
-        const res = await fetch(route(`profiles/id/${profile_id}`), {
+        const res = await fetch(route(`profiles/${profile_id}`), {
             method: 'GET',
             credentials: 'include',
             mode: 'cors',
@@ -134,6 +135,25 @@ export async function updateProfile(values): Promise<void> {
         throw err
     }
 }
+
+export async function deleteProfile(profile_id: number): Promise<Profile> {
+    try {
+        const res = await fetch(route(`profiles/${profile_id}`), {
+            method: 'DELETE',
+            credentials: 'include',
+            mode: 'cors',
+        })
+
+        if (res.status != 200) {
+            throw await res.text()
+        }
+
+        return res.json()
+    } catch (err) {
+        throw err;
+    }
+}
+
 
 export async function updateProfileAvatar(values): Promise<void> {
     let file: File = values.file

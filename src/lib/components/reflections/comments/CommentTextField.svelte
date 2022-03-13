@@ -22,7 +22,7 @@
         background: var(--bg-grey);
     }
 
-    input::placeholder {
+    input {
         font-family: Rubik, sans-serif;
     }
 

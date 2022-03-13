@@ -55,19 +55,13 @@
             navBorder && navBorder.classList.add("bHidden");
         }
     }*/
-
-    async function logoutAction() {
-        logout().then(() => {
-            $authorized = false;
-            router.goto("/sign-in", true);
-        });
-    }
     let [dataStore] = swr(currentProfile, "currentProfile", []);
 
     let searchQuery;
 
+
     function searchRedirect() {
-        router.goto(`/?q=${searchQuery}`);
+        router.goto(`/?q=${encodeURIComponent(searchQuery)}`);
         searchQuery = "";
     }
 </script>
@@ -198,9 +192,6 @@
             {#await $dataStore}
                 <Loading />
             {:then profile}
-                <button class="logout-button" on:click={logoutAction}>
-                    <span class="material-icons-round">power_settings_new</span>
-                </button>
                 <a href="/profiles/current" class="profile-link">
                     <div class="profile-info">
                         <span class="profile-name"
@@ -285,6 +276,10 @@
         border-radius: 9999px;
         cursor: pointer;
         transition: all 200ms;
+    }
+
+    .profile-info img {
+        background: var(--bg-grey-lower);
     }
 
     .profile-info:hover {

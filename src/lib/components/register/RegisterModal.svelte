@@ -17,11 +17,17 @@
     import CenterWrapper from "../CenterWrapper.svelte";
     import ThinButton from "../generic/ThinButton.svelte";
     import SubtleButton from "../generic/SubtleButton.svelte";
+import { announce } from "../announcer/announcer";
 
     const register_redirect = async (values) => {
         console.log(values.email);
-        const res = await register(values);
-        router.goto("/sign-in");
+        try {
+            const res = await register(values);
+            router.goto("/sign-in");
+            announce('A verification email has been sent to your email address.')
+        } catch (err) {
+            announce('Error: Could not register.')
+        }
     };
 
     const onError = (errors) => {

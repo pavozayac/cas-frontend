@@ -70,7 +70,7 @@
     <div class="comments-wrapper">
         {#if comments.length > 0}
             {#each comments as comment}
-                <Comment {reload} comment_id={comment.id} current_profile_id={profile.id} {reflection_id} />
+                <Comment {reload} comment_id={comment.id} {reflection_id} />
             {/each}
         {:else}
             <div class="no-comments">

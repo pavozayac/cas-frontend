@@ -28,8 +28,7 @@ export async function login(email: string, password: string): Promise<JWT> {
     const response = await res.json()
 
     if (!res.ok) {
-        console.log()
-        throw new Error('Authentication error');
+        throw new Error(response.detail);
     }
     
     profileStore.set(response)

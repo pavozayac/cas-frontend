@@ -1,7 +1,7 @@
 <script lang="ts">
     import { filterProfiles, getProfile } from "api/Profile";
 
-    import { filterReflections } from "api/Reflection";
+    import { filterReflections, getReflection } from "api/Reflection";
     import { swr } from "api/swr";
 
     import CenterWrapper from "lib/components/CenterWrapper.svelte";
@@ -11,13 +11,14 @@
     import Container from "lib/components/Container.svelte";
     import InformationTile from "lib/components/generic/InformationTile.svelte";
     import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
-import ThinButton from "lib/components/generic/ThinButton.svelte";
+    import ThinButton from "lib/components/generic/ThinButton.svelte";
     import MemberCard from "lib/components/groups/MemberCard.svelte";
     import Nav from "lib/components/navigation/Nav.svelte";
     import SideMenu from "lib/components/navigation/SideMenu.svelte";
-import { onMount } from "svelte";
+    import { onMount } from "svelte";
     import { writable } from "svelte/store";
-import { router, meta } from "tinro";
+    import { router, meta } from "tinro";
+    import Notifications from "lib/components/notifications/Notifications.svelte";
 
     export let profile_id;
     export let group_id;
@@ -29,21 +30,24 @@ import { router, meta } from "tinro";
     }
 
     async function fetcher(id: number) {
-        const all = await filterReflections(
-            {},
-            {
+        const [allBulk] = await filterReflections({
+            sorts: {},
+            filters: {
                 profile: {
                     id: id,
                 },
                 date_added_lte: formatDate(new Date($year, 0, 1)),
                 date_added_gte: formatDate(new Date($year, 11, 31)),
             },
-            true
-        );
+            pagination: {
+                page: 0,
+                limit: 0,
+            },
+        });
 
-        const creativity = await filterReflections(
-            {},
-            {
+        const [creativityBulk] = await filterReflections({
+            sorts: {},
+            filters: {
                 creativity: true,
                 profile: {
                     id: id,
@@ -51,11 +55,14 @@ import { router, meta } from "tinro";
                 date_added_lte: formatDate(new Date($year, 0, 1)),
                 date_added_gte: formatDate(new Date($year, 11, 31)),
             },
-            true
-        );
-        const activity = await filterReflections(
-            {},
-            {
+            pagination: {
+                page: 0,
+                limit: 0,
+            },
+        });
+        const [activityBulk] = await filterReflections({
+            sorts: {},
+            filters: {
                 activity: true,
                 profile: {
                     id: id,
@@ -63,11 +70,14 @@ import { router, meta } from "tinro";
                 date_added_lte: formatDate(new Date($year, 0, 1)),
                 date_added_gte: formatDate(new Date($year, 11, 31)),
             },
-            true
-        );
-        const service = await filterReflections(
-            {},
-            {
+            pagination: {
+                page: 0,
+                limit: 0,
+            },
+        });
+        const [serviceBulk] = await filterReflections({
+            sorts: {},
+            filters: {
                 service: true,
                 profile: {
                     id: id,
@@ -75,12 +85,27 @@ import { router, meta } from "tinro";
                 date_added_lte: formatDate(new Date($year, 0, 1)),
                 date_added_gte: formatDate(new Date($year, 11, 31)),
             },
-            true
-        );
+            pagination: {
+                page: 0,
+                limit: 0,
+            },
+        });
 
         const profile = await getProfile(id);
 
-        return [all, creativity, activity, service, profile];
+        return [
+            Promise.all(allBulk.map(async (v) => await getReflection(v.id))),
+            Promise.all(
+                creativityBulk.map(async (v) => await getReflection(v.id))
+            ),
+            Promise.all(
+                activityBulk.map(async (v) => await getReflection(v.id))
+            ),
+            Promise.all(
+                serviceBulk.map(async (v) => await getReflection(v.id))
+            ),
+            profile,
+        ];
     }
 
     const [allStore, reload] = swr(fetcher, "memberAllData", [profile_id]);
@@ -91,20 +116,26 @@ import { router, meta } from "tinro";
         } catch (err) {
             router.goto(`/groups/${profile_id}/statistics`);
         }
-    })
-
-
+    });
 </script>
 
 <Nav />
+<Notifications />
 <SideMenu />
 
 {#await $allStore then [allData, creativityData, activityData, serviceData, profile]}
     <CenterWrapper>
-        <Container>
+        <Container
+            style="background: white; padding: 1rem; border-radius: .5rem; box-sizing: border-box;"
+        >
             <CenterWrapper>
                 <LeftCenterRightFlex>
-                    <ThinButton slot="left" text="Back to statistics" fullIconName="arrow_back" target={`/groups/${group_id}/statistics`} />
+                    <ThinButton
+                        slot="left"
+                        text="Back to statistics"
+                        fullIconName="arrow_back"
+                        target={`/groups/${group_id}/statistics`}
+                    />
 
                     <h1 slot="center">Member statistics</h1>
 
@@ -113,7 +144,10 @@ import { router, meta } from "tinro";
                             <button
                                 class="year-button"
                                 on:click={() => {
-                                    $year = Math.max($year - 1, new Date().getFullYear() - 3); 
+                                    $year = Math.max(
+                                        $year - 1,
+                                        new Date().getFullYear() - 3
+                                    );
                                     reload();
                                 }}
                             >
@@ -125,7 +159,10 @@ import { router, meta } from "tinro";
                             <button
                                 class="year-button"
                                 on:click={() => {
-                                    $year = Math.min($year + 1, new Date().getFullYear()); 
+                                    $year = Math.min(
+                                        $year + 1,
+                                        new Date().getFullYear()
+                                    );
                                     reload();
                                 }}
                             >
@@ -136,52 +173,70 @@ import { router, meta } from "tinro";
                         </div>
                     </div>
                 </LeftCenterRightFlex>
-                <LeftCenterRightFlex>
-                    <BalanceChart
-                        slot="left"
-                        {creativityData}
-                        {activityData}
-                        {serviceData}
-                    />
-                    <div class="detail-info" slot="right">
-                        <InformationTile
-                            label="Member"
-                            iconName="person"
-                        >
-                            {profile.first_name} {profile.last_name}
-                        </InformationTile>
-                        <InformationTile
-                            label="Joined"
-                            iconName="star"
-                        >
-                            {new Date(profile.date_joined).getDate()} {new Date(profile.date_joined).toLocaleString('en-us', { month: 'short' })} {new Date(profile.date_joined).getFullYear()}
-                        </InformationTile>
+                <div class="detail-info">
+                    <InformationTile label="Member" iconName="person">
+                        {profile.first_name}
+                        {profile.last_name}
+                    </InformationTile>
+                    <InformationTile label="Joined" iconName="star">
+                        {new Date(profile.date_joined).getDate()}
+                        {new Date(profile.date_joined).toLocaleString("en-us", {
+                            month: "short",
+                        })}
+                        {new Date(profile.date_joined).getFullYear()}
+                    </InformationTile>
+                    {#await allData then all}
                         <InformationTile
                             label="Total reflections"
-                            iconName="view_agenda"
-                            >{allData.length}</InformationTile
+                            iconName="view_agenda">{all.length}</InformationTile
                         >
                         <InformationTile
                             label="Reflections per month"
                             iconName="event"
-                            >{Number(allData.length / 12).toFixed(
+                            >{Number(all.length / 12).toFixed(
                                 2
                             )}</InformationTile
                         >
-                    </div>
-                </LeftCenterRightFlex>
-                <MonthBarChart {allData} />
-                <MonthChartByCategory
-                    {creativityData}
-                    {activityData}
-                    {serviceData}
-                />
+                    {/await}
+                </div>
+                <div class="balance-chart-wrapper">
+                    {#await creativityData then creativity}
+                        {#await activityData then activity}
+                            {#await serviceData then service}
+                                <BalanceChart
+                                    slot="left"
+                                    creativityData={creativity}
+                                    activityData={activity}
+                                    serviceData={service}
+                                />
+                            {/await}
+                        {/await}
+                    {/await}
+                </div>
+                {#await allData then all}
+                    <MonthBarChart allData={all} />
+                {/await}
+                {#await creativityData then creativity}
+                    {#await activityData then activity}
+                        {#await serviceData then service}
+                            <MonthChartByCategory
+                                creativityData={creativity}
+                                activityData={activity}
+                                serviceData={service}
+                            />
+                        {/await}
+                    {/await}
+                {/await}
             </CenterWrapper>
         </Container>
     </CenterWrapper>
 {/await}
 
 <style>
+    .balance-chart-wrapper {
+        width: 50%;
+    }
+
     .wrapper {
         display: flex;
         justify-content: center;

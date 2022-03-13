@@ -1,6 +1,6 @@
 <script lang="ts">
     export let formData
-    export let setError
+    export let setErrors
 
     import { remove } from 'api/utils'
 
@@ -11,7 +11,7 @@
     <div class="tag" on:click={()=>{
         $formData.tags = remove($formData.tags, tag)
         if ($formData.tags.length > 1){
-            setError('oneTag', 'At least one tag must be chosen')
+            setErrors('oneTag', 'At least one tag must be chosen')
         }   
     }}>
         {tag}
@@ -24,7 +24,7 @@
 <style>
     .wrapper {
         display: flex;
-        width: 40rem;
+        width: 100%;
         flex-wrap: wrap;
         color: white;
     }
@@ -40,6 +40,11 @@
         margin: .5rem;
         border-radius: 9999px;
         cursor: pointer;
+        font-family: Rubik, sans-serif;
+    }
+
+    .tag:hover {
+        filter: brightness(.9);
     }
 
     span {

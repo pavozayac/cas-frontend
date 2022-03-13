@@ -1,61 +1,116 @@
 <script lang="ts">
-import { filterNotifications, getNotification } from "api/Notifications";
+    import {
+        filterNotifications,
+        getNotification,
+        toggleRead,
+    } from "api/Notifications";
+    import type { BulkNotification } from "api/Notifications";
 
-import { swr } from "api/swr";
+    import { swr } from "api/swr";
+    import { transformDate } from "api/utils";
+    import { writable } from "svelte/store";
+    import type { Writable } from "svelte/store"; 
+    import PlaceHolderCard from "../generic/PlaceHolderCard.svelte";
 
-    const [notificationsStore, reload] = swr(filterNotifications, 'notifications', [{
+    export let notificationsSWR: [Writable<Promise<[BulkNotification[], number, number]>>, Function] | [] = [];
+
+    const args = writable({
         sorts: {},
         filters: {
-            read: false
+            read: false,
         },
         pagination: {
             limit: 4,
-            page: 0
-        }
-    }]);
+            page: 0,
+        },
+    });
+
+    let notificationsStore;
+    let reload;
+
+    if (notificationsSWR.length == 0) {
+        const [nStore, r] = swr(
+            filterNotifications,
+            "notifications",
+            [$args]
+        );
+
+        notificationsStore = nStore;
+        reload = r;
+    } else {
+        notificationsStore = notificationsSWR[0];
+        reload = notificationsSWR[1];
+    }
+
+    
 
 </script>
 
 {#await $notificationsStore then [notifications, count, read_count]}
-<div class="notifications-container">
-    <h1 style="font-size: 1.5rem;">Recent notifications</h1>
+    <div class="notifications-container">
+        <h1 style="font-size: 1.5rem;">
+            <span class="material-icons-round">notifications</span>
+            Recent notifications
+        </h1>
 
-    {#each notifications as note, index}
-        {#await getNotification(note.id) then notification}
-        <div class:first={index == 0} class="notification">
-            <div class="dismiss">
-                Click to dismiss
-            </div>
-            <div class="text">
-                {notification.content}
-            </div>
+        <div class="gapflex">
+            {#if count > 0}
+                {#each notifications as note, index}
+                    {#await getNotification(note.id) then notification}
+                        <div class="notification">
+                            <div
+                                on:click={() => {
+                                    toggleRead(note.id);
+                                    reload([$args]);
+                                }}
+                                class="dismiss"
+                            >
+                                Click to dismiss
+                            </div>
+                            <div class="text">
+                                <span class="date"
+                                    >{String(
+                                        transformDate(notification.date_sent)
+                                            .split(" ")
+                                            .slice(0, 2)
+                                    ).replaceAll(",", " ")}</span
+                                >
+                                {notification.content}
+                            </div>
+                        </div>
+                    {/await}
+                {/each}
+            {:else}
+                <PlaceHolderCard kindPlural="new notifications" heightRem={4} />
+            {/if}
         </div>
-        {/await}
-    {/each}
-
-</div>
+    </div>
 {/await}
 
 <style>
-    h1 {
-        padding: 1rem;
+    .gapflex {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
     }
 
-    .first {
-        border-top: none;
+    .date {
+        font-weight: bold;
     }
 
     .notifications-container {
-        background: var(--bg-grey-lower);
+        background: white;
         top: 50%;
         transform: translateY(-50%);
         left: calc(50% + 22rem);
         position: fixed;
-        /* padding: 1rem; */
+        padding: 1rem;
         border-radius: 1rem;
         font-family: Rubik, sans-serif;
         overflow: hidden;
         user-select: none;
+        width: 20rem;
     }
 
     .text {
@@ -63,9 +118,10 @@ import { swr } from "api/swr";
     }
 
     .notification {
+        background: var(--bg-grey);
         position: relative;
         overflow: hidden;
-        /* border-radius: 1rem; */
+        border-radius: 0.5rem;
     }
 
     .notification::before {
@@ -74,7 +130,6 @@ import { swr } from "api/swr";
         width: 90%;
         margin-left: 5%;
         height: 100%;
-        border-top: 1px solid black;
     }
 
     .dismiss {
@@ -86,13 +141,11 @@ import { swr } from "api/swr";
         height: 100%;
         opacity: 0;
         color: white;
+        cursor: pointer;
     }
 
     .dismiss:hover {
-        opacity: .7;
+        opacity: 0.7;
         background: black;
     }
-
-
-
 </style>

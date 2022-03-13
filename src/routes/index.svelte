@@ -9,52 +9,53 @@
     import { swr } from "api/swr";
     import { router } from "tinro";
     import Pager from "lib/components/generic/Pager.svelte";
-import { pageLimit } from "lib/constants";
-import { writable } from "svelte/store";
-import Select from "lib/components/generic/Select.svelte";
-import FilterCheckboxes from "lib/components/generic/FilterCheckboxes.svelte";
-import Divider from "lib/components/generic/Divider.svelte";
-import PlaceHolderCard from "lib/components/generic/PlaceHolderCard.svelte";
-import { sortChange, filterChange } from 'api/utils';
+    import { pageLimit } from "lib/constants";
+    import { writable } from "svelte/store";
+    import Select from "lib/components/generic/Select.svelte";
+    import FilterCheckboxes from "lib/components/generic/FilterCheckboxes.svelte";
+    import Divider from "lib/components/generic/Divider.svelte";
+    import PlaceHolderCard from "lib/components/generic/PlaceHolderCard.svelte";
+    import { sortChange, filterChange } from "api/utils";
+    import Notifications from "lib/components/notifications/Notifications.svelte"
 
     export let query: Record<string, string>;
 
     const args = writable({
-        sorts: {date_added: 'desc'}, 
-        filters: {full_text_con: query.q || undefined},
+        sorts: { date_added: "desc" },
+        filters: { full_text_con: query.q || undefined },
         pagination: {
             limit: pageLimit,
-            page: 0
-        }
+            page: 0,
+        },
     });
 
-    const [dataStore, reload] = swr(filterReflections, "indexReflections", [$args]);
+    const [dataStore, reload] = swr(filterReflections, "indexReflections", [
+        $args,
+    ]);
 
-    let searchPhrase = '';
+    let searchPhrase = "";
 
     const pageStore = writable(0);
-    
 
-    router.subscribe(route => {
+    router.subscribe((route) => {
         $args = {
-            sorts: {date_added: 'desc'}, 
-            filters: {full_text_con: route.query.q || undefined},
+            sorts: { date_added: "desc" },
+            filters: { full_text_con: route.query.q ? decodeURIComponent(route.query.q) : undefined },
             pagination: {
                 limit: pageLimit,
-                page: 0
-            }
+                page: 0,
+            },
         };
 
         reload([$args]);
-        searchPhrase = route.query.q || null;
+        searchPhrase = route.query.q ? decodeURIComponent(route.query.q) : null;
 
         $pageStore = 0;
-    })
-
-
+    });
 </script>
 
 <Nav />
+<Notifications />
 <SideMenu />
 
 <CenterWrapper>
@@ -62,61 +63,80 @@ import { sortChange, filterChange } from 'api/utils';
         <CenterWrapper>
             <div class="filters-wrapper">
                 <Divider>
-                    <FilterCheckboxes change={(e, value) => filterChange(e, value, args, pageStore, reload)} name="categories" text="Filter categories" items={{
-                        'Creativity': {
-                            creativity: true
-                        },
-                        'Activity': {
-                            activity: true
-                        },
-                        'Service': {
-                            service: true
-                        }
-                    }}/>
-                    <Select change={(value) => sortChange(value, args, pageStore, reload)} label="Sort by" options={[
-                        {
-                            value: {
-                                date_added: 'desc'
+                    <FilterCheckboxes
+                        change={(e, value) =>
+                            filterChange(e, value, args, pageStore, reload)}
+                        name="categories"
+                        text="Filter categories"
+                        items={{
+                            Creativity: {
+                                creativity: true,
                             },
-                            text: 'Most recent'
-                        },
-                        {
-                            value: {
-                                date_added: 'asc'
+                            Activity: {
+                                activity: true,
                             },
-                            text: 'Least recent'
-                        },
-                        {
-                            value: {
-                                title: 'asc'
+                            Service: {
+                                service: true,
                             },
-                            text: 'Title A-Z'
-                        },
-                        {
-                            value: {
-                                title: 'desc'
+                        }}
+                    />
+                    <Select
+                        change={(value) =>
+                            sortChange(value, args, pageStore, reload)}
+                        label="Sort by"
+                        options={[
+                            {
+                                value: {
+                                    date_added: "desc",
+                                },
+                                text: "Most recent",
                             },
-                            text: 'Title Z-A'
-                        }
-                    ]}/>
+                            {
+                                value: {
+                                    date_added: "asc",
+                                },
+                                text: "Least recent",
+                            },
+                            {
+                                value: {
+                                    title: "asc",
+                                },
+                                text: "Title A-Z",
+                            },
+                            {
+                                value: {
+                                    title: "desc",
+                                },
+                                text: "Title Z-A",
+                            },
+                        ]}
+                    />
                 </Divider>
             </div>
-            
+
             {#if searchPhrase}
-                <h2>Searching for: {searchPhrase}</h2>
+                <div class="search-phrase">
+                    <h2>Searching for: {searchPhrase}</h2>
+                    <a href="/" class="reset-search">
+                        <span class="material-icons-round">close</span>
+                    </a>
+                </div>
             {/if}
-            
+
             {#await $dataStore then [items, count]}
                 {#if count > 0}
-                {#each items as reflection}
-                    <Card id={reflection.id} />
-                {/each}
+                    {#each items as reflection}
+                        <Card id={reflection.id} reflections_reload={reload} />
+                    {/each}
                 {:else}
-                    <PlaceHolderCard heightRem={47} style="margin-bottom: 1.25rem;" kindPlural="reflections" />
+                    <PlaceHolderCard
+                        heightRem={10}
+                        style="margin-bottom: 1.25rem;"
+                        kindPlural="reflections"
+                    />
                 {/if}
 
-                <Pager {args} {count} {reload} {pageStore} /> 
-
+                <Pager {args} {count} {reload} {pageStore} />
             {/await}
         </CenterWrapper>
     </Container>
@@ -136,7 +156,40 @@ import { sortChange, filterChange } from 'api/utils';
         border: 0;
     }
 
+    .search-phrase {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .search-phrase h2 {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .reset-search {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+        margin-left: 1rem;
+        cursor: pointer;
+        padding: 0.5rem;
+    }
+
+    .reset-search:hover {
+        background: var(--bg-grey-lower);
+    }
+
     .filters-wrapper {
         margin-bottom: 1rem;
+        background: white;
+        width: 100%;
+        padding: 0.5rem;
+        box-sizing: border-box;
+        border-radius: 0.5rem;
     }
 </style>

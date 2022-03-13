@@ -19,9 +19,10 @@
     import { postReflection } from "api/Reflection";
     import { router } from "tinro";
     import { announce } from "lib/components/announcer/announcer";
-import RadioGroup from "lib/components/forms/RadioGroup.svelte";
+    import RadioGroup from "lib/components/forms/RadioGroup.svelte";
+    import Notifications from "lib/components/notifications/Notifications.svelte";
 
-    function extraValidate(values, setTouched, setError) {
+    function extraValidate(values, setTouched, setErrors) {
         const errors = {};
         console.log(values);
         console.log("Valuestags: " + values.tags);
@@ -30,13 +31,13 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
         if (typeof values.tags === "undefined" || values?.tags.length < 1) {
             errors.oneTag = "Must have at least one tag";
         } else {
-            setError('tags', null);
+            setErrors("tags", null);
         }
 
         if (typeof values.files === "undefined" || values?.files.length < 1) {
             errors.attachments = "Must have at least one attachment";
         } else {
-            setError('attachments', null);
+            setErrors("attachments", null);
         }
         // if (true){
         // // if (values.categories && values?.categories.length > 1) {
@@ -48,22 +49,35 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
 </script>
 
 <Nav />
+<Notifications />
 <SideMenu />
 
 <CenterWrapper>
     <Container>
         <div class="wrapper">
-            <h1>Post a reflection</h1>
+            <h1>
+                <span class="material-icons-round">edit</span>
+                Post a reflection
+            </h1>
             <Form
                 {extraValidate}
                 validationSchema={addReflectionSchema}
                 let:errors
                 let:data={formData}
                 let:touched
-                let:setField
-                let:setError
+                let:setFields
+                let:setErrors
                 let:validate
-                submitAction={async values => {await postReflection(values); router.goto('/profiles/current'); announce('Reflection posted.') }}
+                submitAction={async (values) => {
+                    try {
+                        await postReflection(values);
+                        announce("Reflection posted.");
+                        router.goto("/profiles/current");
+                    } catch (err) {
+                        announce('Error: could not post the reflection.')
+                    }
+                }}
+             
             >
                 <TextField {errors} name="title" type="text" />
                 <TextArea {errors} name="text_content" />
@@ -75,9 +89,9 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
                     placeholder="Tag"
                     type="text"
                 >
-                    <TagButton {validate} {formData} {setField} />
+                    <TagButton {validate} {formData} {setFields} />
                 </TextField>
-                <TagsList {setError} {formData} />
+                <TagsList {setErrors} {formData} />
                 <div data-felte-reporter-tippy-position-for="categories" />
                 <Checkboxes
                     {touched}
@@ -93,13 +107,13 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
                 />
                 <RadioGroup
                     {formData}
-                    initialValue={Number(0)}
+                    initialValue={'0'}
                     text="Post visibility"
                     name="post_visibility"
                     items={{
-                        "Only you and the coordinator can see your posts": 0,
-                        "Only your group can see your posts": 1,
-                        "Anybody can see your posts": 2,
+                        "Only you and the coordinator can see your posts": '0',
+                        "Only your group can see your posts": '1',
+                        "Anybody can see your posts": '2',
                     }}
                 />
                 <MultipleFileField {formData} {errors} name="attachments" />

@@ -30,7 +30,9 @@
     import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
     import ThinButton from "lib/components/generic/ThinButton.svelte";
     import ConfirmModal from "lib/components/generic/ConfirmModal.svelte";
-import RadioGroup from "lib/components/forms/RadioGroup.svelte";
+    import RadioGroup from "lib/components/forms/RadioGroup.svelte";
+    import Notifications from "lib/components/notifications/Notifications.svelte";
+    import { announce } from "lib/components/announcer/announcer";
 
     export let reflection_id: number;
 
@@ -98,7 +100,7 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
             title: reflection.title,
             text_content: reflection.text_content,
             tags: newTags,
-            post_visibility: reflection.post_visibility,
+            post_visibility: JSON.stringify(reflection.post_visibility),
             // categories: Array(...transformInitialCategories(reflection)),
             ...transformInitialCategories(reflection),
             delete_uuids: [],
@@ -111,6 +113,7 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
 </script>
 
 <Nav />
+<Notifications />
 <SideMenu />
 
 {#await $reflectionStore then reflection}
@@ -129,8 +132,13 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
                                 <ThinButton
                                     action={() => {
                                         show(() => {
-                                            deleteReflection(reflection_id);
-                                            router.goto("/");
+                                            try {
+                                                deleteReflection(reflection_id);
+                                                announce('Successfully deleted reflection.')
+                                                router.goto("/");
+                                            } catch (err) {
+                                                announce('Error: could not delete reflection.')
+                                            }
                                         });
                                     }}
                                     style="float: right;"
@@ -147,13 +155,18 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
                         let:errors
                         let:data={formData}
                         let:touched
-                        let:setField
-                        let:setError
+                        let:setFields
+                        let:setErrors
                         let:validate
                         {extraValidate}
                         submitAction={(values) => {
-                            updateReflection(values, reflection_id);
-                            router.goto("/profiles/current");
+                            try {
+                                updateReflection(values, reflection_id);
+                                announce('Successfully updated reflection.')
+                                router.goto("/profiles/current");
+                            } catch (err) {
+                                announce('Error: could not update reflection.')
+                            }
                         }}
                     >
                         <!-- {errors.subscribe(val => console.log(val))} -->
@@ -167,9 +180,9 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
                             placeholder="Tag"
                             type="text"
                         >
-                            <TagButton {validate} {formData} {setField} />
+                            <TagButton {validate} {formData} {setFields} />
                         </TextField>
-                        <TagsList {setError} {formData} />
+                        <TagsList {setErrors} {formData} />
                         <div
                             data-felte-reporter-tippy-position-for="categories_error"
                         />
@@ -187,13 +200,13 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
                         />
                         <RadioGroup
                             {formData}
-                            initialValue={Number(reflection.post_visibility)}
+                            initialValue={JSON.stringify(reflection.post_visibility)}
                             text="Post visibility"
                             name="post_visibility"
                             items={{
-                                "Only you and the coordinator can see your posts": 0,
-                                "Only your group can see your posts": 1,
-                                "Anybody can see your posts": 2,
+                                "Only you and the coordinator can see your posts": '0',
+                                "Only your group can see your posts": '1',
+                                "Anybody can see your posts": '2',
                             }}
                         />
                         <DeleteFileField
@@ -217,6 +230,12 @@ import RadioGroup from "lib/components/forms/RadioGroup.svelte";
 {/await}
 
 <style>
+    h1 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     .wrapper {
         width: 40rem;
         background: white;

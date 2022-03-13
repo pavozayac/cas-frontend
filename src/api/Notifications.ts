@@ -101,11 +101,11 @@ export async function getNotification(id: number, noRead = false): Promise<Notif
         const res = await fetch(getRoute, {
             method: 'GET',
             credentials: 'include',
-            mode: 'cors',
+            mode: 'cors'
         })
 
         if (res.status != 200) {
-            throw await res.text()
+            throw await res.text();
         }
 
         return await res.json();

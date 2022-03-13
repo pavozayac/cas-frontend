@@ -14,7 +14,7 @@
     import { postNotification } from "api/Notifications";
     import { announce } from "lib/components/announcer/announcer";
 
-    const { form, errors, setField, data } = createForm({
+    const { form, errors, setFields, setErrors, data, setTouched } = createForm({
         onSubmit: async (values) => {
             try {
                 await postNotification(values);
@@ -39,6 +39,19 @@
             }),
         ],
         validateSchema: notificationSchema,
+        validate: (values) => {
+            let errors = {};
+
+            if ((values.recipients && values.recipients.length < 1) || typeof values.recipients == 'undefined') {
+                errors = {
+                    searchBox: "At least one recipient must be chosen.",
+                };
+                setTouched('searchBox');
+                setErrors('searchBox', 'At least one recipient must be chosen.')
+            }
+
+            return errors;
+        },
     });
 
     const profileArgs = writable({
@@ -126,12 +139,15 @@
                 }
             });
 
-        setField("recipients", [...ids.values()]);
+        setFields("recipients", [...ids.values()]);
         console.log($data);
     });
 </script>
 
-<h1>Create notifications</h1>
+<h1>
+    <span class="material-icons-round">notification_add</span>
+    Create notifications
+</h1>
 <form use:form>
     <div class="post-wrapper">
         <TextField
@@ -142,49 +158,10 @@
             label="Notification content"
             placeholder="Content"
         />
-        <button class="post">
+        <button type="submit" class="post">
             <span class="material-icons-round">edit</span>Post
         </button>
     </div>
-
-    {#if $added.size > 0}
-        <h2>Added recipients</h2>
-        {#each [...$added.values()].map((v) => JSON.parse(v)) as recipient}
-            {#if recipient.type == "profile"}
-                <RecipientProfileButton
-                    action={() => {
-                        let theSet = $added;
-                        theSet.delete(
-                            JSON.stringify({
-                                type: "profile",
-                                id: recipient.id,
-                            })
-                        );
-
-                        $added = theSet;
-                    }}
-                    id={recipient.id}
-                    icon="close"
-                />
-            {:else}
-                <RecipientGroupButton
-                    action={() => {
-                        let theSet = $added;
-                        theSet.delete(
-                            JSON.stringify({
-                                type: "group",
-                                id: recipient.id,
-                            })
-                        );
-
-                        $added = theSet;
-                    }}
-                    id={recipient.id}
-                    icon="close"
-                />
-            {/if}
-        {/each}
-    {/if}
 
     <div class="utilities-wrapper">
         <input
@@ -244,6 +221,44 @@
                 />
             {/each}
         {/await}
+    {/if}
+    {#if $added.size > 0}
+        <h2>Added recipients</h2>
+        {#each [...$added.values()].map((v) => JSON.parse(v)) as recipient}
+            {#if recipient.type == "profile"}
+                <RecipientProfileButton
+                    action={() => {
+                        let theSet = $added;
+                        theSet.delete(
+                            JSON.stringify({
+                                type: "profile",
+                                id: recipient.id,
+                            })
+                        );
+
+                        $added = theSet;
+                    }}
+                    id={recipient.id}
+                    icon="close"
+                />
+            {:else}
+                <RecipientGroupButton
+                    action={() => {
+                        let theSet = $added;
+                        theSet.delete(
+                            JSON.stringify({
+                                type: "group",
+                                id: recipient.id,
+                            })
+                        );
+
+                        $added = theSet;
+                    }}
+                    id={recipient.id}
+                    icon="close"
+                />
+            {/if}
+        {/each}
     {/if}
 </form>
 

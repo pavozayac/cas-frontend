@@ -4,6 +4,7 @@
         favouriteReflection,
         getReflection,
         unfavouriteReflection,
+        deleteReflection
     } from "api/Reflection";
     import { swr } from "api/swr";
     import { cubicInOut } from "svelte/easing";
@@ -23,8 +24,11 @@
     import { fade } from "svelte/transition";
     import Pager from "../generic/Pager.svelte";
     import PlaceHolderCard from "lib/components/generic/PlaceHolderCard.svelte";
+import ConfirmModal from "../generic/ConfirmModal.svelte";
+import { announce } from "../announcer/announcer";
 
     export let id;
+    export let reflections_reload: Function;
 
     // let bookmarked: boolean = false
 
@@ -197,6 +201,27 @@
                             </a>
                         {/if}
                     {/await}
+                    {#await $profileStore then profile}
+                        {#if profile.is_admin && !(profile.id == reflection.profile_id)}
+                        <ConfirmModal text="Do you want to delete this user's reflection?" confirmText="Delete" denyText="Cancel" let:show>
+                            <button
+                                class="edit-button"
+                                on:click={() => show(async () => {
+                                    try {
+                                        deleteReflection(reflection.id);
+                                        reflections_reload();
+                                        announce('Successfully deleted reflection.')
+                                    } catch(err) {
+                                        announce('Error: Could not delete reflection.')
+                                    }
+                                })}
+                            >
+                                <span class="material-icons-outlined">delete</span
+                                > Delete
+                            </button>
+                        </ConfirmModal>
+                        {/if}
+                    {/await}
                 </div>
             </div>
         </div>
@@ -205,9 +230,9 @@
 {/await}
 
 <style>
-    .reflection {
+    /* .reflection {
         height: 47rem;
-    }
+    } */
 
     .tags {
         width: 100%;
@@ -328,7 +353,7 @@
     }
 
     .category span {
-        margin-right: 0.5rem;
+        margin-right: 0.3rem;
     }
 
     .creativity {

@@ -13,7 +13,7 @@
         <div class="vertical-container">
             <div class="inner-container">
             {#await confirmEmail(meta.params.code) then response}
-                <span class="material-icons-round">tick</span>Successfully confirmed email address.
+                <span class="material-icons-round">done</span>Successfully confirmed email address.
             {:catch error}
                 <span class="material-icons-round">close</span>Confirmation code is invalid.
             {/await}

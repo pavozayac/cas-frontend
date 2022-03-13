@@ -12,6 +12,8 @@
     import { pageLimit } from "lib/constants";
     import { writable } from "svelte/store";
     import Select from "lib/components/generic/Select.svelte";
+    import LeftCenterRightFlex from "lib/components/generic/LeftCenterRightFlex.svelte";
+    export let reloadRecent: Function;
 
     const args = writable({
         sorts: {
@@ -32,41 +34,46 @@
     );
 </script>
 
-<h1>Received notifications</h1>
+<h1>
+    <span class="material-icons-round">notifications</span>
+    Received notifications
+</h1>
+<LeftCenterRightFlex>
+    <Select
+        slot="right"
+        box={false}
+        change={(value) => sortChange(value, args, pageStore, reload)}
+        label="Sort by"
+        options={[
+            {
+                value: {
+                    read_omit: "asc",
+                },
+                text: "Unread first",
+            },
+            {
+                value: {
+                    read_omit: "desc",
+                },
+                text: "Read first",
+            },
+            {
+                value: {
+                    date_sent: "desc",
+                },
+                text: "Most recent",
+            },
+            {
+                value: {
+                    date_sent: "asc",
+                },
+                text: "Least recent",
+            },
+        ]}
+    />
+</LeftCenterRightFlex>
 
-<Select
-    box={false}
-    change={(value) => sortChange(value, args, pageStore, reload)}
-    label="Sort by"
-    options={[
-        {
-            value: {
-                read_omit: "asc",
-            },
-            text: "Unread first",
-        },
-        {
-            value: {
-                read_omit: "desc",
-            },
-            text: "Read first",
-        },
-        {
-            value: {
-                date_sent: "desc",
-            },
-            text: "Most recent",
-        },
-        {
-            value: {
-                date_sent: "asc",
-            },
-            text: "Least recent",
-        },
-    ]}
-/>
 <div class="notifications-container">
-
     {#await $notificationsStore then [notifications, count, readCount]}
         {#if count > 0}
             {#each notifications as note, index}
@@ -93,6 +100,7 @@
                                     on:click={() => {
                                         toggleRead(note.id);
                                         reload([$args]);
+                                        reloadRecent()
                                     }}
                                     title="Mark as unread"
                                     class="toggle-read"
@@ -106,6 +114,7 @@
                                     on:click={() => {
                                         toggleRead(note.id);
                                         reload([$args]);
+                                        reloadRecent()
                                     }}
                                     title="Mark as read"
                                     class="toggle-read"
@@ -151,6 +160,9 @@
 
     .notifications-container {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
     }
 
     .date {

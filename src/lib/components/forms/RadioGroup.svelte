@@ -1,13 +1,12 @@
 <script lang="ts">
-import { afterUpdate, beforeUpdate, onMount } from "svelte";
+    import { afterUpdate, beforeUpdate, onMount } from "svelte";
 
-
-    export let items: Record<string, any>
-    export let name: string
-    export let text: string
-    export let formData
-    export let setField: Function
-    export let initialValue = null
+    export let items: Record<string, any>;
+    export let name: string;
+    export let text: string;
+    export let formData;
+    export let setFields: Function;
+    export let initialValue = null;
 </script>
 
 <div class="container">
@@ -15,10 +14,10 @@ import { afterUpdate, beforeUpdate, onMount } from "svelte";
     {#each Object.entries(items) as [key, value], index (value)}
         <div class="radio-wrapper" class:first={index == 0}>
             <label class="radio-label" for={value}>
-                {#if (initialValue != null && initialValue == String(value))  || value == $formData[name]}
-                    <input id={value} type="radio" name={name} value={value} checked/>
-                {:else} 
-                    <input id={value} type="radio" name={name} value={value} />
+                {#if (initialValue != null && initialValue == String(value)) || value == $formData[name]}
+                    <input id={value} type="radio" {name} {value} checked />
+                {:else}
+                    <input id={value} type="radio" {name} {value} />
                 {/if}
                 <div class:checked={value == $formData[name]} class="checkmark">
                     <span class="material-icons-round">
@@ -44,7 +43,7 @@ import { afterUpdate, beforeUpdate, onMount } from "svelte";
         background: var(--bg-light);
         padding: 1rem;
         box-sizing: border-box;
-        border-radius: .5rem;
+        border-radius: 0.5rem;
         font-family: Rubik, sans-serif;
     }
 
@@ -54,13 +53,13 @@ import { afterUpdate, beforeUpdate, onMount } from "svelte";
         background: var(--bg-grey);
         border-radius: 9999px;
         box-sizing: border-box;
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
         overflow: hidden;
         cursor: pointer;
     }
 
     .first {
-        margin-top: .5rem;
+        margin-top: 0.5rem;
     }
 
     .radio-label {
@@ -91,5 +90,4 @@ import { afterUpdate, beforeUpdate, onMount } from "svelte";
         background: var(--accent-blue);
         color: white;
     }
-
 </style>

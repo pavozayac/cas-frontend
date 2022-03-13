@@ -62,7 +62,7 @@ export async function postReflection(values) {
     let data = {
         title: values.title,
         text_content: values.text_content,
-        post_visibility: values.post_visibility,
+        post_visibility: parseInt(values.post_visibility),
         creativity: values.creativity,
         activity: values.activity,
         service: values.service,
@@ -115,7 +115,7 @@ export async function updateReflection(values, reflection_id: number) {
     let data = {
         title: values.title,
         text_content: values.text_content,
-        post_visibility: values.post_visibility,
+        post_visibility: parseInt(values.post_visibility),
         creativity: values.creativity,
         activity: values.activity,
         service: values.service,

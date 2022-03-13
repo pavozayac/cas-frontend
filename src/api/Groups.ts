@@ -104,13 +104,13 @@ export async function deleteGroup(id: string): Promise<Group> {
 }
 
 
-export async function updateGroupAvatar(values) {
+export async function updateGroupAvatar(values, group_id) {
     let file: File = values.file
     let data = new FormData()
     data.append('file', file)
 
     try {
-        const res = await fetch(route('groups/avatar/'), {
+        const res = await fetch(route(`groups/${group_id}/avatar/`), {
             method: 'PUT',
             credentials: 'include',
             mode: 'cors',
@@ -150,7 +150,7 @@ export async function createGroup(group) {
 
         const detail = await res.json();
 
-        await updateGroupAvatar(group)
+        await updateGroupAvatar(group, detail.id);
 
         return detail;
 
@@ -184,7 +184,7 @@ export async function updateGroup(group, group_id) {
         const detail = await res.json();
 
         if (file){
-            await updateGroupAvatar(group)
+            await updateGroupAvatar(group, group.id)
         }
 
         return detail;
@@ -201,9 +201,9 @@ export interface GroupJoinRequest {
     date_added: Date;
 }
 
-export async function createGroupJoinRequest(values) {
+export async function createGroupJoinRequest(groupCode: string) {
     try {
-        const res = await fetch(route(`groups/${values.code}/join-requests`), {
+        const res = await fetch(route(`groups/${groupCode}/join-requests`), {
             method: 'POST',
             credentials: 'include',
             mode: 'cors',

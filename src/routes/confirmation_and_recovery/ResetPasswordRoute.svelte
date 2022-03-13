@@ -33,13 +33,13 @@ import { router } from "tinro";
                 name="email"
                 type="text"
                 placeholder="Email address"
-                label="Recovery email address"
+                label="Email address"
             />
             <TextField
                 {errors}
                 name="password"
                 type="password"
-                placeholder="Password"
+                placeholder="New password"
                 label="Password"
             />
             <TextField
@@ -47,7 +47,7 @@ import { router } from "tinro";
                 name="repeat_password"
                 type="password"
                 placeholder="Repeat password"
-                label="Repeat password"
+                label="Repeat new password"
             />
             <Submit text="Reset password" />
         </Form>

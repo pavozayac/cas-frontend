@@ -25,8 +25,7 @@
         onSubmit: async (values) => {
             const jwt = await login(values.email, values.password);
             console.log('bruh');
-            router.goto("/", true);
-        },
+            router.goto("/", true);        },
         onError: (err) => {
             return {
                 password: "Invalid credentials",
